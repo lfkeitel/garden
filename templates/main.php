@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=0.75">
+
+        <?php if (isset($title) && $title != ""): ?>
+        <title>Lee's Garden : <?= $title ?></title>
+        <?php else: ?>
+        <title>Lee's Garden</title>
+        <?php endif ?>
+
+        <link rel="stylesheet" href="/styles/main.css">
+        <?php if(isset($styles)): foreach($styles as $style): ?>
+        <link rel="stylesheet" href="/styles/<?= $style ?>.css">
+        <?php endforeach; endif ?>
+    </head>
+
+    <body>
+        <div class="sidebar">
+            <nav>
+                <ul>
+                    <li><a href="/" class="<?= $app->request->REQUEST_URI == "/" ? 'active-page' : '' ?>">Home</a></li>
+                    <li><a href="/logs" class="<?= $app->request->REQUEST_URI == "/logs" ? 'active-page' : '' ?>">Log</a></li>
+                    <li><a href="/plantings" class="<?= $app->request->REQUEST_URI == "/plantings" ? 'active-page' : '' ?>">Plantings</a></li>
+                    <li><a href="/seeds" class="<?= $app->request->REQUEST_URI == "/seeds" ? 'active-page' : '' ?>">Seeds</a></li>
+                    <li><a href="/wishlist" class="<?= $app->request->REQUEST_URI == "/wishlist" ? 'active-page' : '' ?>">Wishlist</a></li>
+                    <li><a href="/beds" class="<?= $app->request->REQUEST_URI == "/beds" ? 'active-page' : '' ?>">Beds</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <?php if (isset($toast) && $toast != ""): ?>
+            <div class="toast"><?= $toast ?></div>
+            <?php endif ?>
+
+            <div class="main-content">
+            <?= $this->section('content') ?>
+            </div>
+        </div>
+    </body>
+
+    <?php if(isset($scripts)): foreach($scripts as $script): ?>
+    <script type="text/javascript" src="/scripts/<?= $script ?>.js"></script>
+    <?php endforeach; endif ?>
+</html>

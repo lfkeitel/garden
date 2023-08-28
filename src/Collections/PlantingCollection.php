@@ -1,0 +1,54 @@
+<?php
+declare(strict_types=1);
+namespace Root\Garden\Collections;
+
+use Root\Garden\Models;
+use MongoDB\BSON\ObjectId;
+
+class PlantingCollection extends Collection {
+    public function get_all(array $filter = [], string $sort_prop = 'date', $sort_dir = 1): Models\ArrayOfPlantings {
+        return $this->find_multiple($filter, ['sort' => [$sort_prop => $sort_dir]]);
+    }
+
+    public function find_by_id(string|ObjectID $id): ?Models\Planting {
+        $id = $id instanceof ObjectId ? $id : new ObjectId($id);
+        return $this->find_one('_id', $id);
+    }
+
+    public function find_one(string $prop, mixed $val): ?Models\Planting {
+        $records = $this->find_multiple([$prop => $val]);
+
+        if (\count($records) > 0) {
+            return $records[0];
+        }
+
+        return null;
+    }
+
+    public function find_multiple(array $filter = [], array $options = []): Models\ArrayOfPlantings {
+        $collection = $this->db->get_mongodb_collection($this->collection);
+        $all_items = $collection->find($filter, $options);
+        $records = new Models\ArrayOfPlantings();
+        foreach ($all_items as $doc) {
+            $records []= new Models\Planting($this->db, $doc);
+        }
+        return $records;
+    }
+
+    public function get_in_bed(string|ObjectId $id): Models\ArrayOfPlantings {
+        $id = $id instanceof ObjectId ? $id : new ObjectId($id);
+
+        return $this->find_multiple(
+            [
+                'bed' => $id,
+                'status' => [
+                    '$nin' => [
+                        'Harvested',
+                        'Failed',
+                        'Transplanted',
+                    ],
+                ]
+            ]
+        );
+    }
+}

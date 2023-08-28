@@ -1,0 +1,14 @@
+{
+    "name": "root/garden",
+    "type": "project",
+    "require": {
+        "mongodb/mongodb": "^1.16",
+        "league/plates": "^3.5",
+        "onesimus-systems/osrouter": "^1.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Root\\Garden\\": "src/"
+        }
+    }
+}
