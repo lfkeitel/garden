@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Models;
+namespace Garden\Models;
 
-use function Root\Garden\get_class_name;
-use Root\Garden\DatabaseConnection;
+use function Garden\get_class_name;
+use Garden\DatabaseConnection;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Model\BSONDocument;
 use MongoDB;

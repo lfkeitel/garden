@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden;
+namespace Garden;
 
-use Root\Garden\Collections;
+use Garden\Collections;
 use MongoDB;
 
 class DatabaseConnection {

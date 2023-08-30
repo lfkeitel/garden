@@ -1,32 +1,30 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Controllers;
+namespace Garden\Controllers;
 
-use Root\Garden\Models;
-use Root\Garden\Application;
+use Garden\Models;
+use Garden\Application;
+use Onesimus\Router\Http\Request;
+use Onesimus\Router\Attr\Route;
+use Onesimus\Router\Attr\Filter;
 use MongoDB\BSON\ObjectId;
 
 class BedController {
-    private Application $app;
-
-    public function __construct($app) {
-        $this->app = $app;
-    }
-
-    public function beds() {
-        $sort_prop = $this->app->request->GET['sort_by'] ?? 'name';
-        $sort_dir = $this->app->request->GET['sort_dir'] ?? 1;
+    #[Route('get', '/beds')]
+    public function beds(Request $request, Application $app) {
+        $sort_prop = $request->GET['sort_by'] ?? 'name';
+        $sort_dir = $request->GET['sort_dir'] ?? 1;
         $sort_dir = intval($sort_dir);
         if ($sort_dir < -1 || $sort_dir > 1) {
             $sort_dir = 1;
         }
 
-        $all_beds = $this->app->db->beds->get_all(
+        $all_beds = $app->db->beds->get_all(
             $sort_prop,
             $sort_dir,
         );
 
-        echo $this->app->templates->render(
+        echo $app->templates->render(
             'beds::index',
             [
                 'all_beds' => $all_beds,
@@ -36,24 +34,29 @@ class BedController {
         );
     }
 
-    public function beds_view_get($id) {
-        $bed = $this->app->db->beds->find_by_id($id);
+    #[Route('get', '/beds/{id}')]
+    public function beds_view_get(Request $request, Application $app, string $id) {
+        $bed = $app->db->beds->find_by_id($id);
 
-        echo $this->app->templates->render('beds::view',
+        echo $app->templates->render('beds::view',
             [
                 'bed' => $bed,
             ]
         );
     }
 
-    public function beds_new_get() {
-        echo $this->app->templates->render('beds::new');
+    #[Filter('LoginRequired')]
+    #[Route('get', '/beds/new')]
+    public function beds_new_get(Request $request, Application $app) {
+        echo $app->templates->render('beds::new');
     }
 
-    public function beds_new_post() {
-        $form_vars = $this->app->request->POST;
+    #[Filter('LoginRequired')]
+    #[Route('post', '/beds/new')]
+    public function beds_new_post(Request $request, Application $app) {
+        $form_vars = $request->POST;
 
-        $record = new Models\Bed($this->app->db, null);
+        $record = new Models\Bed($app->db, null);
 
         $record->added = new \DateTimeImmutable();
         $record->name = $form_vars['name'];
@@ -63,28 +66,31 @@ class BedController {
 
         $record->create();
 
-        $this->app->templates->addData([
+        $app->templates->addData([
             'toast' => "Created new bed (<a href=\"/beds/{$record->get_id()}\">{$record->name}</a>)"
         ]);
 
-        echo $this->app->templates->render('beds::new');
+        echo $app->templates->render('beds::new');
     }
 
-    public function beds_post() {
-        switch ($this->app->request->POST['action']) {
+    #[Filter('LoginRequired')]
+    #[Route('post', '/beds')]
+    public function beds_post(Request $request, Application $app) {
+        switch ($request->POST['action']) {
             case 'delete_bed':
-                $this->beds_delete();
+                $this->beds_delete($request, $app);
                 break;
         }
 
-        $this->beds();
+        $this->beds($request, $app);
     }
 
-    private function beds_delete() {
-        $bed = $this->app->db->beds->find_by_id($this->app->request->POST['bed_id']);
+    #[Filter('LoginRequired')]
+    private function beds_delete(Request $request, Application $app) {
+        $bed = $app->db->beds->find_by_id($request->POST['bed_id']);
 
         if (\is_null($bed)) {
-            $toast_msg = "Bed does not exist with ID {$this->app->request->POST['bed_id']}";
+            $toast_msg = "Bed does not exist with ID {$request->POST['bed_id']}";
         } else {
             try {
                 $bed->delete();
@@ -95,18 +101,22 @@ class BedController {
             $toast_msg = "Bed deleted";
         }
 
-        $this->app->templates->addData(['toast' => $toast_msg]);
+        $app->templates->addData(['toast' => $toast_msg]);
     }
 
-    public function beds_edit_get($id) {
-        $bed = $this->app->db->beds->find_by_id($id);
+    #[Filter('LoginRequired')]
+    #[Route('get', '/beds/edit/{id}')]
+    public function beds_edit_get(Request $request, Application $app, string $id) {
+        $bed = $app->db->beds->find_by_id($id);
 
-        echo $this->app->templates->render('beds::edit', ['bed' => $bed]);
+        echo $app->templates->render('beds::edit', ['bed' => $bed]);
     }
 
-    public function beds_edit_post($id) {
-        $form_vars = $this->app->request->POST;
-        $record = $this->app->db->beds->find_by_id($id);
+    #[Filter('LoginRequired')]
+    #[Route('post', '/beds/edit/{id}')]
+    public function beds_edit_post(Request $request, Application $app, string $id) {
+        $form_vars = $request->POST;
+        $record = $app->db->beds->find_by_id($id);
 
         $record->name = $form_vars['name'];
         $record->rows = \intval($form_vars['rows']);
@@ -115,10 +125,10 @@ class BedController {
 
         $record->save();
 
-        $this->app->templates->addData([
+        $app->templates->addData([
             'toast' => "Saved bed ({$record->name})"
         ]);
 
-        echo $this->app->templates->render('beds::edit', ['bed' => $record]);
+        echo $app->templates->render('beds::edit', ['bed' => $record]);
     }
 }

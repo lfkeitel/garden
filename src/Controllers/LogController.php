@@ -1,25 +1,24 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Controllers;
+namespace Garden\Controllers;
 
-use Root\Garden\Models;
-use Root\Garden\Application;
+use Garden\Models;
+use Garden\Application;
+use Garden\Lib\LoginRequired;
+use Onesimus\Router\Http\Request;
+use Onesimus\Router\Attr\Route;
+use Onesimus\Router\Attr\Filter;
 use MongoDB\BSON\ObjectId;
 
 class LogController {
-    private Application $app;
-
-    public function __construct($app) {
-        $this->app = $app;
-    }
-
-    public function logs() {
-        $all_logs = $this->app->db->logs->get_all(
+    #[Route('get', '/logs')]
+    public function logs(Request $request, Application $app) {
+        $all_logs = $app->db->logs->get_all(
             'date',
             -1,
         );
 
-        echo $this->app->templates->render(
+        echo $app->templates->render(
             'logs::index',
             [
                 'all_logs' => $all_logs,
@@ -27,34 +26,39 @@ class LogController {
         );
     }
 
-    public function logs_view_get($id) {
-        $log = $this->app->db->logs->find_by_id($id);
+    #[Route('get', '/logs/{id}')]
+    public function logs_view_get(Request $request, Application $app, string $id) {
+        $log = $app->db->logs->find_by_id($id);
 
-        echo $this->app->templates->render('logs::view',
+        echo $app->templates->render('logs::view',
             [
                 'log' => $log,
             ]
         );
     }
 
-    public function logs_new_get() {
-        $form_vars = $this->app->request->GET;
+    #[Filter('LoginRequired')]
+    #[Route('get', '/logs/new')]
+    public function logs_new_get(Request $request, Application $app) {
+        $form_vars = $request->GET;
         $preselect_id = $form_vars['planting'] ?? '';
 
-        echo $this->app->templates->render(
+        echo $app->templates->render(
             'logs::new',
             ['plantings' => $this->get_planting_select_data(), 'select_planting' => $preselect_id],
         );
     }
 
-    public function logs_new_post() {
-        $form_vars = $this->app->request->POST;
+    #[Filter('LoginRequired')]
+    #[Route('post', '/logs/new')]
+    public function logs_new_post(Request $request, Application $app) {
+        $form_vars = $request->POST;
 
-        $record = new Models\Log($this->app->db, null);
+        $record = new Models\Log($app->db, null);
 
         $record->date = new \DateTimeImmutable();
         if ($form_vars['planting'] !== 'All') {
-            $planting = $this->app->db->plantings->find_by_id(new ObjectId($form_vars['planting']));
+            $planting = $app->db->plantings->find_by_id(new ObjectId($form_vars['planting']));
             $record->planting = $planting;
         }
         $record->notes = $form_vars['notes'];
@@ -65,18 +69,18 @@ class LogController {
 
         $record->create();
 
-        $this->app->templates->addData([
+        $app->templates->addData([
             'toast' => "Created new <a href=\"/logs/{$record->get_id()}\">log</a>"
         ]);
 
-        echo $this->app->templates->render(
+        echo $app->templates->render(
             'logs::new',
             ['plantings' => $this->get_planting_select_data()],
         );
     }
 
-    private function get_planting_select_data(): array {
-        $plantings = $this->app->db->plantings->get_all([], 'date');
+    private function get_planting_select_data(Application $app): array {
+        $plantings = $app->db->plantings->get_all([], 'date');
         $planting_data = [];
         foreach ($plantings as $planting) {
             $planting_data []= [
@@ -87,21 +91,23 @@ class LogController {
         return $planting_data;
     }
 
-    public function logs_post() {
-        switch ($this->app->request->POST['action']) {
+    #[Filter('LoginRequired')]
+    #[Route('post', '/logs')]
+    public function logs_post(Request $request, Application $app) {
+        switch ($request->POST['action']) {
             case 'delete_log':
-                $this->logs_delete();
+                $this->logs_delete($request, $app);
                 break;
         }
 
-        $this->logs();
+        $this->logs($request, $app);
     }
 
-    private function logs_delete() {
-        $log = $this->app->db->logs->find_by_id($this->app->request->POST['log_id']);
+    private function logs_delete(Request $request, Application $app) {
+        $log = $app->db->logs->find_by_id($request->POST['log_id']);
 
         if (\is_null($log)) {
-            $toast_msg = "Log does not exist with ID {$this->app->request->POST['log_id']}";
+            $toast_msg = "Log does not exist with ID {$request->POST['log_id']}";
         } else {
             try {
                 $files = $log->image_files;
@@ -117,27 +123,31 @@ class LogController {
             $toast_msg = "Log deleted";
         }
 
-        $this->app->templates->addData(['toast' => $toast_msg]);
+        $app->templates->addData(['toast' => $toast_msg]);
     }
 
-    public function logs_edit_get($id) {
-        $log = $this->app->db->logs->find_by_id($id);
+    #[Filter('LoginRequired')]
+    #[Route('get', '/logs/edit/{id}')]
+    public function logs_edit_get(Request $request, Application $app, string $id) {
+        $log = $app->db->logs->find_by_id($id);
 
-        echo $this->app->templates->render(
+        echo $app->templates->render(
             'logs::edit',
             [
                 'log' => $log,
-                'plantings' => $this->get_planting_select_data(),
+                'plantings' => $this->get_planting_select_data($app),
             ],
         );
     }
 
-    public function logs_edit_post($id) {
-        $form_vars = $this->app->request->POST;
-        $record = $this->app->db->logs->find_by_id($id);
+    #[Filter('LoginRequired')]
+    #[Route('post', '/logs/edit/{id}')]
+    public function logs_edit_post(Request $request, Application $app, string $id) {
+        $form_vars = $request->POST;
+        $record = $app->db->logs->find_by_id($id);
 
         if ($form_vars['planting'] !== 'All') {
-            $planting = $this->app->db->plantings->find_by_id(new ObjectId($form_vars['planting']));
+            $planting = $app->db->plantings->find_by_id(new ObjectId($form_vars['planting']));
             $record->planting = $planting;
         }
         $record->notes = $form_vars['notes'];
@@ -145,15 +155,15 @@ class LogController {
 
         $record->save();
 
-        $this->app->templates->addData([
+        $app->templates->addData([
             'toast' => "Saved log ({$record->date->format('Y-m-d H:i:s')})",
         ]);
 
-        echo $this->app->templates->render(
+        echo $app->templates->render(
             'logs::edit',
             [
                 'log' => $record,
-                'plantings' => $this->get_planting_select_data(),
+                'plantings' => $this->get_planting_select_data($app),
             ],
         );
     }

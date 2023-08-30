@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Models;
+namespace Garden\Models;
 
-use function Root\Garden\BSON_array_to_array;
+use function Garden\BSON_array_to_array;
 use MongoDB\Model\BSONDocument;
 
 class Planting extends DBRecord {

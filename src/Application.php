@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden;
+namespace Garden;
 
-use Root\Garden\DatabaseConnection;
+use Garden\DatabaseConnection;
 use League\Plates\Engine;
 use Onesimus\Router\Http\Request;
 

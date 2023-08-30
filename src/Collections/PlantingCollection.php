@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Collections;
+namespace Garden\Collections;
 
-use Root\Garden\Models;
+use Garden\Models;
 use MongoDB\BSON\ObjectId;
 
 class PlantingCollection extends Collection {

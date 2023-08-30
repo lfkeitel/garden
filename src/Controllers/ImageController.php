@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Controllers;
+namespace Garden\Controllers;
 
-use Root\Garden\Application;
-use function Root\Garden\buffer_var_dump;
+use Garden\Application;
+use Garden\Lib\LoginRequired;
+use Onesimus\Router\Http\Request;
+use Onesimus\Router\Attr\Route;
+use Onesimus\Router\Attr\Filter;
+use function Garden\buffer_var_dump;
 
 class ImageController {
-    private Application $app;
-
-    public function __construct(Application $app) {
-        $this->app = $app;
-    }
-
-    public function upload_image() {
-        $data = $this->app->request->POST;
+    #[Filter('LoginRequired')]
+    #[Route('post', '/upload')]
+    public function upload_image(Request $request) {
+        $data = $request->POST;
 
         if (\array_key_exists('image', $data)) {
             $filename = $this->upload_png_data($data['image']);

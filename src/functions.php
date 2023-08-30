@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden;
+namespace Garden;
 
 function BSON_array_to_array(\Traversable $a): array {
     $r = [];

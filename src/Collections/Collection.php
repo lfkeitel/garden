@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Collections;
+namespace Garden\Collections;
 
-use function Root\Garden\get_class_name;
-use Root\Garden\DatabaseConnection;
+use function Garden\get_class_name;
+use Garden\DatabaseConnection;
 
 abstract class Collection {
     protected DatabaseConnection $db;

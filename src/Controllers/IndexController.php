@@ -1,18 +1,16 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Controllers;
+namespace Garden\Controllers;
 
-use Root\Garden\Application;
+use Garden\Application;
+use Onesimus\Router\Http\Request;
+use Onesimus\Router\Attr\Route;
+use Onesimus\Router\Attr\Route404;
 
 class IndexController {
-    private Application $app;
-
-    public function __construct(Application $app) {
-        $this->app = $app;
-    }
-
-    public function index() {
-        $plantings = $this->app->db->plantings->find_multiple(
+    #[Route('get', '/')]
+    public function index(Request $request, Application $app) {
+        $plantings = $app->db->plantings->find_multiple(
             [
                 'status' => [
                     '$nin' => [
@@ -25,19 +23,19 @@ class IndexController {
             ['sort' => ['date' => 1]],
         );
 
-        $logs = $this->app->db->logs->find_multiple(
+        $logs = $app->db->logs->find_multiple(
             [],
             ['$limit' => 15, 'sort' => ['date' => -1]],
         );
 
-        $beds = $this->app->db->beds->get_all();
+        $beds = $app->db->beds->get_all();
         $bed_plantings = [];
 
         foreach ($beds as $bed) {
-            $bed_plantings[$bed->get_id()] = $this->app->db->plantings->get_in_bed($bed->get_id_obj());
+            $bed_plantings[$bed->get_id()] = $app->db->plantings->get_in_bed($bed->get_id_obj());
         }
 
-        echo $this->app->templates->render(
+        echo $app->templates->render(
             'index',
             [
                 'plantings' => $plantings,
@@ -48,7 +46,8 @@ class IndexController {
         );
     }
 
-    public function error404() {
-        echo $this->app->templates->render('404');
+    #[Route404]
+    public function error404(Request $request, Application $app) {
+        echo $app->templates->render('404');
     }
 }

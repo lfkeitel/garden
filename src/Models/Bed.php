@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Models;
+namespace Garden\Models;
 
-use function Root\Garden\BSON_array_to_array;
-use Root\Garden\DatabaseConnection;
+use function Garden\BSON_array_to_array;
+use Garden\DatabaseConnection;
 use MongoDB\Model\BSONDocument;
 use MongoDB;
 

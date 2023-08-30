@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden\Models;
+namespace Garden\Models;
 
 class ArrayOfLogs extends \ArrayObject {
     public function offsetSet($key, $val): void {

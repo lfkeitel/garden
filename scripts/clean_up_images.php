@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Root\Garden;
+namespace Garden;
 
 $dev_mode = false;
 
