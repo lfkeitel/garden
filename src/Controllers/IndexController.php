@@ -25,7 +25,7 @@ class IndexController {
 
         $logs = $app->db->logs->find_multiple(
             [],
-            ['$limit' => 15, 'sort' => ['date' => -1]],
+            ['limit' => 15, 'sort' => ['date' => -1]],
         );
 
         $beds = $app->db->beds->get_all();
