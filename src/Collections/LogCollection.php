@@ -10,12 +10,15 @@ class LogCollection extends Collection {
         return $this->find_multiple([], ['sort' => [$sort_prop => $sort_dir]]);
     }
 
-    public function get_planting_logs(string|ObjectId $id, string $sort_prop = 'date', $sort_dir = -1): Models\ArrayOfLogs {
+    public function get_planting_logs(string|ObjectId $id, string $planting_date, string $sort_prop = 'date', $sort_dir = -1): Models\ArrayOfLogs {
         $id = $id instanceof ObjectId ? $id : new ObjectId($id);
         return $this->find_multiple([
             '$or' => [
-                ['planting' => $id],
-                ['planting' => null]
+                ['planting' => $id], // Logs for specific planting
+                ['$and' => [ // Logs for all plantings made after planting date
+                    ['planting' => null],
+                    ['date' => ['$gt' => $planting_date]]
+                ]]
             ]
         ], ['sort' => [$sort_prop => $sort_dir]]);
     }

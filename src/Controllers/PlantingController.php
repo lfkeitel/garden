@@ -46,7 +46,7 @@ class PlantingController {
     #[Route('get', '/plantings/{id}')]
     public function plantings_view_get(Request $request, Application $app, string $id) {
         $planting = $app->db->plantings->find_by_id($id);
-        $logs = $app->db->logs->get_planting_logs($id);
+        $logs = $app->db->logs->get_planting_logs($id, $planting->date->format('Y-m-d H:i:s'));
 
         echo $app->templates->render('plantings::view',
             [
