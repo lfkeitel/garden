@@ -11,9 +11,9 @@
         <title>Lee's Garden</title>
         <?php endif ?>
 
-        <link rel="stylesheet" href="/styles/main.css">
+        <link rel="stylesheet" href="/static/styles/main.css">
         <?php if(isset($styles)): foreach($styles as $style): ?>
-        <link rel="stylesheet" href="/styles/<?= $style ?>.css">
+        <link rel="stylesheet" href="/static/styles/<?= $style ?>.css">
         <?php endforeach; endif ?>
     </head>
 
@@ -42,8 +42,8 @@
         </div>
     </body>
 
-    <script type="text/javascript" src="/scripts/common.js"></script>
+    <script type="text/javascript" src="/static/scripts/common.js"></script>
     <?php if(isset($scripts)): foreach($scripts as $script): ?>
-    <script type="text/javascript" src="/scripts/<?= $script ?>.js"></script>
+    <script type="text/javascript" src="/static/scripts/<?= $script ?>.js"></script>
     <?php endforeach; endif ?>
 </html>
