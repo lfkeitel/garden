@@ -42,6 +42,7 @@
         </div>
     </body>
 
+    <script type="text/javascript" src="/scripts/common.js"></script>
     <?php if(isset($scripts)): foreach($scripts as $script): ?>
     <script type="text/javascript" src="/scripts/<?= $script ?>.js"></script>
     <?php endforeach; endif ?>

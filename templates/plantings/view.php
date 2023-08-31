@@ -4,7 +4,6 @@
 
 <p>
     <a href="/plantings/edit/<?= $planting->get_id() ?>" class="btn">Edit</a>
-    <a href="/logs/new?planting=<?= $this->e($planting->get_id()) ?>" class="btn">New Log</a>
     <a href="/plantings/gallery/<?= $this->e($planting->get_id()) ?>" class="btn">Photo Gallery</a>
 </p>
 

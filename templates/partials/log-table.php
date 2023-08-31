@@ -26,7 +26,7 @@
                     <button type="submit" class="btn btn-small">Edit</button>
                 </form>
 
-                <form method="post">
+                <form method="post" onsubmit="return form_confirm(this);">
                     <input type="hidden" value="delete_log" name="action">
                     <input type="hidden" value="<?= $log->get_id() ?>" name="log_id">
                     <button type="submit" class="btn btn-small">Delete</button>
