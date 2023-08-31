@@ -45,7 +45,7 @@ class LogController {
 
         echo $app->templates->render(
             'logs::new',
-            ['plantings' => $this->get_planting_select_data(), 'select_planting' => $preselect_id],
+            ['plantings' => $this->get_planting_select_data($app), 'select_planting' => $preselect_id],
         );
     }
 
@@ -75,7 +75,7 @@ class LogController {
 
         echo $app->templates->render(
             'logs::new',
-            ['plantings' => $this->get_planting_select_data()],
+            ['plantings' => $this->get_planting_select_data($app)],
         );
     }
 
