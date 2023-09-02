@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Garden\Collections;
 
 use Garden\Models;
+use Garden\Lib\Weather;
 use MongoDB\BSON\ObjectId;
 
 class LogCollection extends Collection {
@@ -42,16 +43,17 @@ class LogCollection extends Collection {
         $collection = $this->db->get_mongodb_collection($this->collection);
         $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfLogs();
-        foreach ($all_items as $log) {
-            $extras = [];
+        foreach ($all_items as $record) {
+            $date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['date']);
+            $extras = [
+                'weather' => Weather::get_for_date($date->format('Y-m-d')),
+            ];
 
-            if($log['planting']) {
-                $extras = [
-                    'planting' => $this->db->plantings->find_by_id($log['planting']),
-                ];
+            if($record['planting']) {
+                $extras['planting'] = $this->db->plantings->find_by_id($record['planting']);
             }
 
-            $records []= new Models\Log($log, $extras);
+            $records []= new Models\Log($record, $extras);
         }
         return $records;
     }

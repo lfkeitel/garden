@@ -11,6 +11,7 @@ class Log extends DBRecord {
     public string $notes;
     public string $time_of_day;
     public array $image_files = [];
+    public Weather $weather;
 
     public function __construct(?BSONDocument $record = null, ?array $extras = []) {
         if ($record) {
@@ -30,6 +31,7 @@ class Log extends DBRecord {
         $this->date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['date']);
         $this->notes = $record['notes'];
         $this->time_of_day = $record['time_of_day'];
+        $this->weather = $extras['weather'];
 
         if ($record->offsetExists('image_files')) {
             $this->image_files = BSON_array_to_array($record['image_files']);

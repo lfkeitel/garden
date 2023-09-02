@@ -12,6 +12,7 @@
             <?php if ($edit_btns): ?><th scope="col"></th><?php endif ?>
             <th scope="col"></th>
             <th scope="col">Date</th>
+            <th scope="col">Weather</th>
             <th scope="col">Planting</th>
             <th scope="col">Time of Day</th>
             <th scope="col">Notes</th>
@@ -35,6 +36,7 @@
             <?php endif ?>
             <td><a href="/logs/<?= $log->get_id() ?>">View</a></td>
             <td><?= $log->date->format('Y-m-d') ?></td>
+            <td><?= $log->weather->temp_high ?>/<?= $log->weather->temp_low ?>&deg;C</td>
             <?php if (!is_null($log->planting)): ?>
             <td><a href="/plantings/<?= $log->planting->get_id() ?>"><?= $log->display_string() ?></a></td>
             <?php else: ?>
