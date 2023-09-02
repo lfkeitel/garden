@@ -4,3 +4,9 @@ $mongo_db_connect = [
     'port' => 27017,
     'database' => 'garden',
 ];
+
+$openweather_apikey = '';
+$location = [
+    'lat' => '',
+    'lon' => '',
+];

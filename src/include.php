@@ -18,12 +18,16 @@ if ($dev_mode) {
 
 require 'functions.php';
 require 'database.php';
+$db = new DatabaseConnection($mongo_db_connect);
+
 require 'routes.php';
 $app_vars = require 'app_vars.php';
 
-$request = Request::getRequest();
+Lib\Weather::$apikey = $openweather_apikey;
+Lib\Weather::$location = $location;
+Lib\Weather::$db = $db->weather;
 
-$db = new DatabaseConnection($mongo_db_connect);
+$request = Request::getRequest();
 
 $templates = new Engine('../templates');
 $templates->addFolder('seeds', '../templates/seeds');

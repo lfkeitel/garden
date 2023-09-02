@@ -3,9 +3,10 @@ declare(strict_types=1);
 namespace Garden\Collections;
 
 use Garden\Models;
+use Garden\Lib\WeatherDataConnector;
 use MongoDB\BSON\ObjectId;
 
-class WeatherCollection extends Collection {
+class WeatherCollection extends Collection implements WeatherDataConnector {
     // $date = 'yyyy-mm-dd'
     public function get_by_date(string $date): ?Models\Weather {
         return $this->find_one('date', $date);

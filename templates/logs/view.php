@@ -27,6 +27,36 @@
         <dd><?= $log->time_of_day ?></dd>
     </dl>
 
+    <h3>Weather</h3>
+    <dl>
+        <dt>Day High</dt>
+        <dd><?= $log->weather->temp_high ?>&deg;C</dd>
+
+        <dt>Day Low</dt>
+        <dd><?= $log->weather->temp_low ?>&deg;C</dd>
+
+        <dt>Afternoon</dt>
+        <dd><?= $log->weather->temp_afternoon ?>&deg;C</dd>
+
+        <dt>Night</dt>
+        <dd><?= $log->weather->temp_night ?>&deg;C</dd>
+
+        <dt>Evening</dt>
+        <dd><?= $log->weather->temp_evening ?>&deg;C</dd>
+
+        <dt>Morning</dt>
+        <dd><?= $log->weather->temp_morning ?>&deg;C</dd>
+
+        <dt>Precipitation</dt>
+        <dd><?= $log->weather->precipitation ?>in</dd>
+
+        <dt>Cloud Cover</dt>
+        <dd><?= $log->weather->cloud_cov ?>%</dd>
+
+        <dt>Humidity</dt>
+        <dd><?= $log->weather->humidity ?>%</dd>
+    </dl>
+
     <h3>Notes</h3>
     <p class="notes"><?= nl2br($log->notes) ?></p>
 

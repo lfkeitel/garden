@@ -11,6 +11,7 @@ class DatabaseConnection {
     public Collections\Collection $plantings;
     public Collections\Collection $logs;
     public Collections\Collection $beds;
+    public Collections\Collection $weather;
 
     public function __construct(array $options) {
         $client = new MongoDB\Client("mongodb://$options[hostname]:$options[port]");
@@ -20,6 +21,7 @@ class DatabaseConnection {
         $this->plantings = new Collections\PlantingCollection($this);
         $this->logs = new Collections\LogCollection($this);
         $this->beds = new Collections\BedCollection($this);
+        $this->weather = new Collections\WeatherCollection($this);
     }
 
     public function get_mongodb_collection(string $collection): MongoDB\Collection {
