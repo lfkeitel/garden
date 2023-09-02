@@ -214,7 +214,7 @@ class PlantingController {
         $planting = $app->db->plantings->find_by_id($id);
 
         $log_dir = $dir === 'asc' ? 1 : -1;
-        $logs = $app->db->logs->get_planting_logs($id, 'date', $log_dir);
+        $logs = $app->db->logs->get_planting_logs($id, $planting->date->format('Y-m-d H:i:s'), 'date', $log_dir);
 
         echo $app->templates->render('plantings::gallery',
             [
