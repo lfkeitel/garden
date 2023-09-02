@@ -2,10 +2,7 @@
 declare(strict_types=1);
 namespace Garden\Models;
 
-use function Garden\BSON_array_to_array;
-use Garden\DatabaseConnection;
 use MongoDB\Model\BSONDocument;
-use MongoDB;
 
 
 class Bed extends DBRecord {
@@ -15,7 +12,13 @@ class Bed extends DBRecord {
     public int $cols;
     public string $notes;
 
-    protected function load_from_record(BSONDocument $record, DatabaseConnection $db) {
+    public function __construct(?BSONDocument $record = null) {
+        if ($record) {
+            $this->load_from_record($record);
+        }
+    }
+
+    protected function load_from_record(BSONDocument $record) {
         $this->id = $record['_id'];
         $this->added = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['added']);
         $this->name = $record['name'];

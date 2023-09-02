@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Garden\Models;
 
-use function Garden\BSON_array_to_array;
-use Garden\DatabaseConnection;
 use MongoDB\Model\BSONDocument;
 
 class Planting extends DBRecord {
@@ -18,11 +16,17 @@ class Planting extends DBRecord {
     public string $tray_id;
     public ?\DateTimeImmutable $harvest_date = null;
 
+    public function __construct(?BSONDocument $record = null, ?array $extras = []) {
+        if ($record) {
+            $this->load_from_record($record, $extras);
+        }
+    }
+
     public function display_string(): string {
         return "{$this->seed->common_name} - {$this->seed->variety}";
     }
 
-    protected function load_from_record(BSONDocument $record, DatabaseConnection $db) {
+    protected function load_from_record(BSONDocument $record, array $extras) {
         $this->id = $record['_id'];
         $this->row = $record['row'];
         $this->column = $record['column'];
@@ -36,8 +40,8 @@ class Planting extends DBRecord {
             $this->harvest_date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['harvest_date']);
         }
 
-        $this->seed = $db->seeds->find_by_id($record['seed']);
-        $this->bed = $db->beds->find_by_id($record['bed']);
+        $this->seed = $extras['seed'];
+        $this->bed = $extras['bed'];
     }
 
     public function to_array(): array {

@@ -43,7 +43,15 @@ class LogCollection extends Collection {
         $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfLogs();
         foreach ($all_items as $log) {
-            $records []= new Models\Log($log, $this->db);
+            $extras = [];
+
+            if($log['planting']) {
+                $extras = [
+                    'planting' => $this->db->plantings->find_by_id($log['planting']),
+                ];
+            }
+
+            $records []= new Models\Log($log, $extras);
         }
         return $records;
     }

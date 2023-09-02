@@ -25,16 +25,6 @@ class PlantingCollection extends Collection {
         return null;
     }
 
-    public function find_multiple(array $filter = [], array $options = []): Models\ArrayOfPlantings {
-        $collection = $this->db->get_mongodb_collection($this->collection);
-        $all_items = $collection->find($filter, $options);
-        $records = new Models\ArrayOfPlantings();
-        foreach ($all_items as $doc) {
-            $records []= new Models\Planting($doc, $this->db);
-        }
-        return $records;
-    }
-
     public function get_in_bed(string|ObjectId $id): Models\ArrayOfPlantings {
         $id = $id instanceof ObjectId ? $id : new ObjectId($id);
 
@@ -50,5 +40,20 @@ class PlantingCollection extends Collection {
                 ]
             ]
         );
+    }
+
+    public function find_multiple(array $filter = [], array $options = []): Models\ArrayOfPlantings {
+        $collection = $this->db->get_mongodb_collection($this->collection);
+        $all_items = $collection->find($filter, $options);
+        $records = new Models\ArrayOfPlantings();
+        foreach ($all_items as $doc) {
+            $extras = [
+                'seed' => $this->db->seeds->find_by_id($doc['seed']),
+                'bed' => $this->db->beds->find_by_id($doc['bed']),
+            ];
+
+            $records []= new Models\Planting($doc, $extras);
+        }
+        return $records;
     }
 }

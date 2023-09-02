@@ -3,9 +3,7 @@ declare(strict_types=1);
 namespace Garden\Models;
 
 use function Garden\BSON_array_to_array;
-use Garden\DatabaseConnection;
 use MongoDB\Model\BSONDocument;
-
 
 class Log extends DBRecord {
     public \DateTimeImmutable $date;
@@ -14,6 +12,12 @@ class Log extends DBRecord {
     public string $time_of_day;
     public array $image_files = [];
 
+    public function __construct(?BSONDocument $record = null, ?array $extras = []) {
+        if ($record) {
+            $this->load_from_record($record, $extras);
+        }
+    }
+
     public function display_string(): string {
         if ($this->planting) {
             return $this->planting->display_string();
@@ -21,7 +25,7 @@ class Log extends DBRecord {
         return "All";
     }
 
-    protected function load_from_record(BSONDocument $record, DatabaseConnection $db) {
+    protected function load_from_record(BSONDocument $record, array $extras) {
         $this->id = $record['_id'];
         $this->date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['date']);
         $this->notes = $record['notes'];
@@ -32,7 +36,7 @@ class Log extends DBRecord {
         }
 
         if($record['planting']) {
-            $this->planting = $db->plantings->find_by_id($record['planting']);
+            $this->planting = $extras['planting'];
         }
     }
 
