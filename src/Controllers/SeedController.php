@@ -70,41 +70,41 @@ class SeedController {
     public function seeds_new_post(Request $request, Application $app) {
         $form_vars = $request->POST;
 
-        $seed = new Models\Seed($app->db, null);
+        $record = new Models\Seed();
 
-        $seed->added = new \DateTimeImmutable();
-        $seed->type = $form_vars['seed_type'];
-        $seed->variety = $form_vars['variety_name'];
-        $seed->days_to_maturity = intval($form_vars['days_to_maturity']);
-        $seed->days_to_germination = intval($form_vars['days_to_germination']);
-        $seed->is_heirloom = $form_vars['is_heirloom'] == 'Yes';
-        $seed->sun = $form_vars['sun_amt'];
-        $seed->season = $form_vars['growing_season'] ?? ['Summer'];
-        $seed->characteristics = $form_vars['other_charact'] ?? [];
-        $seed->is_hybrid = $form_vars['is_hybrid'] == 'Yes';
-        $seed->source = $form_vars['source'];
-        $seed->link = $form_vars['source_link'];
-        $seed->notes = $form_vars['notes'];
-        $seed->on_wishlist = \array_key_exists('on_wishlist', $form_vars);
+        $record->added = new \DateTimeImmutable();
+        $record->type = $form_vars['seed_type'];
+        $record->variety = $form_vars['variety_name'];
+        $record->days_to_maturity = intval($form_vars['days_to_maturity']);
+        $record->days_to_germination = intval($form_vars['days_to_germination']);
+        $record->is_heirloom = $form_vars['is_heirloom'] == 'Yes';
+        $record->sun = $form_vars['sun_amt'];
+        $record->season = $form_vars['growing_season'] ?? ['Summer'];
+        $record->characteristics = $form_vars['other_charact'] ?? [];
+        $record->is_hybrid = $form_vars['is_hybrid'] == 'Yes';
+        $record->source = $form_vars['source'];
+        $record->link = $form_vars['source_link'];
+        $record->notes = $form_vars['notes'];
+        $record->on_wishlist = \array_key_exists('on_wishlist', $form_vars);
 
-        switch ($seed->type) {
+        switch ($record->type) {
             case 'Vegetable':
-                $seed->common_name = $form_vars['seed_vegetable_name'];
+                $record->common_name = $form_vars['seed_vegetable_name'];
                 break;
             case 'Herb':
-                $seed->common_name = $form_vars['seed_herb_name'];
+                $record->common_name = $form_vars['seed_herb_name'];
                 break;
             case 'Fruit':
-                $seed->common_name = $form_vars['seed_fruit_name'];
+                $record->common_name = $form_vars['seed_fruit_name'];
                 break;
             case 'Flower':
-                $seed->common_name = $form_vars['seed_flower_name'];
+                $record->common_name = $form_vars['seed_flower_name'];
                 break;
         }
 
-        $seed->create();
+        $app->db->seeds->create($record);
 
-        $app->templates->addData(['toast' => "Saved seed (<a href=\"/seeds/{$seed->get_id()}\">{$seed->display_string()}</a>)"]);
+        $app->templates->addData(['toast' => "Saved seed (<a href=\"/seeds/{$record->get_id()}\">{$record->display_string()}</a>)"]);
         echo $app->templates->render('seeds::new');
     }
 
@@ -120,6 +120,18 @@ class SeedController {
         $this->seeds($request, $app);
     }
 
+    #[Filter('LoginRequired')]
+    #[Route('post', '/wishlist')]
+    public function seeds_post_wishlist(Request $request, Application $app) {
+        switch ($request->POST['action']) {
+            case 'delete_seed':
+                $this->seeds_delete($request, $app);
+                break;
+        }
+
+        $this->wishlist($request, $app);
+    }
+
     private function seeds_delete(Request $request, Application $app) {
         $seed = $app->db->seeds->find_by_id($request->POST['seed_id']);
 
@@ -129,7 +141,7 @@ class SeedController {
             $toast_msg = "Seed deleted ({$seed->common_name} - {$seed->variety})";
 
             try {
-                $seed->delete();
+                $app->db->seeds->delete($seed);
             } catch (\Exception $e) {
                 $toast_msg = 'Error deleting seed: '.$e;
             }
@@ -154,43 +166,43 @@ class SeedController {
     #[Route('post', '/seeds/edit/{id}')]
     public function seeds_edit_post(Request $request, Application $app, string $id) {
         $form_vars = $request->POST;
-        $seed = $app->db->seeds->find_by_id($id);
+        $record = $app->db->seeds->find_by_id($id);
 
-        $seed->type = $form_vars['seed_type'];
-        $seed->variety = $form_vars['variety_name'];
-        $seed->days_to_maturity = intval($form_vars['days_to_maturity']);
-        $seed->days_to_germination = intval($form_vars['days_to_germination']);
-        $seed->is_heirloom = $form_vars['is_heirloom'] == 'Yes';
-        $seed->sun = $form_vars['sun_amt'];
-        $seed->season = $form_vars['growing_season'] ?? ['Summer'];
-        $seed->characteristics = $form_vars['other_charact'] ?? [];
-        $seed->is_hybrid = $form_vars['is_hybrid'] == 'Yes';
-        $seed->source = $form_vars['source'];
-        $seed->link = $form_vars['source_link'];
-        $seed->notes = $form_vars['notes'];
-        $seed->on_wishlist = \array_key_exists('on_wishlist', $form_vars);
+        $record->type = $form_vars['seed_type'];
+        $record->variety = $form_vars['variety_name'];
+        $record->days_to_maturity = intval($form_vars['days_to_maturity']);
+        $record->days_to_germination = intval($form_vars['days_to_germination']);
+        $record->is_heirloom = $form_vars['is_heirloom'] == 'Yes';
+        $record->sun = $form_vars['sun_amt'];
+        $record->season = $form_vars['growing_season'] ?? ['Summer'];
+        $record->characteristics = $form_vars['other_charact'] ?? [];
+        $record->is_hybrid = $form_vars['is_hybrid'] == 'Yes';
+        $record->source = $form_vars['source'];
+        $record->link = $form_vars['source_link'];
+        $record->notes = $form_vars['notes'];
+        $record->on_wishlist = \array_key_exists('on_wishlist', $form_vars);
 
-        switch ($seed->type) {
+        switch ($record->type) {
             case 'Vegetable':
-                $seed->common_name = $form_vars['seed_vegetable_name'];
+                $record->common_name = $form_vars['seed_vegetable_name'];
                 break;
             case 'Herb':
-                $seed->common_name = $form_vars['seed_herb_name'];
+                $record->common_name = $form_vars['seed_herb_name'];
                 break;
             case 'Fruit':
-                $seed->common_name = $form_vars['seed_fruit_name'];
+                $record->common_name = $form_vars['seed_fruit_name'];
                 break;
             case 'Flower':
-                $seed->common_name = $form_vars['seed_flower_name'];
+                $record->common_name = $form_vars['seed_flower_name'];
                 break;
         }
 
-        $seed->save();
+        $app->db->seeds->save($record);
 
-        $app->templates->addData(['toast' => "Saved seed (<a href=\"/seeds/{$seed->get_id()}\">{$seed->display_string()}</a>)"]);
+        $app->templates->addData(['toast' => "Saved seed (<a href=\"/seeds/{$record->get_id()}\">{$record->display_string()}</a>)"]);
         echo $app->templates->render('seeds::view',
             [
-                'seed' => $seed,
+                'seed' => $record,
             ]
         );
     }

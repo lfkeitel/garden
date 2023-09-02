@@ -43,7 +43,7 @@ class LogCollection extends Collection {
         $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfLogs();
         foreach ($all_items as $log) {
-            $records []= new Models\Log($this->db, $log);
+            $records []= new Models\Log($log, $this->db);
         }
         return $records;
     }

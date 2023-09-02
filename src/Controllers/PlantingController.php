@@ -97,7 +97,7 @@ class PlantingController {
     public function plantings_new_post(Request $request, Application $app) {
         $form_vars = $request->POST;
 
-        $record = new Models\Planting($app->db, null);
+        $record = new Models\Planting();
 
         $record->date = new \DateTimeImmutable();
         $record->row = \intval($form_vars['row']);
@@ -111,7 +111,7 @@ class PlantingController {
         $record->notes = $form_vars['notes'];
         $record->tray_id = $form_vars['tray_id'];
 
-        $record->create();
+        $app->db->plantings->create($record);
 
         $app->templates->addData([
             'toast' => "Created new planting (<a href=\"/plantings/{$record->get_id()}\">{$seed->display_string()}</a>)"
@@ -145,7 +145,7 @@ class PlantingController {
             $toast_msg = "Planting does not exist with ID {$request->POST['planting_id']}";
         } else {
             try {
-                $planting->delete();
+                $app->db->plantings->delete($planting);
             } catch (\Exception $e) {
                 $toast_msg = 'Error deleting seed: '.$e;
             }
@@ -193,7 +193,7 @@ class PlantingController {
             $record->harvest_date = null;
         }
 
-        $record->save();
+        $app->db->plantings->save($record);
 
         $app->templates->addData([
             'toast' => "Saved planting (<a href=\"/plantings/{$record->get_id()}\">{$seed->display_string()}</a>)"

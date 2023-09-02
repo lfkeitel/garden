@@ -54,7 +54,7 @@ class LogController {
     public function logs_new_post(Request $request, Application $app) {
         $form_vars = $request->POST;
 
-        $record = new Models\Log($app->db, null);
+        $record = new Models\Log();
 
         $record->date = new \DateTimeImmutable();
         if ($form_vars['planting'] !== 'All') {
@@ -67,7 +67,7 @@ class LogController {
             $record->image_files = \explode(";", $form_vars['image_files']);
         }
 
-        $record->create();
+        $app->db->logs->create($record);
 
         $app->templates->addData([
             'toast' => "Created new <a href=\"/logs/{$record->get_id()}\">log</a>"
@@ -111,7 +111,7 @@ class LogController {
         } else {
             try {
                 $files = $log->image_files;
-                $log->delete();
+                $app->db->logs->delete($log);
 
                 foreach($files as $file) {
                     \unlink("../uploads/$file");
@@ -153,7 +153,7 @@ class LogController {
         $record->notes = $form_vars['notes'];
         $record->time_of_day = $form_vars['time_of_day'];
 
-        $record->save();
+        $app->db->logs->save($record);
 
         $app->templates->addData([
             'toast' => "Saved log ({$record->date->format('Y-m-d H:i:s')})",

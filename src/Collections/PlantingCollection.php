@@ -30,7 +30,7 @@ class PlantingCollection extends Collection {
         $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfPlantings();
         foreach ($all_items as $doc) {
-            $records []= new Models\Planting($this->db, $doc);
+            $records []= new Models\Planting($doc, $this->db);
         }
         return $records;
     }

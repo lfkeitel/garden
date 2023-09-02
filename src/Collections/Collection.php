@@ -4,6 +4,8 @@ namespace Garden\Collections;
 
 use function Garden\get_class_name;
 use Garden\DatabaseConnection;
+use Garden\Models\DBRecord;
+use MongoDB;
 
 abstract class Collection {
     protected DatabaseConnection $db;
@@ -15,5 +17,27 @@ abstract class Collection {
         $name = get_class_name($this);
         $name = \str_replace('Collection', '', $name);
         $this->collection = strtolower($name);
+    }
+
+    public function create(DBRecord $record): MongoDB\InsertOneResult {
+        $collection = $this->collection;
+        $res = $this->db->get_mongodb_collection($collection)->insertOne($record->to_array());
+        $record->set_id($res->getInsertedId());
+        return $res;
+    }
+
+    public function save(DBRecord $record): MongoDB\UpdateResult {
+        $collection = $this->collection;
+        return $this->db->get_mongodb_collection($collection)->replaceOne(
+            ['_id' => $record->get_id_obj()],
+            $record->to_array()
+        );
+    }
+
+    public function delete(DBRecord $record): MongoDB\DeleteResult {
+        $collection = $this->collection;
+        return $this->db->get_mongodb_collection($collection)->deleteOne (
+            ['_id' => $record->get_id_obj()]
+        );
     }
 }

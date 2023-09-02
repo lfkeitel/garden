@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Garden\Models;
 
 use function Garden\BSON_array_to_array;
+use Garden\DatabaseConnection;
 use MongoDB\Model\BSONDocument;
 
 
@@ -27,7 +28,7 @@ class Seed extends DBRecord {
         return "{$this->common_name} - {$this->variety}";
     }
 
-    protected function load_from_record(BSONDocument $record) {
+    protected function load_from_record(BSONDocument $record, DatabaseConnection $db) {
         $this->id = $record['_id'];
         $this->added = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['added']);
         $this->type = $record['type'];
@@ -46,7 +47,7 @@ class Seed extends DBRecord {
         $this->on_wishlist = $record['on_wishlist'] ?? false;
     }
 
-    protected function to_array(): array {
+    public function to_array(): array {
         return [
             'added' => $this->added->format('Y-m-d H:i:s'),
             'type' => $this->type,

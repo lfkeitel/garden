@@ -56,7 +56,7 @@ class BedController {
     public function beds_new_post(Request $request, Application $app) {
         $form_vars = $request->POST;
 
-        $record = new Models\Bed($app->db, null);
+        $record = new Models\Bed();
 
         $record->added = new \DateTimeImmutable();
         $record->name = $form_vars['name'];
@@ -64,7 +64,7 @@ class BedController {
         $record->cols = \intval($form_vars['cols']);
         $record->notes = $form_vars['notes'];
 
-        $record->create();
+        $app->db->beds->create($record);
 
         $app->templates->addData([
             'toast' => "Created new bed (<a href=\"/beds/{$record->get_id()}\">{$record->name}</a>)"
@@ -93,7 +93,7 @@ class BedController {
             $toast_msg = "Bed does not exist with ID {$request->POST['bed_id']}";
         } else {
             try {
-                $bed->delete();
+                $app->db->beds->delete($bed);
             } catch (\Exception $e) {
                 $toast_msg = 'Error deleting bed: '.$e;
             }
@@ -123,7 +123,7 @@ class BedController {
         $record->cols = \intval($form_vars['cols']);
         $record->notes = $form_vars['notes'];
 
-        $record->save();
+        $app->db->beds->save($record);
 
         $app->templates->addData([
             'toast' => "Saved bed ({$record->name})"

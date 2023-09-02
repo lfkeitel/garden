@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Garden\Models;
 
 use function Garden\BSON_array_to_array;
+use Garden\DatabaseConnection;
 use MongoDB\Model\BSONDocument;
 
 
@@ -20,7 +21,7 @@ class Log extends DBRecord {
         return "All";
     }
 
-    protected function load_from_record(BSONDocument $record) {
+    protected function load_from_record(BSONDocument $record, DatabaseConnection $db) {
         $this->id = $record['_id'];
         $this->date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['date']);
         $this->notes = $record['notes'];
@@ -31,11 +32,11 @@ class Log extends DBRecord {
         }
 
         if($record['planting']) {
-            $this->planting = $this->db->plantings->find_by_id($record['planting']);
+            $this->planting = $db->plantings->find_by_id($record['planting']);
         }
     }
 
-    protected function to_array(): array {
+    public function to_array(): array {
         return [
             'date' => $this->date->format('Y-m-d H:i:s'),
             'planting' => is_null($this->planting) ? null : $this->planting->get_id_obj(),

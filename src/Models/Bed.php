@@ -15,7 +15,7 @@ class Bed extends DBRecord {
     public int $cols;
     public string $notes;
 
-    protected function load_from_record(BSONDocument $record) {
+    protected function load_from_record(BSONDocument $record, DatabaseConnection $db) {
         $this->id = $record['_id'];
         $this->added = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['added']);
         $this->name = $record['name'];
@@ -24,7 +24,7 @@ class Bed extends DBRecord {
         $this->notes = $record['notes'];
     }
 
-    protected function to_array(): array {
+    public function to_array(): array {
         return [
             'added' => $this->added->format('Y-m-d H:i:s'),
             'name' => $this->name,
