@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Garden\Collections;
 
 use Garden\Models;
-use Garden\Lib\Weather;
+use Garden\Lib\Weather\Store as WeatherStore;
 use MongoDB\BSON\ObjectId;
 
 class LogCollection extends Collection {
@@ -46,7 +46,7 @@ class LogCollection extends Collection {
         foreach ($all_items as $record) {
             $date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['date']);
             $extras = [
-                'weather' => Weather::get_for_date($date->format('Y-m-d')),
+                'weather' => WeatherStore::get_for_date($date->format('Y-m-d')),
             ];
 
             if($record['planting']) {

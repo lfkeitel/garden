@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Garden\Lib;
+namespace Garden\Lib\Weather;
 
 use Garden\Models\Weather as WeatherModel;
 
-class Weather {
-    public static WeatherDataConnector $db;
+class Store {
+    public static DataConnector $db;
     public static string $address = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
     public static string $apikey = '';
     public static array $location = [
@@ -50,6 +50,10 @@ class Weather {
     }
 
     public static function get_openweather_data(string $date): ?array {
+        if (self::$apikey === '') {
+            return null;
+        }
+
         $address = self::$address;
         $lat = self::$location['lat'];
         $lon = self::$location['lon'];

@@ -23,9 +23,9 @@ $db = new DatabaseConnection($mongo_db_connect);
 require 'routes.php';
 $app_vars = require 'app_vars.php';
 
-Lib\Weather::$apikey = $openweather_apikey;
-Lib\Weather::$location = $location;
-Lib\Weather::$db = $db->weather;
+Lib\Weather\Store::$apikey = $openweather_apikey;
+Lib\Weather\Store::$location = $location;
+Lib\Weather\Store::$db = $db->weather;
 
 $request = Request::getRequest();
 
