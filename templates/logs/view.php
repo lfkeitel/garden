@@ -60,7 +60,7 @@
     <h3>Notes</h3>
     <p class="notes"><?= nl2br($log->notes) ?></p>
 
-    <h3>Images</h3>
+    <h3 id="images">Images</h3>
     <?php foreach ($log->image_files as $file): ?>
     <p><a href="/uploads/<?= $file ?>" target="_blank"><img src="/uploads/<?= $file ?>" width="720" height="540"></a></p>
     <?php endforeach ?>

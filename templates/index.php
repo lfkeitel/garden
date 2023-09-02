@@ -92,7 +92,7 @@ $now = new DateTimeImmutable();
             <th scope="col">Bed</th>
             <th scope="col">Status</th>
             <th scope="col">Tray ID</th>
-            <th scope="col">Harvest Date</th>
+            <th scope="col">Maturity Date</th>
         </tr>
     </thead>
     <tbody>

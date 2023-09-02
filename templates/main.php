@@ -23,7 +23,7 @@
                 <ul>
                     <li><a href="/" class="<?= $app->request->REQUEST_URI == "/" ? 'active-page' : '' ?>">Home</a></li>
                     <li><a href="/logs" class="<?= $app->request->REQUEST_URI == "/logs" ? 'active-page' : '' ?>">Log</a></li>
-                    <li><a href="/plantings" class="<?= $app->request->REQUEST_URI == "/plantings" ? 'active-page' : '' ?>">Plantings</a></li>
+                    <li><a href="/plantings?filter=Active" class="<?= $app->request->REQUEST_URI == "/plantings" ? 'active-page' : '' ?>">Plantings</a></li>
                     <li><a href="/seeds" class="<?= $app->request->REQUEST_URI == "/seeds" ? 'active-page' : '' ?>">Seeds</a></li>
                     <li><a href="/wishlist" class="<?= $app->request->REQUEST_URI == "/wishlist" ? 'active-page' : '' ?>">Wishlist</a></li>
                     <li><a href="/beds" class="<?= $app->request->REQUEST_URI == "/beds" ? 'active-page' : '' ?>">Beds</a></li>

@@ -43,7 +43,7 @@
             <td><?= $log->display_string() ?></td>
             <?php endif ?>
             <td><?= $log->time_of_day ?></td>
-            <td><?= count($log->image_files) > 0 ? '📷 ' : '' ?><?= nl2br($log->notes) ?></td>
+            <td><?= count($log->image_files) > 0 ? "<a href=\"/logs/{$log->get_id()}#images\">📷</a> " : '' ?><?= nl2br($log->notes) ?></td>
         </tr>
         <?php endforeach ?>
     </tbody>
