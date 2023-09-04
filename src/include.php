@@ -8,9 +8,10 @@ use League\Plates\Engine;
 $dev_mode = false;
 
 require '../vendor/autoload.php';
+$config = [];
 require 'config.php';
 
-if ($dev_mode) {
+if ($config['dev_mode']) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
@@ -18,13 +19,13 @@ if ($dev_mode) {
 
 require 'functions.php';
 require 'database.php';
-$db = new DatabaseConnection($mongo_db_connect);
+$db = new DatabaseConnection($config['mongo_db_connect']);
 
 require 'routes.php';
 $app_vars = require 'app_vars.php';
 
-Lib\Weather\Store::$apikey = $openweather_apikey;
-Lib\Weather\Store::$location = $location;
+Lib\Weather\Store::$apikey = $config['openweather_apikey'];
+Lib\Weather\Store::$location = $config['location'];
 Lib\Weather\Store::$db = $db->weather;
 
 $request = Request::getRequest();
@@ -36,7 +37,11 @@ $templates->addFolder('beds', '../templates/beds');
 $templates->addFolder('logs', '../templates/logs');
 $templates->addFolder('partials', '../templates/partials');
 
-$app = new Application($db, $request, $templates);
+\session_save_path(__DIR__.'/../sessions');
+\session_start();
+\session_gc();
+
+$app = new Application($db, $config, $request, $templates);
 
 $templates->addData([
     'app' => $app,

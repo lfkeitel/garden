@@ -35,6 +35,12 @@ class IndexController {
             $bed_plantings[$bed->get_id()] = $app->db->plantings->get_in_bed($bed->get_id_obj());
         }
 
+        if (\array_key_exists('login', $request->get)) {
+            $app->templates->addData([
+                'toast' => 'Logged in'
+            ]);
+        }
+
         echo $app->templates->render(
             'index',
             [
@@ -44,6 +50,42 @@ class IndexController {
                 'bed_plantings' => $bed_plantings,
             ],
         );
+    }
+
+    #[Route('get', '/login')]
+    public function login(Request $request, Application $app) {
+        echo $app->templates->render('login');
+    }
+
+    #[Route('post', '/login')]
+    public function login_post(Request $request, Application $app) {
+        $formdata = $request->post;
+        $user = $app->config['admin_user'];
+
+        if (!\array_key_exists('username', $formdata) ||
+            !\array_key_exists('password', $formdata) ||
+            $formdata['username'] !== $user['username'] ||
+            !\password_verify($formdata['password'], $user['password'])
+        ) {
+            $app->templates->addData([
+                'toast' => "Incorrect username or password"
+            ]);
+            $this->login($request, $app);
+            return;
+        }
+
+        $_SESSION['logged_in'] = true;
+        \header('Location: /?login=success');
+        \http_response_code(303);
+    }
+
+    #[Route('get', '/logout')]
+    public function logout(Request $request, Application $app) {
+        $_SESSION['logged_in'] = false;
+        $app->templates->addData([
+            'toast' => "Logged out"
+        ]);
+        $this->login($request, $app);
     }
 
     #[Route404]

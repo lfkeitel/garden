@@ -13,5 +13,5 @@ Router::registerClass('Garden\Controllers\PlantingController');
 Router::registerClass('Garden\Controllers\LogController');
 
 Router::filter('LoginRequired', function (Request $request): bool {
-    return $request->remote_user !== '';
+    return \array_key_exists('logged_in', $_SESSION) && $_SESSION['logged_in'] === true;
 });
