@@ -3,7 +3,9 @@
 <h2>== Bed <?= $bed->name ?> ==</h2>
 
 <p>
+    <?php if ($this->is_logged_in()): ?>
     <a href="/beds/edit/<?= $bed->get_id() ?>" class="btn">Edit</a>
+    <?php endif ?>
 </p>
 
 <article>

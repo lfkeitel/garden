@@ -27,7 +27,7 @@
                     <li><a href="/seeds" class="<?= $app->request->REQUEST_URI == "/seeds" ? 'active-page' : '' ?>">Seeds</a></li>
                     <li><a href="/wishlist" class="<?= $app->request->REQUEST_URI == "/wishlist" ? 'active-page' : '' ?>">Wishlist</a></li>
                     <li><a href="/beds" class="<?= $app->request->REQUEST_URI == "/beds" ? 'active-page' : '' ?>">Beds</a></li>
-                    <?php if (\array_key_exists('logged_in', $_SESSION) && $_SESSION['logged_in'] === true): ?>
+                    <?php if ($this->is_logged_in()): ?>
                     <li><a href="/logout">Logout</a></li>
                     <?php else: ?>
                     <li><a href="/login" class="<?= $app->request->REQUEST_URI == "/login" ? 'active-page' : '' ?>">Login</a></li>

@@ -1,15 +1,19 @@
 <?php $edit_btns = $edit_btns ?? true; ?>
 
+<?php if ($this->is_logged_in()): ?>
 <?php if (isset($planting_id) && $planting_id !== ''): ?>
 <a href="/logs/new?planting=<?= $this->e($planting_id) ?>" class="btn">New Log</a>
 <?php else: ?>
 <a href="/logs/new" class="btn">New Log</a>
 <?php endif ?>
+<?php endif ?>
 
 <table class="seed-table">
     <thead>
         <tr>
-            <?php if ($edit_btns): ?><th scope="col"></th><?php endif ?>
+            <?php if ($this->is_logged_in() && $edit_btns): ?>
+            <th scope="col"></th>
+            <?php endif ?>
             <th scope="col"></th>
             <th scope="col">Date</th>
             <th scope="col">Weather</th>
@@ -21,7 +25,7 @@
     <tbody>
         <?php foreach ($logs as $log): ?>
         <tr>
-            <?php if ($edit_btns): ?>
+            <?php if ($this->is_logged_in() && $edit_btns): ?>
             <td class="control-cell">
                 <form method="get" action="/logs/edit/<?= $this->e($log->get_id()) ?>">
                     <button type="submit" class="btn btn-small">Edit</button>

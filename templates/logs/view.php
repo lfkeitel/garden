@@ -3,7 +3,9 @@
 <h2>== Log <?= $log->date->format('Y-m-d H:i:s') ?> ==</h2>
 
 <p>
+    <?php if ($this->is_logged_in()): ?>
     <a href="/logs/edit/<?= $log->get_id() ?>" class="btn">Edit</a>
+    <?php endif ?>
 </p>
 
 <article>

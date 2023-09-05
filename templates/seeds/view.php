@@ -5,7 +5,9 @@
 <h2>== <?= $seed->common_name ?> - <?= $seed->variety ?> <?= $seed->on_wishlist ? '(Wishlist)' : '' ?> ==</h2>
 
 <p>
+    <?php if ($this->is_logged_in()): ?>
     <a href="/seeds/edit/<?= $seed->get_id() ?>" class="btn">Edit</a>
+    <?php endif ?>
 </p>
 
 <article>

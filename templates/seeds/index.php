@@ -1,6 +1,8 @@
 <?php $this->layout('main', ['title' => "Seeds"]) ?>
 
+<?php if ($this->is_logged_in()): ?>
 <a href="/seeds/new" class="btn">New Seed</a>
+<?php endif ?>
 
 <table class="seed-table">
     <thead>
@@ -41,6 +43,7 @@
     <tbody>
         <?php foreach ($allSeeds as $seed): ?>
         <tr>
+            <?php if ($this->is_logged_in()): ?>
             <td class="control-cell">
                 <form method="get" action="/seeds/edit/<?= $this->e($seed->get_id()) ?>">
                     <button type="submit" class="btn btn-small">Edit</button>
@@ -52,6 +55,9 @@
                     <button type="submit" class="btn btn-small">Delete</button>
                 </form>
             </td>
+            <?php else: ?>
+            <td></td>
+            <?php endif ?>
             <td><?= $seed->type ?></td>
             <td><?= $seed->common_name ?></td>
             <td><a href="/seeds/<?= $seed->get_id() ?>"><?= $seed->variety ?></a></td>

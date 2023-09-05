@@ -1,6 +1,8 @@
 <?php $this->layout('main', ['title' => "Plantings"]) ?>
 
+<?php if ($this->is_logged_in()): ?>
 <a href="/plantings/new" class="btn">New Planting</a>
+<?php endif ?>
 
 <p>
     <form>
@@ -22,8 +24,10 @@
 <table class="seed-table">
     <thead>
         <tr>
-            <th scope="col">Sort ></th>
+            <?php if ($this->is_logged_in()): ?>
             <th scope="col"></th>
+            <?php endif ?>
+            <th scope="col">Sort ></th>
             <th scope="col">
                 <a href="/plantings?filter=<?= $filter ?>&sort_by=date<?= $sort_by == 'date' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Planted</a>
             </th>
@@ -59,6 +63,7 @@
     <tbody>
         <?php foreach ($allPlantings as $planting): ?>
         <tr>
+            <?php if ($this->is_logged_in()): ?>
             <td class="control-cell">
                 <form method="get" action="/plantings/edit/<?= $this->e($planting->get_id()) ?>">
                     <button type="submit" class="btn btn-small">Edit</button>
@@ -70,6 +75,7 @@
                     <button type="submit" class="btn btn-small">Delete</button>
                 </form>
             </td>
+            <?php endif ?>
             <td><a href="/plantings/<?= $planting->get_id() ?>">View</a></td>
             <td><?= $planting->date->format('Y-m-d') ?></td>
             <td><?= $planting->seed->display_string() ?></td>

@@ -13,5 +13,6 @@ Router::registerClass('Garden\Controllers\PlantingController');
 Router::registerClass('Garden\Controllers\LogController');
 
 Router::filter('LoginRequired', function (Request $request): bool {
-    return \array_key_exists('logged_in', $_SESSION) && $_SESSION['logged_in'] === true;
+    global $is_logged_in;
+    return $is_logged_in();
 });

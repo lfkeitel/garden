@@ -1,11 +1,15 @@
 <?php $this->layout('main', ['title' => 'Beds']) ?>
 
+<?php if ($this->is_logged_in()): ?>
 <a href="/beds/new" class="btn">New Bed</a>
+<?php endif ?>
 
 <table class="seed-table">
     <thead>
         <tr>
+            <?php if ($this->is_logged_in()): ?>
             <th scope="col"></th>
+            <?php endif ?>
             <th scope="col">
                 <a href="/beds?sort_by=name<?= $sort_by == 'name' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Name</a>
             </th>
@@ -23,6 +27,7 @@
     <tbody>
         <?php foreach ($all_beds as $bed): ?>
         <tr>
+            <?php if ($this->is_logged_in()): ?>
             <td class="control-cell">
                 <form method="get" action="/beds/edit/<?= $this->e($bed->get_id()) ?>">
                     <button type="submit" class="btn btn-small">Edit</button>
@@ -34,6 +39,7 @@
                     <button type="submit" class="btn btn-small">Delete</button>
                 </form>
             </td>
+            <?php endif ?>
             <td><a href="/beds/<?= $bed->get_id() ?>"><?= $bed->name ?></a></td>
             <td><?= $bed->added->format('Y-m-d') ?></td>
             <td><?= $bed->rows ?></td>

@@ -3,7 +3,9 @@
 <h2>== Planting of <?= $planting->seed->common_name ?> - <?= $planting->seed->variety ?> ==</h2>
 
 <p>
+    <?php if ($this->is_logged_in()): ?>
     <a href="/plantings/edit/<?= $planting->get_id() ?>" class="btn">Edit</a>
+    <?php endif ?>
     <a href="/plantings/gallery/<?= $this->e($planting->get_id()) ?>" class="btn">Photo Gallery</a>
 </p>
 

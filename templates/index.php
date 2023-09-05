@@ -20,9 +20,11 @@ $now = new DateTimeImmutable();
     (<?= $last_frost->format('Y-m-d') ?>)
 </p>
 
-<h2>Bed States</h2>
+<h2>Bed Status</h2>
 
+<?php if ($this->is_logged_in()): ?>
 <a href="/beds/new" class="btn">New Bed</a>
+<?php endif ?>
 
 <table class="seed-table">
     <thead>
@@ -82,7 +84,9 @@ $now = new DateTimeImmutable();
 
 <h2>Current Plantings</h2>
 
+<?php if ($this->is_logged_in()): ?>
 <a href="/plantings/new" class="btn">New Planting</a>
+<?php endif ?>
 
 <table class="seed-table">
     <thead>

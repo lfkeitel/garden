@@ -5,10 +5,10 @@ namespace Garden;
 use Onesimus\Router\Http\Request;
 use League\Plates\Engine;
 
-$dev_mode = false;
-
 require '../vendor/autoload.php';
-$config = [];
+$config = [
+    'dev_mode' => false
+];
 require 'config.php';
 
 if ($config['dev_mode']) {
@@ -16,6 +16,14 @@ if ($config['dev_mode']) {
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 }
+
+\session_save_path(__DIR__.'/../sessions');
+\session_start();
+\session_gc();
+
+$is_logged_in = function(): bool {
+    return \array_key_exists('logged_in', $_SESSION) && $_SESSION['logged_in'] === true;
+};
 
 require 'functions.php';
 require 'database.php';
@@ -36,10 +44,6 @@ $templates->addFolder('plantings', '../templates/plantings');
 $templates->addFolder('beds', '../templates/beds');
 $templates->addFolder('logs', '../templates/logs');
 $templates->addFolder('partials', '../templates/partials');
-
-\session_save_path(__DIR__.'/../sessions');
-\session_start();
-\session_gc();
 
 $app = new Application($db, $config, $request, $templates);
 
@@ -72,3 +76,5 @@ $templates->registerFunction('date_plus_days', function (\DateTimeInterface $the
     $day = $then->add(new \DateInterval("P{$days}D"));
     return $day->format('Y-m-d');
 });
+
+$templates->registerFunction('is_logged_in', $is_logged_in);
