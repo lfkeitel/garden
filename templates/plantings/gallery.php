@@ -3,7 +3,7 @@
 <h2>== Photo Gallery of <?= $planting->seed->common_name ?> - <?= $planting->seed->variety ?> ==</h2>
 
 <p>
-    <a href="/plantings/gallery/<?= $this->e($planting->get_id()) ?>?dir=<?= $sort_dir ?>" class="btn">Sort</a>
+    <a href="<?= $basepath ?>/plantings/gallery/<?= $this->e($planting->get_id()) ?>?dir=<?= $sort_dir ?>" class="btn">Sort</a>
 </p>
 
 <p>
@@ -18,8 +18,8 @@
                     <?= $log->notes !== '' ? '&diams;' : '' ?>
                     <?= $log->date->format('Y-m-d') ?>
                 </span><br>
-                <a href="/uploads/<?= $file ?>" target="_blank">
-                    <img src="/uploads/<?= $file ?>" width="360" height="270">
+                <a href="<?= $basepath ?>/uploads/<?= $file ?>" target="_blank">
+                    <img src="<?= $basepath ?>/uploads/<?= $file ?>" width="360" height="270">
                 </a>
             </p>
         <?php endforeach ?>

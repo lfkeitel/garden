@@ -6,7 +6,7 @@
 
 <p>
     <?php if ($this->is_logged_in()): ?>
-    <a href="/seeds/edit/<?= $seed->get_id() ?>" class="btn">Edit</a>
+    <a href="<?= $basepath ?>/seeds/edit/<?= $seed->get_id() ?>" class="btn">Edit</a>
     <?php endif ?>
 </p>
 

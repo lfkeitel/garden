@@ -10,3 +10,5 @@ $location = [
     'lat' => '',
     'lon' => '',
 ];
+
+$basepath = '';

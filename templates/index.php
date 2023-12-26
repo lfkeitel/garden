@@ -23,7 +23,7 @@ $now = new DateTimeImmutable();
 <h2>Bed Status</h2>
 
 <?php if ($this->is_logged_in()): ?>
-<a href="/beds/new" class="btn">New Bed</a>
+<a href="<?= $basepath ?>/beds/new" class="btn">New Bed</a>
 <?php endif ?>
 
 <table class="seed-table">
@@ -36,7 +36,7 @@ $now = new DateTimeImmutable();
     <tbody>
         <?php foreach ($beds as $bed): ?>
         <tr>
-            <td><a href="/beds/<?= $bed->get_id() ?>"><?= $bed->display_string() ?></a></td>
+            <td><a href="<?= $basepath ?>/beds/<?= $bed->get_id() ?>"><?= $bed->display_string() ?></a></td>
 
             <td>
                 <table class="no-color-bg planting-table">
@@ -59,7 +59,7 @@ $now = new DateTimeImmutable();
                         <td class="<?= $condition_class ?>">
                         <?php $n = 0; foreach ($bed_plantings[$bed->get_id()] as $planting): ?>
                             <?php if ($planting->row === $i && $planting->column === $j): ?>
-                                <a href="/plantings/<?= $planting->get_id() ?>" title="<?= $planting->notes ?>">
+                                <a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>" title="<?= $planting->notes ?>">
                                 <?= $planting->display_string() ?> (<?= $planting->row ?>/<?= $planting->column ?>) (<?= $this->days_from_date($planting->date) ?>) (<?= $planting->status ?>)<br>
                                 </a>
                             <?php $n++; endif ?>
@@ -85,7 +85,7 @@ $now = new DateTimeImmutable();
 <h2>Current Plantings</h2>
 
 <?php if ($this->is_logged_in()): ?>
-<a href="/plantings/new" class="btn">New Planting</a>
+<a href="<?= $basepath ?>/plantings/new" class="btn">New Planting</a>
 <?php endif ?>
 
 <table class="seed-table">
@@ -103,7 +103,7 @@ $now = new DateTimeImmutable();
         <?php foreach ($plantings as $planting): ?>
         <tr>
             <td><?= $planting->date->format('Y-m-d') ?></td>
-            <td><a href="/plantings/<?= $planting->get_id() ?>"><?= $planting->display_string() ?></a></td>
+            <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>"><?= $planting->display_string() ?></a></td>
             <td><?= $planting->bed->name ?> (<?= $planting->row ?>/<?= $planting->column ?>)</td>
             <td><?= $planting->status ?></td>
             <td><?= $planting->tray_id ?></td>

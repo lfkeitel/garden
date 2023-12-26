@@ -4,7 +4,7 @@
 
 <p>
     <?php if ($this->is_logged_in()): ?>
-    <a href="/logs/edit/<?= $log->get_id() ?>" class="btn">Edit</a>
+    <a href="<?= $basepath ?>/logs/edit/<?= $log->get_id() ?>" class="btn">Edit</a>
     <?php endif ?>
 </p>
 
@@ -17,7 +17,7 @@
         <dt>Planting:</dt>
         <dd>
             <?php if ($log->planting): ?>
-            <a href="/plantings/<?= $log->planting->get_id() ?>">
+            <a href="<?= $basepath ?>/plantings/<?= $log->planting->get_id() ?>">
             <?= $log->planting->seed->common_name.' - '.$log->planting->seed->variety ?>
             </a>
             <?php else: ?>
@@ -64,6 +64,6 @@
 
     <h3 id="images">Images</h3>
     <?php foreach ($log->image_files as $file): ?>
-    <p><a href="/uploads/<?= $file ?>" target="_blank"><img src="/uploads/<?= $file ?>" width="720" height="540"></a></p>
+    <p><a href="<?= $basepath ?>/uploads/<?= $file ?>" target="_blank"><img src="<?= $basepath ?>/uploads/<?= $file ?>" width="720" height="540"></a></p>
     <?php endforeach ?>
 </article>

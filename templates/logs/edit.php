@@ -43,7 +43,7 @@
         <input type="hidden" id="image_files" name="image_files" value="<?= implode(';', $log->image_files) ?>">
 
         <?php foreach ($log->image_files as $file): ?>
-        <p><img src="/uploads/<?= $file ?>"></p>
+        <p><img src="<?= $basepath ?>/uploads/<?= $file ?>"></p>
         <?php endforeach ?>
     </fieldset>
 

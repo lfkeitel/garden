@@ -25,6 +25,8 @@ $is_logged_in = function(): bool {
     return \array_key_exists('logged_in', $_SESSION) && $_SESSION['logged_in'] === true;
 };
 
+$basepath = isset($basepath) ? $basepath : '';
+
 require 'functions.php';
 require 'database.php';
 $db = new DatabaseConnection($config['mongo_db_connect']);
@@ -36,7 +38,7 @@ Lib\Weather\Store::$apikey = $config['openweather_apikey'];
 Lib\Weather\Store::$location = $config['location'];
 Lib\Weather\Store::$db = $db->weather;
 
-$request = Request::getRequest();
+$request = Request::getRequest($basepath);
 
 $templates = new Engine('../templates');
 $templates->addFolder('seeds', '../templates/seeds');
@@ -49,6 +51,7 @@ $app = new Application($db, $config, $request, $templates);
 
 $templates->addData([
     'app' => $app,
+    'basepath' => $basepath,
     'first_frost' => $app_vars['first_frost'],
     'last_frost' => $app_vars['last_frost'],
 ]);

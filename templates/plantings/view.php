@@ -4,9 +4,9 @@
 
 <p>
     <?php if ($this->is_logged_in()): ?>
-    <a href="/plantings/edit/<?= $planting->get_id() ?>" class="btn">Edit</a>
+    <a href="<?= $basepath ?>/plantings/edit/<?= $planting->get_id() ?>" class="btn">Edit</a>
     <?php endif ?>
-    <a href="/plantings/gallery/<?= $this->e($planting->get_id()) ?>" class="btn">Photo Gallery</a>
+    <a href="<?= $basepath ?>/plantings/gallery/<?= $this->e($planting->get_id()) ?>" class="btn">Photo Gallery</a>
 </p>
 
 <div class="side-by-side">
@@ -18,7 +18,7 @@
 
             <dt>Seed:</dt>
             <dd>
-                <a href="/seeds/<?= $planting->seed->get_id() ?>">
+                <a href="<?= $basepath ?>/seeds/<?= $planting->seed->get_id() ?>">
                     <?= $planting->seed->display_string() ?>
                 </a>
             </dd>

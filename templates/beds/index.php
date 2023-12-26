@@ -1,7 +1,7 @@
 <?php $this->layout('main', ['title' => 'Beds']) ?>
 
 <?php if ($this->is_logged_in()): ?>
-<a href="/beds/new" class="btn">New Bed</a>
+<a href="<?= $basepath ?>/beds/new" class="btn">New Bed</a>
 <?php endif ?>
 
 <table class="seed-table">
@@ -11,16 +11,16 @@
             <th scope="col"></th>
             <?php endif ?>
             <th scope="col">
-                <a href="/beds?sort_by=name<?= $sort_by == 'name' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Name</a>
+                <a href="<?= $basepath ?>/beds?sort_by=name<?= $sort_by == 'name' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Name</a>
             </th>
             <th scope="col">
-                <a href="/beds?sort_by=added<?= $sort_by == 'added' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Added</a>
+                <a href="<?= $basepath ?>/beds?sort_by=added<?= $sort_by == 'added' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Added</a>
             </th>
             <th scope="col">
-                <a href="/beds?sort_by=rows<?= $sort_by == 'rows' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Rows</a>
+                <a href="<?= $basepath ?>/beds?sort_by=rows<?= $sort_by == 'rows' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Rows</a>
             </th>
             <th scope="col">
-                <a href="/beds?sort_by=cols<?= $sort_by == 'cols' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Columns</a>
+                <a href="<?= $basepath ?>/beds?sort_by=cols<?= $sort_by == 'cols' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Columns</a>
             </th>
         </tr>
     </thead>
@@ -40,7 +40,7 @@
                 </form>
             </td>
             <?php endif ?>
-            <td><a href="/beds/<?= $bed->get_id() ?>"><?= $bed->name ?></a></td>
+            <td><a href="<?= $basepath ?>/beds/<?= $bed->get_id() ?>"><?= $bed->name ?></a></td>
             <td><?= $bed->added->format('Y-m-d') ?></td>
             <td><?= $bed->rows ?></td>
             <td><?= $bed->cols ?></td>

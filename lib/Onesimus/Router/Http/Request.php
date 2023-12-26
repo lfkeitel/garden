@@ -28,10 +28,15 @@ class Request
 
     public array $context = []; // Used for arbitrary data while handling the request.
 
-    public static function getRequest(): Request
+    public static function getRequest(string $basepath = ''): Request
     {
         if (is_null(self::$instance)) {
             self::$instance = new self();
+
+            $path = (self::$instance)->REQUEST_URI;
+            if ($basepath !== '' && \str_starts_with($path, $basepath)) {
+                (self::$instance)->REQUEST_URI = \substr($path, \strlen($basepath));
+            }
         }
         return self::$instance;
     }

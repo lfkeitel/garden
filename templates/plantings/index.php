@@ -1,7 +1,7 @@
 <?php $this->layout('main', ['title' => "Plantings"]) ?>
 
 <?php if ($this->is_logged_in()): ?>
-<a href="/plantings/new" class="btn">New Planting</a>
+<a href="<?= $basepath ?>/plantings/new" class="btn">New Planting</a>
 <?php endif ?>
 
 <p>
@@ -29,7 +29,7 @@
             <?php endif ?>
             <th scope="col">Sort ></th>
             <th scope="col">
-                <a href="/plantings?filter=<?= $filter ?>&sort_by=date<?= $sort_by == 'date' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Planted</a>
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=date<?= $sort_by == 'date' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Planted</a>
             </th>
             <th scope="col">
                 Seed
@@ -38,25 +38,25 @@
                 Bed
             </th>
             <th scope="col">
-                <a href="/plantings?filter=<?= $filter ?>&sort_by=row<?= $sort_by == 'row' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Row</a>
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=row<?= $sort_by == 'row' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Row</a>
             </th>
             <th scope="col">
-                <a href="/plantings?filter=<?= $filter ?>&sort_by=column<?= $sort_by == 'column' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Column</a>
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=column<?= $sort_by == 'column' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Column</a>
             </th>
             <th scope="col">
-                <a href="/plantings?filter=<?= $filter ?>&sort_by=status<?= $sort_by == 'status' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Status</a>
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=status<?= $sort_by == 'status' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Status</a>
             </th>
             <th scope="col">
-                <a href="/plantings?filter=<?= $filter ?>&sort_by=is_transplant<?= $sort_by == 'is_transplant' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Is Transplant?</a>
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=is_transplant<?= $sort_by == 'is_transplant' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Is Transplant?</a>
             </th>
             <th scope="col">
-                <a href="/plantings?filter=<?= $filter ?>&sort_by=notes<?= $sort_by == 'notes' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Notes</a>
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=notes<?= $sort_by == 'notes' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Notes</a>
             </th>
             <th scope="col">
-                <a href="/plantings?filter=<?= $filter ?>&sort_by=tray_id<?= $sort_by == 'tray_id' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Tray ID</a>
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=tray_id<?= $sort_by == 'tray_id' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Tray ID</a>
             </th>
             <th scope="col">
-                <a href="/plantings?filter=<?= $filter ?>&sort_by=harvest_date<?= $sort_by == 'harvest_date' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Maturity Date</a>
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=harvest_date<?= $sort_by == 'harvest_date' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Maturity Date</a>
             </th>
         </tr>
     </thead>
@@ -76,7 +76,7 @@
                 </form>
             </td>
             <?php endif ?>
-            <td><a href="/plantings/<?= $planting->get_id() ?>">View</a></td>
+            <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>">View</a></td>
             <td><?= $planting->date->format('Y-m-d') ?></td>
             <td><?= $planting->seed->display_string() ?></td>
             <td><?= $planting->bed->name ?></td>
