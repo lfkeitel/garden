@@ -7,7 +7,11 @@ use League\Plates\Engine;
 
 require '../vendor/autoload.php';
 $config = [
-    'dev_mode' => false
+    'dev_mode' => false,
+    'admin_user' => [
+        'username' => 'admin',
+        'password' => '$2y$10$ARzGO8XROBR848CRyqhZe.9piRVhg/QsrSa6wHlTWs5jttE7KmtBC',
+    ],
 ];
 require 'config.php';
 

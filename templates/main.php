@@ -18,7 +18,6 @@
     </head>
 
     <body>
-        <pre><?= $app->request->REQUEST_URI ?> <?= __FILE__ ?></pre>
         <div class="sidebar">
             <nav>
                 <ul>
