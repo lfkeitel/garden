@@ -5,7 +5,7 @@
     You're already logged in!
 </p>
 <?php else: ?>
-<form method="post">
+<form action="<?= $basepath ?>/login" method="post">
     Username: <input type="text" name="username" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus><br>
     Password: <input type="password" name="password"><br><br>
 
