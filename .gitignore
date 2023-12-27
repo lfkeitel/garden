@@ -2,3 +2,8 @@ config.php
 vendor/
 uploads/
 sessions/
+
+
+# Added by cargo
+
+/target
