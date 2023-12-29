@@ -8,6 +8,9 @@ edition = "2021"
 [dependencies]
 axum = "0.7.2"
 html-node = "0.5.0"
+mongodb = "2.8.0"
+serde = { version = "1.0.193", features = ["derive"] }
 tokio = { version = "1.35.1", features = ["full"] }
+toml = "0.8.8"
 tower = "0.4.13"
 tower-http = { version = "0.5.0", features = ["fs"] }

@@ -1,7 +1,10 @@
 pub mod layouts;
+pub mod pages;
 
+use html_node::Node;
 use std::collections::HashMap;
 
+#[derive(Clone)]
 pub enum Param {
     String(String),
     Vec(Vec<String>),
@@ -45,17 +48,30 @@ impl From<bool> for Param {
     }
 }
 
+#[derive(Clone)]
 pub struct Params {
-    map: HashMap<&'static str, Param>,
+    map: HashMap<String, Param>,
 }
 
 impl Params {
-    fn has_key(&self, key: &str) -> bool {
-        self.map.contains_key(key)
+    pub fn new() -> Self {
+        Self {
+            map: HashMap::new(),
+        }
     }
 
-    fn get(&self, key: &str) -> Option<&Param> {
-        self.map.get(key)
+    pub fn add(&mut self, key: &str, val: Param) {
+        self.map.insert(key.to_string(), val);
+    }
+
+    pub fn merge(&mut self, other: &Params) {
+        for (name, value) in &other.map {
+            self.map.insert(name.to_string(), value.clone());
+        }
+    }
+
+    fn has_key(&self, key: &str) -> bool {
+        self.map.contains_key(key)
     }
 
     fn get_string(&self, key: &str) -> String {
@@ -97,10 +113,73 @@ impl Params {
         }
     }
 }
-impl<const N: usize> From<[(&'static str, Param); N]> for Params {
-    fn from(value: [(&'static str, Param); N]) -> Self {
+
+impl<const N: usize> From<[(String, Param); N]> for Params {
+    fn from(value: [(String, Param); N]) -> Self {
         Self {
             map: HashMap::from(value),
         }
+    }
+}
+
+impl<const N: usize> From<[(&'static str, Param); N]> for Params {
+    fn from(value: [(&'static str, Param); N]) -> Self {
+        let mut map = HashMap::new();
+        for v in value {
+            map.insert(v.0.to_string(), v.1);
+        }
+        Self { map }
+    }
+}
+
+type TemplateFn = fn(Node, Params) -> Node;
+
+#[derive(Clone)]
+pub struct Templates {
+    global_params: Params,
+    layouts: HashMap<String, TemplateFn>,
+}
+
+impl Templates {
+    pub fn new() -> Self {
+        Templates {
+            layouts: HashMap::from([("main".to_owned(), layouts::main_page as TemplateFn)]),
+            global_params: Params::new(),
+        }
+    }
+
+    pub fn with_params(&self, params: Params) -> Self {
+        let mut t = self.clone();
+        t.global_params.merge(&params);
+        t
+    }
+
+    pub fn layout(&self, name: &str) -> Option<Layout> {
+        match self.layouts.get(name) {
+            Some(l) => Some(Layout {
+                template: *l,
+                global_params: &self.global_params,
+            }),
+            None => None,
+        }
+    }
+
+    pub fn set_param<T: Into<Param>>(&mut self, name: &str, value: T) {
+        self.global_params
+            .map
+            .insert(name.to_string(), value.into());
+    }
+}
+
+pub struct Layout<'a> {
+    template: TemplateFn,
+    global_params: &'a Params,
+}
+
+impl<'a> Layout<'a> {
+    pub fn exec(&self, content: Node, mut params: Params) -> String {
+        params.merge(self.global_params);
+
+        (self.template)(content, params).to_string()
     }
 }

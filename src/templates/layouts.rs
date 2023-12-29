@@ -1,10 +1,9 @@
 use super::Params;
 
-use axum::http::Uri;
 use html_node::{html, text, Node};
 
-pub fn main_page(body: Node, params: Params, uri: Uri) -> Node {
-    let request_uri = uri.path();
+pub fn main_page(body: Node, params: Params) -> Node {
+    let request_uri = params.get_string("request_uri");
     html! (
         <!DOCTYPE html>
         <html>
