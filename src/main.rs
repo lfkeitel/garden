@@ -60,18 +60,6 @@ async fn req_template_params(
     next.run(req).await
 }
 
-/*
-dev_mode = true
-
-[mongo_db]
-hostname = 'localhos'
-port = 27017
-database = 'garden'
-
-[openweather]
-apikey = ''
-location = {lat: '', lon: ''}
-*/
 #[derive(Clone, Deserialize)]
 struct Config {
     dev_mode: bool,
