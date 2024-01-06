@@ -19,59 +19,61 @@ use tower_http::services::ServeDir;
 use database::Database;
 use templates::Templates;
 
-async fn index(
-    State(state): State<AppState>,
-    Extension(template): Extension<Templates>,
-) -> Html<String> {
-    let bed_collection = state.database.beds();
-    let pot = bed_collection
-        .find_one(
-            doc! {
-                "name": "Small Pot"
-            },
-            None,
-        )
-        .await
-        .unwrap()
-        .unwrap();
+#[derive(Clone, Deserialize)]
+struct Config {
+    #[serde(default)]
+    dev_mode: bool,
 
-    let main_layout = template.layout("main").unwrap();
-    main_layout
-        .exec(
-            html!(
-                <p>"Hello world!"</p>
-                <p>{text!("{}", pot.name)}</p>
-            ),
-            Params::new(),
-        )
-        .into()
+    #[serde(default)]
+    server: ServerConfig,
+
+    #[serde(default)]
+    mongo_db: MongoDBConfig,
+
+    openweather: Option<OpenWeatherConfig>,
 }
 
-async fn req_template_params(
-    State(state): State<AppState>,
-    mut req: Request,
-    next: Next,
-) -> Response {
-    let t = state
-        .templates
-        .with_params(Params::from([("request_uri", req.uri().path().into())]));
-    req.extensions_mut().insert(t);
+fn default_server_address() -> String {
+    "127.0.0.1".to_string()
+}
 
-    next.run(req).await
+fn default_server_port() -> u16 {
+    3000
 }
 
 #[derive(Clone, Deserialize)]
-struct Config {
-    dev_mode: bool,
-    mongo_db: MongoDBConfig,
-    openweather: OpenWeatherConfig,
+struct ServerConfig {
+    #[serde(default = "default_server_address")]
+    address: String,
+
+    #[serde(default = "default_server_port")]
+    port: u16,
+}
+
+impl Default for ServerConfig {
+    fn default() -> Self {
+        Self {
+            address: default_server_address(),
+            port: default_server_port(),
+        }
+    }
 }
 
 #[derive(Clone, Deserialize)]
 struct MongoDBConfig {
     hostname: String,
-    port: i16,
+    port: u16,
     database: String,
+}
+
+impl Default for MongoDBConfig {
+    fn default() -> Self {
+        Self {
+            hostname: "127.0.0.1".to_string(),
+            port: 27017,
+            database: "garden".to_string(),
+        }
+    }
 }
 
 #[derive(Clone, Deserialize)]
@@ -96,6 +98,12 @@ struct AppState {
 #[tokio::main]
 async fn main() {
     let config: Config = toml::from_str(&read_to_string("private/config.toml").unwrap()).unwrap();
+
+    let server_bind_address = format!(
+        "{host}:{port}",
+        host = config.server.address,
+        port = config.server.port
+    );
 
     let mongo_connect = format!(
         "mongodb://{host}:{port}",
@@ -128,9 +136,49 @@ async fn main() {
         ))
         .with_state(state);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
+    let listener = tokio::net::TcpListener::bind(&server_bind_address)
         .await
         .unwrap();
-    println!("Server running on 127.0.0.1:3000");
+
+    println!("Server running on {}", &server_bind_address);
     axum::serve(listener, app).await.unwrap();
+}
+
+async fn req_template_params(
+    State(state): State<AppState>,
+    mut req: Request,
+    next: Next,
+) -> Response {
+    let t = state
+        .templates
+        .with_params(Params::from([("request_uri", req.uri().path().into())]));
+    req.extensions_mut().insert(t);
+
+    next.run(req).await
+}
+
+async fn index(
+    State(state): State<AppState>,
+    Extension(template): Extension<Templates>,
+) -> Html<String> {
+    let bed_collection = state.database.beds();
+    let beds = bed_collection
+        .all(None)
+        .await
+        .unwrap()
+        .into_iter()
+        .map(|item| text!("{}", item.name));
+
+    let main_layout = template.layout("main").unwrap();
+    main_layout
+        .exec(
+            html!(
+                <p>"Hello world!"</p>
+                <p>
+                { beds }
+                </p>
+            ),
+            Params::new(),
+        )
+        .into()
 }

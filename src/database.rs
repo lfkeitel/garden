@@ -1,6 +1,7 @@
+use futures::stream::TryStreamExt;
 use mongodb::bson::Document;
-use mongodb::options::FindOneOptions;
-use mongodb::{Client, Collection};
+use mongodb::options::{FindOneOptions, FindOptions};
+use mongodb::{Client, Collection, Cursor};
 use serde::de::DeserializeOwned;
 
 use crate::models;
@@ -56,5 +57,15 @@ where
         options: impl Into<Option<FindOneOptions>>,
     ) -> mongodb::error::Result<Option<T>> {
         self.collection.find_one(filter, options).await
+    }
+
+    pub async fn all(
+        &self,
+        options: impl Into<Option<FindOptions>>,
+    ) -> mongodb::error::Result<Vec<T>> {
+        let items = self.collection.find(None, options).await?;
+
+        let v: Vec<T> = items.try_collect().await.unwrap_or_default();
+        Ok(v)
     }
 }

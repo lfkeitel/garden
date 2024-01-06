@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 axum = "0.7.2"
+futures = "0.3.30"
 html-node = "0.5.0"
 mongodb = "2.8.0"
 serde = { version = "1.0.193", features = ["derive"] }
