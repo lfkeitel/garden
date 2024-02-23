@@ -45,7 +45,15 @@ class LogController {
 
         echo $app->templates->render(
             'logs::new',
-            ['plantings' => $this->get_planting_select_data($app), 'select_planting' => $preselect_id],
+            ['plantings' => $this->get_planting_select_data($app, [
+                'status' => [
+                    '$nin' => [
+                        'Harvested',
+                        'Failed',
+                        'Transplanted',
+                    ],
+                ]
+            ]), 'select_planting' => $preselect_id],
         );
     }
 
@@ -79,8 +87,8 @@ class LogController {
         );
     }
 
-    private function get_planting_select_data(Application $app): array {
-        $plantings = $app->db->plantings->get_all([], 'date');
+    private function get_planting_select_data(Application $app, array $filter = []): array {
+        $plantings = $app->db->plantings->get_all($filter, 'date');
         $planting_data = [];
         foreach ($plantings as $planting) {
             $planting_data []= [
