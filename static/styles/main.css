@@ -1,158 +1,161 @@
 table {
-    border-collapse: collapse;
-    border: 2px solid black;
+  border-collapse: collapse;
+  border: 2px solid black;
 }
 
 th,
 td {
-    border: 2px solid black;
-    padding: 1px 10px;
+  border: 2px solid black;
+  padding: 1px 10px;
 }
 
-th[scope='col'] {
-    background-color: #696969;
-    color: white;
+th[scope="col"] {
+  background-color: #696969;
+  color: white;
 }
 
-th[scope='col'] a {
-    color: white;
+th[scope="col"] a {
+  color: white;
 }
 
 tbody tr:nth-child(odd) {
-    background-color: #83abf0;
-    color: black;
+  background-color: #83abf0;
+  color: black;
 }
 
 table.no-color-bg tbody tr {
-    background-color: rgb(228, 228, 228);
+  background-color: rgb(228, 228, 228);
 }
 
 table.planting-table,
 table.planting-table th,
 table.planting-table td {
-    border: 2px solid grey;
+  border: 2px solid grey;
 }
 
 body {
-    display: flex;
-    /* flex-direction: column; */
+  display: flex;
+  /* flex-direction: column; */
 }
 
 nav ul {
-    display: flex;
-    flex-direction: column;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 nav ul li {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 nav ul li a {
-    background-color: rgb(210, 210, 210);
-    margin: 0;
-    padding: 15px 20px;
-    text-decoration: none;
-    color: black;
+  background-color: rgb(210, 210, 210);
+  margin: 0;
+  padding: 15px 20px;
+  text-decoration: none;
+  color: black;
 }
 
 nav ul li a:hover {
-    background-color: rgb(164, 164, 164);
+  background-color: rgb(164, 164, 164);
 }
 
 nav ul li a.active-page {
-    background-color: rgb(164, 164, 164);
+  background-color: rgb(164, 164, 164);
 }
 
 .content {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .side-by-side {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .side-by-side article {
-    margin-right: 5em;
+  margin-right: 5em;
 }
 
 .toast {
-    background-color: lightgreen;
-    padding: .5em 1em .3em 1em;
-    margin-bottom: 1em;
-    font-size: 1.2em;
-    font-weight: bold;
-    font-family: sans-serif;
+  background-color: lightgreen;
+  padding: 0.5em 1em 0.3em 1em;
+  margin-bottom: 1em;
+  font-size: 1.2em;
+  font-weight: bold;
+  font-family: sans-serif;
 }
 
 .main-content {
-    margin-left: 20px;
-    margin-right: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
-button, .btn {
-    background-color: lightblue;
-    padding: 8px 20px;
-    text-decoration: none;
-    /* margin: 10px 20px; */
-    display: inline-block;
-    color: black;
-    border: 1px solid rgb(116, 116, 116);
+button,
+.btn {
+  background-color: lightblue;
+  padding: 8px 20px;
+  text-decoration: none;
+  margin: 10px 0px;
+  display: inline-block;
+  color: black;
+  border: 1px solid rgb(116, 116, 116);
 }
 
 .btn-small {
-    padding: 5px 10px;
+  padding: 5px 10px;
 }
 
-button:hover, .btn:hover {
-    background-color: rgb(122, 200, 226);
+button:hover,
+.btn:hover {
+  background-color: rgb(122, 200, 226);
 }
 
 .seed-table {
-    margin-top: 5px;
+  margin-top: 5px;
 }
 
 .control-cell {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 3px 5px;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    border-left: none;
-    border-right: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3px 5px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: none;
+  border-right: none;
 }
 
 dt {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 dd {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 
-dl, .notes {
-    margin-left: 2em;
+dl,
+.notes {
+  margin-left: 2em;
 }
 
 .planting-good {
-    background-color: lightgreen;
+  background-color: lightgreen;
 }
 
 .planting-concerned {
-    background-color: rgb(255, 255, 150);
+  background-color: rgb(255, 255, 150);
 }
 
 .gallery {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .gallery-item {
-    margin: .5em .5em;
+  margin: 0.5em 0.5em;
 }
