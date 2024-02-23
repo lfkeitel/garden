@@ -2,7 +2,7 @@
 $seed_types = [
     'Vegetable',
     'Herb',
-    'Tree',
+    'Fruit',
     'Flower',
 ];
 
@@ -115,9 +115,11 @@ $herb_seeds = [
     'Other',
 ];
 
-$tree_names = [
+$fruit_names = [
     'Apple',
     'Orange',
+    'Strawberry',
+    'Other',
 ];
 
 $flower_seeds = [
@@ -239,7 +241,7 @@ return [
         'common_names' => [
             'veggie' => $veggie_seeds,
             'herb' => $herb_seeds,
-            'fruit' => $tree_names,
+            'fruit' => $fruit_names,
             'flower' => $flower_seeds,
         ]
     ],
