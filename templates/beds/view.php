@@ -5,6 +5,7 @@
 <p>
     <?php if ($this->is_logged_in()): ?>
     <a href="<?= $basepath ?>/beds/edit/<?= $bed->get_id() ?>" class="btn">Edit</a>
+    <a href="<?= $basepath ?>/plantings/new?bed=<?= $bed->get_id() ?>" class="btn">New Planting</a>
     <?php endif ?>
 </p>
 

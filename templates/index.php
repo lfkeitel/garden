@@ -65,7 +65,7 @@ $now = new DateTimeImmutable();
                             <?php $n++; endif ?>
                         <?php endforeach ?>
                         <?php if ($n === 0): ?>
-                            Bed is empty.
+                            Bed is empty. (<a href="/plantings/new?bed=<?= $bed->get_id() ?>">Create</a>)
                         <?php endif ?>
                         </td>
                     <?php endfor ?>

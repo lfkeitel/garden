@@ -25,7 +25,7 @@
                 Bed:
                 <select name="bed">
                     <?php foreach ($beds as $bed): ?>
-                    <option value="<?= $bed['id'] ?>"><?= $bed['name'] ?></option>
+                    <option value="<?= $bed['id'] ?>" <?= $bed['id'] === $auto_bed ? 'selected' : '' ?>><?= $bed['name'] ?></option>
                     <?php endforeach ?>
                 </select>
             </label>
