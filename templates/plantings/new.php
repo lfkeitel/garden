@@ -52,6 +52,12 @@
 
         <p>
             <label>
+                Planting Date: <input type="date" name="planting_date" value="<?= (new DateTimeImmutable())->format("Y-m-d") ?>">
+            </label>
+        </p>
+
+        <p>
+            <label>
                 Is transplant?
 
                 <input type="radio" name="is_transplant" value="Yes">Yes</input>

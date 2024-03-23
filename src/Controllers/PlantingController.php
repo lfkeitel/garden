@@ -99,7 +99,7 @@ class PlantingController {
 
         $record = new Models\Planting();
 
-        $record->date = new \DateTimeImmutable();
+        $record->date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
         $record->row = \intval($form_vars['row']);
         $record->column = \intval($form_vars['column']);
         $bed = $app->db->beds->find_by_id(new ObjectId($form_vars['bed']));
@@ -176,6 +176,7 @@ class PlantingController {
         $form_vars = $request->POST;
         $record = $app->db->plantings->find_by_id($id);
 
+        $record->date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
         $record->row = \intval($form_vars['row']);
         $record->column = \intval($form_vars['column']);
         $bed = $app->db->beds->find_by_id(new ObjectId($form_vars['bed']));
