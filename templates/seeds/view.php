@@ -58,6 +58,9 @@
 
         <dt>Added:</dt>
         <dd><?= $seed->added->format("Y-m-d H:i:s") ?></dd>
+
+        <dt>Tags:</dt>
+        <dd><?= count($seed->tags) == 0 ? 'None' : implode(", ", $seed->tags) ?></dd>
     </dl>
 
     <h3>Notes</h3>

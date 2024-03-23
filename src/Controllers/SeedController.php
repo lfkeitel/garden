@@ -12,6 +12,7 @@ use Onesimus\Router\Attr\Filter;
 class SeedController {
     #[Route('get', '/seeds')]
     public function seeds(Request $request, Application $app) {
+        $tag_filter = $request->GET['tag'] ?? '';
         $sort_prop = $request->GET['sort_by'] ?? 'common_name';
         $sort_dir = $request->GET['sort_dir'] ?? 1;
         $sort_dir = intval($sort_dir);
@@ -19,10 +20,20 @@ class SeedController {
             $sort_dir = 1;
         }
 
+        $filter = [];
+        if ($tag_filter !== '') {
+            $filter = [
+                'custom_tags'=>[
+                    '$in' => [$tag_filter],
+                ],
+            ];
+        }
+
         echo $app->templates->render(
             'seeds::index',
             [
-                'allSeeds' => $app->db->seeds->get_all($sort_prop, $sort_dir),
+                'allSeeds' => $app->db->seeds->get_all($sort_prop, $sort_dir, $filter),
+                'allTags' => $app->db->seeds->get_all_tags(),
                 'sort_by' => $sort_prop,
                 'sort_dir' => $sort_dir,
             ],
@@ -31,6 +42,7 @@ class SeedController {
 
     #[Route('get', '/wishlist')]
     public function wishlist(Request $request, Application $app) {
+        $tag_filter = $request->GET['tag'] ?? '';
         $sort_prop = $request->GET['sort_by'] ?? 'common_name';
         $sort_dir = $request->GET['sort_dir'] ?? 1;
         $sort_dir = intval($sort_dir);
@@ -38,10 +50,20 @@ class SeedController {
             $sort_dir = 1;
         }
 
+        $filter = [];
+        if ($tag_filter !== '') {
+            $filter = [
+                'custom_tags'=>[
+                    '$in' => [$tag_filter],
+                ],
+            ];
+        }
+
         echo $app->templates->render(
             'seeds::index',
             [
-                'allSeeds' => $app->db->seeds->get_all_wishlist($sort_prop, $sort_dir),
+                'allSeeds' => $app->db->seeds->get_all_wishlist($sort_prop, $sort_dir, $filter),
+                'allTags' => $app->db->seeds->get_all_tags(),
                 'sort_by' => $sort_prop,
                 'sort_dir' => $sort_dir,
             ],
@@ -86,6 +108,12 @@ class SeedController {
         $record->link = $form_vars['source_link'];
         $record->notes = $form_vars['notes'];
         $record->on_wishlist = \array_key_exists('on_wishlist', $form_vars);
+        $record->tags = [];
+
+        $custom_tags = explode(',', $form_vars['tags']);
+        foreach ($custom_tags as $tag) {
+            array_push($record->tags, trim($tag));
+        }
 
         switch ($record->type) {
             case 'Vegetable':
@@ -181,6 +209,12 @@ class SeedController {
         $record->link = $form_vars['source_link'];
         $record->notes = $form_vars['notes'];
         $record->on_wishlist = \array_key_exists('on_wishlist', $form_vars);
+        $record->tags = [];
+
+        $custom_tags = explode(',', $form_vars['tags']);
+        foreach ($custom_tags as $tag) {
+            array_push($record->tags, trim($tag));
+        }
 
         switch ($record->type) {
             case 'Vegetable':

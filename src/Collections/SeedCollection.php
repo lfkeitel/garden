@@ -3,22 +3,23 @@ declare(strict_types=1);
 namespace Garden\Collections;
 
 use Garden\Models;
+use function Garden\BSON_array_to_array;
 use MongoDB\BSON\ObjectId;
 
 class SeedCollection extends Collection {
-    public function get_all(string $sort_prop = 'common_name', $sort_dir = 1): Models\ArrayOfSeeds {
-        return $this->find_multiple([
+    public function get_all(string $sort_prop = 'common_name', $sort_dir = 1, $filter = []): Models\ArrayOfSeeds {
+        return $this->find_multiple(array_merge([
             '$or' => [
                 ['on_wishlist' => false],
                 ['on_wishlist' => ['$exists' => false]],
             ]
-        ], ['sort' => [$sort_prop => $sort_dir]]);
+        ], $filter), ['sort' => [$sort_prop => $sort_dir]]);
     }
 
-    public function get_all_wishlist(string $sort_prop = 'common_name', $sort_dir = 1): Models\ArrayOfSeeds {
-        return $this->find_multiple([
+    public function get_all_wishlist(string $sort_prop = 'common_name', $sort_dir = 1, $filter = []): Models\ArrayOfSeeds {
+        return $this->find_multiple(array_merge([
             'on_wishlist' => true,
-        ], ['sort' => [$sort_prop => $sort_dir]]);
+        ], $filter), ['sort' => [$sort_prop => $sort_dir]]);
     }
 
     public function find_by_id(string|ObjectId $id): ?Models\Seed {
@@ -44,5 +45,10 @@ class SeedCollection extends Collection {
             $records []= new Models\Seed($seed, $this->db);
         }
         return $records;
+    }
+
+    public function get_all_tags(): array {
+        $collection = $this->db->get_mongodb_collection($this->collection);
+        return BSON_array_to_array($collection->distinct('custom_tags'));
     }
 }

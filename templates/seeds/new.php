@@ -137,6 +137,13 @@
 
         <p>
             <label>
+                Tags (comma separated):<br>
+                <textarea cols="30" rows="2" name="tags"></textarea>
+            </label>
+        </p>
+
+        <p>
+            <label>
                 Notes:<br>
                 <textarea cols="50" rows="6" name="notes"></textarea>
             </label>

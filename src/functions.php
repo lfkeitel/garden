@@ -2,10 +2,12 @@
 declare(strict_types=1);
 namespace Garden;
 
-function BSON_array_to_array(\Traversable $a): array {
+function BSON_array_to_array(iterable $a): array {
     $r = [];
     foreach ($a as $i) {
-        $r []= $i;
+        if (!empty($i)) {
+            $r []= $i;
+        }
     }
     return $r;
 }

@@ -22,6 +22,7 @@ class Seed extends DBRecord {
     public string $link;
     public string $notes;
     public bool $on_wishlist;
+    public array $tags;
 
     public function __construct(?BSONDocument $record = null) {
         if ($record) {
@@ -50,9 +51,12 @@ class Seed extends DBRecord {
         $this->link = $record['link'] ?? '';
         $this->notes = $record['notes'] ?? '';
         $this->on_wishlist = $record['on_wishlist'] ?? false;
+        $this->tags = BSON_array_to_array($record['custom_tags'] ?? []);
     }
 
     public function to_array(): array {
+        sort($this->tags, \SORT_NATURAL|\SORT_FLAG_CASE);
+
         return [
             'added' => $this->added->format('Y-m-d H:i:s'),
             'type' => $this->type,
@@ -69,6 +73,7 @@ class Seed extends DBRecord {
             'link' => $this->link,
             'notes' => $this->notes,
             'on_wishlist' => $this->on_wishlist,
+            'custom_tags' => $this->tags,
         ];
     }
 }

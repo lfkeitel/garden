@@ -4,6 +4,11 @@
 <a href="<?= $basepath ?>/seeds/new" class="btn">New Seed</a>
 <?php endif ?>
 
+<div>
+<strong>Tags:</strong>
+<a href="/seeds">None</a><?php foreach ($allTags as $key => $tag): ?>, <a href="/seeds?tag=<?= $tag ?>"><?= $tag ?></a><?php endforeach ?>
+</div>
+
 <table class="seed-table">
     <thead>
         <tr>
@@ -28,12 +33,6 @@
             </th>
             <th scope="col">
                 <a href="<?= $basepath ?>/seeds?sort_by=sun<?= $sort_by == 'sun' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Sun</a>
-            </th>
-            <th scope="col">
-                <a href="<?= $basepath ?>/seeds?sort_by=season<?= $sort_by == 'season' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Seasons</a>
-            </th>
-            <th scope="col">
-                <a href="<?= $basepath ?>/seeds?sort_by=characteristics<?= $sort_by == 'characteristics' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Characteristics</a>
             </th>
             <th scope="col">
                 <a href="<?= $basepath ?>/seeds?sort_by=is_hybrid<?= $sort_by == 'is_hybrid' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Hybrid?</a>
@@ -65,8 +64,6 @@
             <td><?= $seed->days_to_germination ?></td>
             <td><?= $seed->is_heirloom ? 'Yes' : 'No' ?></td>
             <td><?= $seed->sun ?></td>
-            <td><?= implode(", ", $seed->season) ?></td>
-            <td><?= implode(", ", $seed->characteristics) ?></td>
             <td><?= $seed->is_hybrid ? 'Yes' : 'No' ?></td>
         </tr>
         <?php endforeach ?>
