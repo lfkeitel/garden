@@ -248,4 +248,5 @@ return [
     'planting_statuses' => $planting_statuses,
     'first_frost' => $first_frost,
     'last_frost' => $last_frost,
+    'usda_zone' => '7a',
 ];

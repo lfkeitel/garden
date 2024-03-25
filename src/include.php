@@ -58,6 +58,8 @@ $templates->addData([
     'basepath' => $basepath,
     'first_frost' => $app_vars['first_frost'],
     'last_frost' => $app_vars['last_frost'],
+    'usda_zone' => $app_vars['usda_zone'],
+    'season_length' => 365 - intval($app_vars['last_frost']->diff($app_vars['first_frost'])->format('%a')),
 ]);
 
 $templates->addData(

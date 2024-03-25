@@ -3,7 +3,7 @@ $this->layout('main', ['title' => "Home"]);
 $now = new DateTimeImmutable();
 ?>
 
-<h2>Season Information (Zone 6b / <?= 365 - intval($last_frost->diff($first_frost)->format('%a')) ?> day season)</h2>
+<h2>Season Information (Zone <?= $usda_zone ?> / <?= $season_length ?> day season)</h2>
 
 <p>
     <strong>Today's Date:</strong> <?= date('Y-m-d') ?>
