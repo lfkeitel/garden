@@ -5,7 +5,7 @@ table {
 
 th,
 td {
-  border: 2px solid black;
+  border: 1px solid black;
   padding: 1px 10px;
 }
 
@@ -19,7 +19,7 @@ th[scope="col"] a {
 }
 
 tbody tr:nth-child(odd) {
-  background-color: #83abf0;
+  background-color: #8eb2f1;
   color: black;
 }
 
