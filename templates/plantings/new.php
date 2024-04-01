@@ -32,12 +32,12 @@
         </p>
         <p>
             <label>
-                Row: <input type="number" name="row" value="1">
+                Row: <input type="number" name="row" value="<?= isset($auto_row) ? $auto_row : '1' ?>">
             </label>
         </p>
         <p>
             <label>
-                Column: <input type="number" name="column" value="1">
+                Column: <input type="number" name="column" value="<?= isset($auto_col) ? $auto_col : '1' ?>">
             </label>
         </p>
         <p>
