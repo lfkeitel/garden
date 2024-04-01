@@ -47,9 +47,15 @@ class PlantingCollection extends Collection {
         $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfPlantings();
         foreach ($all_items as $doc) {
+            $transplants = new Models\ArrayOfTransplants();
+            foreach ($doc['transplant_log'] ?? [] as $id) {
+                $transplants []= $this->db->transplants->find_by_id($id);
+            }
+
             $extras = [
                 'seed' => $this->db->seeds->find_by_id($doc['seed']),
                 'bed' => $this->db->beds->find_by_id($doc['bed']),
+                'transplant_log' => $transplants,
             ];
 
             $records []= new Models\Planting($doc, $extras);

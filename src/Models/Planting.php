@@ -15,6 +15,7 @@ class Planting extends DBRecord {
     public \DateTimeImmutable $date;
     public string $tray_id;
     public ?\DateTimeImmutable $harvest_date = null;
+    public ArrayOfTransplants $transplant_log;
 
     public function display_string(): string {
         return "{$this->seed->common_name} - {$this->seed->variety}";
@@ -36,9 +37,16 @@ class Planting extends DBRecord {
 
         $this->seed = $extras['seed'];
         $this->bed = $extras['bed'];
+        $this->transplant_log = $extras['transplant_log'];
     }
 
     public function to_array(): array {
+        $transplant_ids = [];
+        // var_dump($this->transplant_log);
+        foreach ($this->transplant_log as $tlog) {
+            \array_push($transplant_ids, $tlog->get_id_obj());
+        }
+
         return [
             'row' => $this->row,
             'column' => $this->column,
@@ -50,6 +58,7 @@ class Planting extends DBRecord {
             'date' => $this->date->format('Y-m-d H:i:s'),
             'tray_id' => $this->tray_id,
             'harvest_date' => is_null($this->harvest_date) ? null : $this->harvest_date->format('Y-m-d H:i:s'),
+            'transplant_log' => $transplant_ids,
         ];
     }
 }

@@ -73,12 +73,18 @@ nav ul li a.active-page {
 }
 
 .side-by-side {
-  display: flex;
-  flex-direction: row;
+}
+
+@media screen and (min-width: 900px) {
+  .side-by-side {
+    display: flex;
+    flex-direction: row;
+    column-gap: 40px;
+  }
 }
 
 .side-by-side article {
-  margin-right: 5em;
+  /*margin-right: 5em;*/
 }
 
 .toast {

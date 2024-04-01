@@ -113,6 +113,7 @@ class PlantingController {
         $record->is_transplant = $form_vars['is_transplant'] === 'Yes';
         $record->notes = $form_vars['notes'];
         $record->tray_id = $form_vars['tray_id'];
+        $record->transplant_log = new Models\ArrayOfTransplants();
 
         $app->db->plantings->create($record);
 
@@ -200,17 +201,7 @@ class PlantingController {
 
         $app->db->plantings->save($record);
 
-        $app->templates->addData([
-            'toast' => "Saved planting (<a href=\"/plantings/{$record->get_id()}\">{$seed->display_string()}</a>)"
-        ]);
-
-        echo $app->templates->render('plantings::edit',
-            [
-                'planting' => $record,
-                'seeds' => $this->get_seed_select_data($app),
-                'beds' => $this->get_bed_select_data($app),
-            ]
-        );
+        header("Location: /plantings/{$id}", true, 302);
     }
 
     #[Route('get', '/plantings/gallery/{id}')]
@@ -228,5 +219,57 @@ class PlantingController {
                 'sort_dir' => $dir === 'desc' ? 'asc' : 'desc',
             ]
         );
+    }
+
+    #[Filter('LoginRequired')]
+    #[Route('get', '/plantings/transplant/{id}')]
+    public function plantings_transplant_get(Request $request, Application $app, string $id) {
+        $planting = $app->db->plantings->find_by_id($id);
+
+        echo $app->templates->render('plantings::transplant',
+            [
+                'planting' => $planting,
+                'beds' => $this->get_bed_select_data($app),
+            ]
+        );
+    }
+
+    #[Filter('LoginRequired')]
+    #[Route('post', '/plantings/transplant/{id}')]
+    public function plantings_transplant_post(Request $request, Application $app, string $id) {
+        $form_vars = $request->POST;
+
+        // Build and create transplant log
+        $planting = $app->db->plantings->find_by_id($id);
+        $record = new Models\Transplant();
+
+        $from = new Models\PlantingLocation();
+        $from->row = \intval($form_vars['old_row']);
+        $from->column = \intval($form_vars['old_column']);
+        $from->bed = $app->db->beds->find_by_id(new ObjectId($form_vars['old_bed']));
+        $from->tray_id = $form_vars['old_tray_id'];
+
+        $to = new Models\PlantingLocation();
+        $to->row = \intval($form_vars['new_row']);
+        $to->column = \intval($form_vars['new_column']);
+        $to->bed = $app->db->beds->find_by_id(new ObjectId($form_vars['new_bed']));
+        $to->tray_id = $form_vars['new_tray_id'];
+
+        $record->from = $from;
+        $record->to = $to;
+        $record->date = new \DateTimeImmutable($form_vars['transplant_date'] ?? 'now');
+        $record->notes = $form_vars['notes'];
+
+        $app->db->transplants->create($record);
+
+        // Update planting with transplant log and current location
+        $planting->row = $to->row;
+        $planting->column = $to->column;
+        $planting->bed = $to->bed;
+        $planting->tray_id = $to->tray_id;
+        $planting->transplant_log []= $record;
+        $app->db->plantings->save($planting);
+
+        header("Location: /plantings/{$id}", true, 302);
     }
 }
