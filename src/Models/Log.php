@@ -13,12 +13,6 @@ class Log extends DBRecord {
     public array $image_files = [];
     public Weather $weather;
 
-    public function __construct(?BSONDocument $record = null, ?array $extras = []) {
-        if ($record) {
-            $this->load_from_record($record, $extras);
-        }
-    }
-
     public function display_string(): string {
         if ($this->planting) {
             return $this->planting->display_string();
@@ -26,7 +20,7 @@ class Log extends DBRecord {
         return "All";
     }
 
-    protected function load_from_record(BSONDocument $record, array $extras) {
+    protected function load_from_record(BSONDocument $record, array $extras): void {
         $this->id = $record['_id'];
         $this->date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['date']);
         $this->notes = $record['notes'];

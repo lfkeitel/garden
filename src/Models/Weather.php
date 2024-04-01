@@ -16,13 +16,7 @@ class Weather extends DBRecord {
     public float $cloud_cov; // %
     public float $humidity; // % relative
 
-    public function __construct(?BSONDocument $record = null) {
-        if ($record) {
-            $this->load_from_record($record);
-        }
-    }
-
-    protected function load_from_record(BSONDocument $record) {
+    protected function load_from_record(BSONDocument $record, array $extras): void {
         $this->id = $record['_id'];
         $this->date = \DateTimeImmutable::createFromFormat('Y-m-d', $record['date']);
         $this->temp_high = $record['temp_high'];

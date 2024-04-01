@@ -24,17 +24,11 @@ class Seed extends DBRecord {
     public bool $on_wishlist;
     public array $tags;
 
-    public function __construct(?BSONDocument $record = null) {
-        if ($record) {
-            $this->load_from_record($record);
-        }
-    }
-
     public function display_string(): string {
         return "{$this->common_name} - {$this->variety}";
     }
 
-    protected function load_from_record(BSONDocument $record) {
+    protected function load_from_record(BSONDocument $record, array $extras): void {
         $this->id = $record['_id'];
         $this->added = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['added']);
         $this->type = $record['type'];

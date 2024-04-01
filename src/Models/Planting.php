@@ -16,17 +16,11 @@ class Planting extends DBRecord {
     public string $tray_id;
     public ?\DateTimeImmutable $harvest_date = null;
 
-    public function __construct(?BSONDocument $record = null, ?array $extras = []) {
-        if ($record) {
-            $this->load_from_record($record, $extras);
-        }
-    }
-
     public function display_string(): string {
         return "{$this->seed->common_name} - {$this->seed->variety}";
     }
 
-    protected function load_from_record(BSONDocument $record, array $extras) {
+    protected function load_from_record(BSONDocument $record, array $extras): void {
         $this->id = $record['_id'];
         $this->row = $record['row'];
         $this->column = $record['column'];

@@ -30,7 +30,7 @@ class BedCollection extends Collection {
         $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfBeds();
         foreach ($all_items as $log) {
-            $records []= new Models\Bed($log, $this->db);
+            $records []= new Models\Bed($log);
         }
         return $records;
     }

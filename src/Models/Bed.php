@@ -12,13 +12,7 @@ class Bed extends DBRecord {
     public int $cols;
     public string $notes;
 
-    public function __construct(?BSONDocument $record = null) {
-        if ($record) {
-            $this->load_from_record($record);
-        }
-    }
-
-    protected function load_from_record(BSONDocument $record) {
+    protected function load_from_record(BSONDocument $record, array $extras): void {
         $this->id = $record['_id'];
         $this->added = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['added']);
         $this->name = $record['name'];

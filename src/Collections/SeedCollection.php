@@ -42,7 +42,7 @@ class SeedCollection extends Collection {
         $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfSeeds();
         foreach ($all_items as $seed) {
-            $records []= new Models\Seed($seed, $this->db);
+            $records []= new Models\Seed($seed);
         }
         return $records;
     }
