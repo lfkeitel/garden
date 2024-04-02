@@ -27,6 +27,7 @@
                     <li><a href="<?= $basepath ?>/seeds" class="<?= $app->request->REQUEST_URI == "/seeds" ? 'active-page' : '' ?>">Seeds</a></li>
                     <li><a href="<?= $basepath ?>/wishlist" class="<?= $app->request->REQUEST_URI == "/wishlist" ? 'active-page' : '' ?>">Wishlist</a></li>
                     <li><a href="<?= $basepath ?>/beds" class="<?= $app->request->REQUEST_URI == "/beds" ? 'active-page' : '' ?>">Beds</a></li>
+                    <li><a href="<?= $basepath ?>/reference" class="<?= $app->request->REQUEST_URI == "/reference" ? 'active-page' : '' ?>">Reference</a></li>
                     <?php if ($this->is_logged_in()): ?>
                     <li><a href="/logout">Logout</a></li>
                     <?php else: ?>

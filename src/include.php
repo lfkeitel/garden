@@ -50,6 +50,7 @@ $templates->addFolder('plantings', '../templates/plantings');
 $templates->addFolder('beds', '../templates/beds');
 $templates->addFolder('logs', '../templates/logs');
 $templates->addFolder('partials', '../templates/partials');
+$templates->addFolder('reference', '../templates/reference');
 
 $app = new Application($db, $config, $request, $templates);
 
