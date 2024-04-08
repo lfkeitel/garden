@@ -22,8 +22,8 @@ $now = new DateTimeImmutable();
 
 <h2>Bed Status</h2>
 
-<?php if ($this->is_logged_in()): ?>
-<a href="<?= $basepath ?>/beds/new" class="btn">New Bed</a>
+<?php if ($this->is_logged_in()) : ?>
+    <a href="<?= $basepath ?>/beds/new" class="btn">New Bed</a>
 <?php endif ?>
 
 <table class="seed-table">
@@ -34,46 +34,50 @@ $now = new DateTimeImmutable();
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($beds as $bed): ?>
-        <tr>
-            <td><a href="<?= $basepath ?>/beds/<?= $bed->get_id() ?>"><?= $bed->display_string() ?></a></td>
+        <?php foreach ($beds as $bed) : ?>
+            <tr>
+                <td><a href="<?= $basepath ?>/beds/<?= $bed->get_id() ?>"><?= $bed->display_string() ?></a></td>
 
-            <td>
-                <table class="no-color-bg planting-table">
-                <?php for($i = 1; $i <= $bed->rows; $i++): ?>
-                    <tr>
-                        <?php for($j = 1; $j <= $bed->cols; $j++):
-                            $condition_class = array_reduce(
-                                (array) ($bed_plantings[$bed->get_id()]),
-                                function($carry, $planting) use ($i, $j) {
-                                    if ($planting->row === $i &&
-                                        $planting->column === $j &&
-                                        $planting->status === 'Concerned') {
-                                        return 'planting-concerned';
-                                    }
-                                    return $carry;
-                                },
-                                'planting-good'
-                            );
-                        ?>
-                        <td class="<?= $condition_class ?>">
-                        <?php $n = 0; foreach ($bed_plantings[$bed->get_id()] as $planting): ?>
-                            <?php if ($planting->row === $i && $planting->column === $j): ?>
-                                <a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>" title="<?= $planting->notes ?>">
-                                <?= $planting->display_string() ?> (<?= $planting->row ?>/<?= $planting->column ?>) (<?= $this->days_from_date($planting->date) ?>) (<?= $planting->status ?>)<br>
-                                </a>
-                            <?php $n++; endif ?>
-                        <?php endforeach ?>
-                        <?php if ($n === 0): ?>
-                            Bed is empty. <?php if ($this->is_logged_in()): ?>(<a href="/plantings/new?col=<?= $j ?>&row=<?= $i ?>&bed=<?= $bed->get_id() ?>">Create</a>)<?php endif ?>
-                        <?php endif ?>
-                        </td>
-                    <?php endfor ?>
-                    </tr>
-                <?php endfor ?>
-                </table>
-            </td>
-        </tr>
+                <td>
+                    <table class="no-color-bg planting-table">
+                        <?php for ($i = 1; $i <= $bed->rows; $i++) : ?>
+                            <tr>
+                                <?php for ($j = 1; $j <= $bed->cols; $j++) :
+                                    $condition_class = array_reduce(
+                                        (array) ($bed_plantings[$bed->get_id()]),
+                                        function ($carry, $planting) use ($i, $j) {
+                                            if (
+                                                $planting->row === $i &&
+                                                $planting->column === $j &&
+                                                $planting->status === 'Concerned'
+                                            ) {
+                                                return 'planting-concerned';
+                                            }
+                                            return $carry;
+                                        },
+                                        'planting-good'
+                                    );
+                                ?>
+                                    <td class="<?= $condition_class ?>">
+                                        <?php $n = 0;
+                                        foreach ($bed_plantings[$bed->get_id()] as $planting) : ?>
+                                            <?php if ($planting->row === $i && $planting->column === $j) : ?>
+                                                <a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>" title="<?= $planting->notes ?>">
+                                                    <?= $planting->display_string() ?> (<?= $planting->row ?>/<?= $planting->column ?>) (<?= $this->days_from_date($planting->date) ?>) (<?= $planting->status ?>)<br>
+                                                </a>
+                                            <?php $n++;
+                                            endif ?>
+                                        <?php endforeach ?>
+                                        <?php if ($n === 0) : ?>
+                                            Bed is empty. <?php if ($this->is_logged_in()) : ?>(<a href="/plantings/new?col=<?= $j ?>&row=<?= $i ?>&bed=<?= $bed->get_id() ?>">Create</a>)<?php endif ?>
+                                        <?php endif ?>
+                                    </td>
+                                <?php endfor ?>
+                            </tr>
+                        <?php endfor ?>
+                    </table>
+                </td>
+            </tr>
         <?php endforeach ?>
     </tbody>
 </table>
@@ -82,10 +86,10 @@ $now = new DateTimeImmutable();
 
 <?php $this->insert('partials::log-table', ['logs' => $logs, 'edit_btns' => false]) ?>
 
-<h2>Current Plantings</h2>
+<h2>Current Plantings (<?= count($plantings) ?>)</h2>
 
-<?php if ($this->is_logged_in()): ?>
-<a href="<?= $basepath ?>/plantings/new" class="btn">New Planting</a>
+<?php if ($this->is_logged_in()) : ?>
+    <a href="<?= $basepath ?>/plantings/new" class="btn">New Planting</a>
 <?php endif ?>
 
 <table class="seed-table">
@@ -100,15 +104,15 @@ $now = new DateTimeImmutable();
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($plantings as $planting): ?>
-        <tr>
-            <td><?= $planting->date->format('Y-m-d') ?></td>
-            <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>"><?= $planting->display_string() ?></a></td>
-            <td><?= $planting->bed->name ?> (<?= $planting->row ?>/<?= $planting->column ?>)</td>
-            <td><?= $planting->status ?></td>
-            <td><?= $planting->tray_id ?></td>
-            <td><?= is_null($planting->harvest_date) ? '<i>'.$this->date_plus_days($planting->date, $planting->seed->days_to_maturity).'*</i>' : $planting->harvest_date->format('Y-m-d') ?></td>
-        </tr>
+        <?php foreach ($plantings as $planting) : ?>
+            <tr>
+                <td><?= $planting->date->format('Y-m-d') ?></td>
+                <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>"><?= $planting->display_string() ?></a></td>
+                <td><?= $planting->bed->name ?> (<?= $planting->row ?>/<?= $planting->column ?>)</td>
+                <td><?= $planting->status ?></td>
+                <td><?= $planting->tray_id ?></td>
+                <td><?= is_null($planting->harvest_date) ? '<i>' . $this->date_plus_days($planting->date, $planting->seed->days_to_maturity) . '*</i>' : $planting->harvest_date->format('Y-m-d') ?></td>
+            </tr>
         <?php endforeach ?>
     </tbody>
 </table>
