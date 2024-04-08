@@ -1,6 +1,10 @@
-<?php $this->layout('main',
-    ['scripts' => ['seed-form'],
-     'title' => "New Planting"]) ?>
+<?php $this->layout(
+    'main',
+    [
+        'scripts' => ['seed-form'],
+        'title' => "New Planting"
+    ]
+) ?>
 
 <h2>New Planting</h2>
 
@@ -11,8 +15,8 @@
         <label for="seed">Seed:</label>
 
         <select name="seed">
-            <?php foreach ($seeds as $seed): ?>
-            <option value="<?= $seed['id'] ?>"><?= $seed['name'] ?></option>
+            <?php foreach ($seeds as $seed) : ?>
+                <option value="<?= $seed['id'] ?>"><?= $seed['name'] ?></option>
             <?php endforeach ?>
         </select>
     </fieldset>
@@ -24,20 +28,20 @@
             <label>
                 Bed:
                 <select name="bed">
-                    <?php foreach ($beds as $bed): ?>
-                    <option value="<?= $bed['id'] ?>" <?= $bed['id'] === $auto_bed ? 'selected' : '' ?>><?= $bed['name'] ?></option>
+                    <?php foreach ($beds as $bed) : ?>
+                        <option value="<?= $bed['id'] ?>" <?= $bed['id'] === $auto_bed ? 'selected' : '' ?>><?= $bed['name'] ?></option>
                     <?php endforeach ?>
                 </select>
             </label>
         </p>
         <p>
             <label>
-                Row: <input type="number" name="row" value="<?= isset($auto_row) ? $auto_row : '1' ?>">
+                Row: <input type="text" name="row" value="<?= isset($auto_row) ? $auto_row : '1' ?>">
             </label>
         </p>
         <p>
             <label>
-                Column: <input type="number" name="column" value="<?= isset($auto_col) ? $auto_col : '1' ?>">
+                Column: <input type="text" name="column" value="<?= isset($auto_col) ? $auto_col : '1' ?>">
             </label>
         </p>
         <p>

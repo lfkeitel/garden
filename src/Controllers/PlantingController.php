@@ -109,23 +109,52 @@ class PlantingController
     public function plantings_new_post(Request $request, Application $app)
     {
         $form_vars = $request->POST;
-
         $record = new Models\Planting();
 
-        $record->date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
-        $record->row = \intval($form_vars['row']);
-        $record->column = \intval($form_vars['column']);
-        $bed = $app->db->beds->find_by_id(new ObjectId($form_vars['bed']));
-        $record->bed = $bed;
-        $seed = $app->db->seeds->find_by_id(new ObjectId($form_vars['seed']));
-        $record->seed = $seed;
-        $record->status = 'Active';
-        $record->is_transplant = $form_vars['is_transplant'] === 'Yes';
-        $record->notes = $form_vars['notes'];
-        $record->tray_id = $form_vars['tray_id'];
-        $record->transplant_log = new Models\ArrayOfTransplants();
+        $row = $form_vars['row'];
+        $col = $form_vars['column'];
 
-        $app->db->plantings->create($record);
+        $row_start = 0;
+        $row_end = 0;
+        $col_start = 0;
+        $col_end = 0;
+
+        if (str_contains($row, "-")) {
+            $row_parts = explode("-", $row);
+            $row_start = \intval($row_parts[0]);
+            $row_end = \intval($row_parts[1]);
+        } else {
+            $row_start = \intval($row);
+            $row_end = \intval($row);
+        }
+
+        if (str_contains($col, "-")) {
+            $col_parts = explode("-", $col);
+            $col_start = \intval($col_parts[0]);
+            $col_end = \intval($col_parts[1]);
+        } else {
+            $col_start = \intval($col);
+            $col_end = \intval($col);
+        }
+
+        for ($i = $row_start; $i <= $row_end; $i++) {
+            for ($j = $col_start; $j <= $col_end; $j++) {
+                $record->date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
+                $record->row = $i;
+                $record->column = $j;
+                $bed = $app->db->beds->find_by_id(new ObjectId($form_vars['bed']));
+                $record->bed = $bed;
+                $seed = $app->db->seeds->find_by_id(new ObjectId($form_vars['seed']));
+                $record->seed = $seed;
+                $record->status = 'Active';
+                $record->is_transplant = $form_vars['is_transplant'] === 'Yes';
+                $record->notes = $form_vars['notes'];
+                $record->tray_id = $form_vars['tray_id'];
+                $record->transplant_log = new Models\ArrayOfTransplants();
+                $app->db->plantings->create($record);
+            }
+        }
+
 
         $app->templates->addData([
             'toast' => "Created new planting (<a href=\"/plantings/{$record->get_id()}\">{$seed->display_string()}</a>)"
