@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden;
 
 use Onesimus\Router\Http\Request;
@@ -21,11 +23,11 @@ if ($config['dev_mode']) {
     error_reporting(E_ALL);
 }
 
-\session_save_path(__DIR__.'/../sessions');
+\session_save_path(__DIR__ . '/../sessions');
 \session_start();
 \session_gc();
 
-$is_logged_in = function(): bool {
+$is_logged_in = function (): bool {
     return \array_key_exists('logged_in', $_SESSION) && $_SESSION['logged_in'] === true;
 };
 
@@ -74,7 +76,7 @@ $templates->addData(
     [
         'planting_statuses' => $app_vars['planting_statuses'],
     ],
-    ['plantings::new', 'plantings::edit', 'plantings::index'],
+    ['plantings::new', 'plantings::edit', 'plantings::bulk_edit', 'plantings::index'],
 );
 
 $templates->registerFunction('days_from_date', function (\DateTimeInterface $then) {

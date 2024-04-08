@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Controllers;
 
 use Garden\Models;
@@ -10,9 +12,11 @@ use Onesimus\Router\Attr\Route;
 use Onesimus\Router\Attr\Filter;
 use MongoDB\BSON\ObjectId;
 
-class PlantingController {
+class PlantingController
+{
     #[Route('get', '/plantings')]
-    public function plantings(Request $request, Application $app) {
+    public function plantings(Request $request, Application $app)
+    {
         $sort_prop = $request->GET['sort_by'] ?? 'date';
         $sort_dir = $request->GET['sort_dir'] ?? 1;
         $sort_dir = intval($sort_dir);
@@ -44,11 +48,13 @@ class PlantingController {
     }
 
     #[Route('get', '/plantings/{id}')]
-    public function plantings_view_get(Request $request, Application $app, string $id) {
+    public function plantings_view_get(Request $request, Application $app, string $id)
+    {
         $planting = $app->db->plantings->find_by_id($id);
         $logs = $app->db->logs->get_planting_logs($id, $planting->date->format('Y-m-d H:i:s'));
 
-        echo $app->templates->render('plantings::view',
+        echo $app->templates->render(
+            'plantings::view',
             [
                 'planting' => $planting,
                 'logs' => $logs,
@@ -58,7 +64,8 @@ class PlantingController {
 
     #[Filter('LoginRequired')]
     #[Route('get', '/plantings/new')]
-    public function plantings_new_get(Request $request, Application $app) {
+    public function plantings_new_get(Request $request, Application $app)
+    {
         echo $app->templates->render(
             'plantings::new',
             [
@@ -71,11 +78,12 @@ class PlantingController {
         );
     }
 
-    private function get_seed_select_data(Application $app): array {
+    private function get_seed_select_data(Application $app): array
+    {
         $seeds = $app->db->seeds->get_all('common_name');
         $seed_data = [];
         foreach ($seeds as $seed) {
-            $seed_data []= [
+            $seed_data[] = [
                 'name' => $seed->display_string(),
                 'id' => $seed->get_id(),
             ];
@@ -83,11 +91,12 @@ class PlantingController {
         return $seed_data;
     }
 
-    private function get_bed_select_data(Application $app): array {
+    private function get_bed_select_data(Application $app): array
+    {
         $beds = $app->db->beds->get_all('name');
         $bed_data = [];
         foreach ($beds as $bed) {
-            $bed_data []= [
+            $bed_data[] = [
                 'name' => $bed->display_string(),
                 'id' => $bed->get_id(),
             ];
@@ -97,7 +106,8 @@ class PlantingController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/plantings/new')]
-    public function plantings_new_post(Request $request, Application $app) {
+    public function plantings_new_post(Request $request, Application $app)
+    {
         $form_vars = $request->POST;
 
         $record = new Models\Planting();
@@ -133,17 +143,22 @@ class PlantingController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/plantings')]
-    public function plantings_post(Request $request, Application $app) {
+    public function plantings_post(Request $request, Application $app)
+    {
         switch ($request->POST['action']) {
             case 'delete_planting':
                 $this->plantings_delete($request, $app);
+                break;
+            case 'bulk_edit':
+                $this->plantings_bulk_edit($request, $app);
                 break;
         }
 
         $this->plantings($request, $app);
     }
 
-    private function plantings_delete(Request $request, Application $app) {
+    private function plantings_delete(Request $request, Application $app)
+    {
         $planting = $app->db->plantings->find_by_id($request->POST['planting_id']);
 
         if (\is_null($planting)) {
@@ -152,7 +167,7 @@ class PlantingController {
             try {
                 $app->db->plantings->delete($planting);
             } catch (\Exception $e) {
-                $toast_msg = 'Error deleting seed: '.$e;
+                $toast_msg = 'Error deleting seed: ' . $e;
             }
 
             $toast_msg = "Planting deleted";
@@ -161,12 +176,55 @@ class PlantingController {
         $app->templates->addData(['toast' => $toast_msg]);
     }
 
+    private function plantings_bulk_edit(Request $request, Application $app)
+    {
+    }
+
+    #[Filter('LoginRequired')]
+    #[Route('get', '/plantings/edit')]
+    public function plantings_bulk_edit_get(Request $request, Application $app)
+    {
+        $selected = explode(",", $request->GET['selected']);
+        $plantings = [];
+        foreach ($selected as $selection) {
+            $plantings[] = $app->db->plantings->find_by_id($selection);
+        }
+
+        echo $app->templates->render(
+            'plantings::bulk_edit',
+            [
+                'plantings' => $plantings,
+                'seeds' => $this->get_seed_select_data($app),
+                'beds' => $this->get_bed_select_data($app),
+            ]
+        );
+    }
+
+    #[Filter('LoginRequired')]
+    #[Route('post', '/plantings/edit')]
+    public function plantings_bulk_edit_post(Request $request, Application $app)
+    {
+        $selected = explode(",", $request->GET['selected']);
+        $new_status = $request->POST['status'];
+
+        foreach ($selected as $selection) {
+            $planting = $app->db->plantings->find_by_id($selection);
+            $planting->status = $new_status;
+            $app->db->plantings->save($planting);
+        }
+
+        $app->templates->addData(['toast' => "Plantings updated"]);
+        header("Location: /plantings?filter=Active", true, 302);
+    }
+
     #[Filter('LoginRequired')]
     #[Route('get', '/plantings/edit/{id}')]
-    public function plantings_edit_get(Request $request, Application $app, string $id) {
+    public function plantings_edit_get(Request $request, Application $app, string $id)
+    {
         $planting = $app->db->plantings->find_by_id($id);
 
-        echo $app->templates->render('plantings::edit',
+        echo $app->templates->render(
+            'plantings::edit',
             [
                 'planting' => $planting,
                 'seeds' => $this->get_seed_select_data($app),
@@ -177,7 +235,8 @@ class PlantingController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/plantings/edit/{id}')]
-    public function plantings_edit_post(Request $request, Application $app, string $id) {
+    public function plantings_edit_post(Request $request, Application $app, string $id)
+    {
         $form_vars = $request->POST;
         $record = $app->db->plantings->find_by_id($id);
 
@@ -205,14 +264,16 @@ class PlantingController {
     }
 
     #[Route('get', '/plantings/gallery/{id}')]
-    public function plantings_gallery_get(Request $request, Application $app, string $id) {
+    public function plantings_gallery_get(Request $request, Application $app, string $id)
+    {
         $dir = $request->GET['dir'] ?? 'desc';
         $planting = $app->db->plantings->find_by_id($id);
 
         $log_dir = $dir === 'asc' ? 1 : -1;
         $logs = $app->db->logs->get_planting_logs($id, $planting->date->format('Y-m-d H:i:s'), 'date', $log_dir);
 
-        echo $app->templates->render('plantings::gallery',
+        echo $app->templates->render(
+            'plantings::gallery',
             [
                 'planting' => $planting,
                 'logs' => $logs,
@@ -223,10 +284,12 @@ class PlantingController {
 
     #[Filter('LoginRequired')]
     #[Route('get', '/plantings/transplant/{id}')]
-    public function plantings_transplant_get(Request $request, Application $app, string $id) {
+    public function plantings_transplant_get(Request $request, Application $app, string $id)
+    {
         $planting = $app->db->plantings->find_by_id($id);
 
-        echo $app->templates->render('plantings::transplant',
+        echo $app->templates->render(
+            'plantings::transplant',
             [
                 'planting' => $planting,
                 'beds' => $this->get_bed_select_data($app),
@@ -236,7 +299,8 @@ class PlantingController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/plantings/transplant/{id}')]
-    public function plantings_transplant_post(Request $request, Application $app, string $id) {
+    public function plantings_transplant_post(Request $request, Application $app, string $id)
+    {
         $form_vars = $request->POST;
 
         // Build and create transplant log
@@ -267,7 +331,7 @@ class PlantingController {
         $planting->column = $to->column;
         $planting->bed = $to->bed;
         $planting->tray_id = $to->tray_id;
-        $planting->transplant_log []= $record;
+        $planting->transplant_log[] = $record;
         $app->db->plantings->save($planting);
 
         header("Location: /plantings/{$id}", true, 302);

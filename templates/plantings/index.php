@@ -1,4 +1,6 @@
-<?php $this->layout('main', ['title' => "Plantings"]) ?>
+<?php $this->layout('main', [
+    'title' => "Plantings",
+    'scripts' => ['plantings']]) ?>
 
 <?php if ($this->is_logged_in()): ?>
 <a href="<?= $basepath ?>/plantings/new" class="btn">New Planting</a>
@@ -19,12 +21,18 @@
 
         <button type="submit">Filter</button>
     </form>
+
+    <form>
+        <input type="hidden" value="bulk_edit" name="action">
+        <button type="button" class="btn btn-small" id="bulk_edit_btn">Bulk Edit</button>
+    </form>
 </p>
 
 <table class="seed-table">
     <thead>
         <tr>
             <?php if ($this->is_logged_in()): ?>
+            <th scope="col"></th>
             <th scope="col"></th>
             <?php endif ?>
             <th scope="col">Sort ></th>
@@ -74,6 +82,9 @@
                     <input type="hidden" value="<?= $planting->get_id() ?>" name="planting_id">
                     <button type="submit" class="btn btn-small">Delete</button>
                 </form>
+            </td>
+            <td>
+                <input type="checkbox" name="plantings_selection" value="<?= $this->e($planting->get_id()) ?>">
             </td>
             <?php endif ?>
             <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>">View</a></td>
