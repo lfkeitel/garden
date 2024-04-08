@@ -14,6 +14,7 @@ $config = [
         'username' => 'admin',
         'password' => '$2y$10$ARzGO8XROBR848CRyqhZe.9piRVhg/QsrSa6wHlTWs5jttE7KmtBC',
     ],
+    'session_timeout' => 3600,
 ];
 require 'config.php';
 
@@ -23,9 +24,22 @@ if ($config['dev_mode']) {
     error_reporting(E_ALL);
 }
 
+\ini_set("session.gc_maxlifetime", $config['session_timeout']);
 \session_save_path(__DIR__ . '/../sessions');
 \session_start();
-\session_gc();
+
+if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $config['session_timeout'])) {
+    session_unset();
+    session_destroy();
+}
+$_SESSION['LAST_ACTIVITY'] = time();
+
+if (!isset($_SESSION['CREATED'])) {
+    $_SESSION['CREATED'] = time();
+} else if (time() - $_SESSION['CREATED'] > 1800) {
+    session_regenerate_id(true);
+    $_SESSION['CREATED'] = time();
+}
 
 $is_logged_in = function (): bool {
     return \array_key_exists('logged_in', $_SESSION) && $_SESSION['logged_in'] === true;
