@@ -10,10 +10,6 @@ use League\Plates\Engine;
 require '../vendor/autoload.php';
 $config = [
     'dev_mode' => false,
-    'admin_user' => [
-        'username' => 'admin',
-        'password' => '$2y$10$ARzGO8XROBR848CRyqhZe.9piRVhg/QsrSa6wHlTWs5jttE7KmtBC',
-    ],
     'session_timeout' => 3600,
 ];
 require 'config.php';
@@ -58,7 +54,10 @@ Lib\Weather\Store::$apikey = $config['openweather_apikey'];
 Lib\Weather\Store::$location = $config['location'];
 Lib\Weather\Store::$db = $db->weather;
 
-$request = Request::getRequest($basepath);
+$request = null;
+if (\array_key_exists('REQUEST_URI', $_SERVER)) {
+    $request = Request::getRequest($basepath);
+}
 
 $templates = new Engine('../templates');
 $templates->addFolder('seeds', '../templates/seeds');
