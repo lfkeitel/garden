@@ -1,7 +1,11 @@
-<?php $this->layout('main',
-    ['styles' => ['new-log'],
-     'scripts' => ['new-log'],
-     'title' => 'New Log']) ?>
+<?php $this->layout(
+    'main',
+    [
+        'styles' => ['new-log'],
+        'scripts' => ['new-log'],
+        'title' => 'New Log'
+    ]
+) ?>
 
 <h2>New Log</h2>
 
@@ -14,20 +18,9 @@
                 Planting:
                 <select name="planting">
                     <option>All</option>
-                    <?php foreach ($plantings as $planting): ?>
-                    <option value="<?= $planting['id'] ?>" <?= $select_planting === $planting['id'] ? 'selected' : '' ?>><?= $planting['name'] ?></option>
+                    <?php foreach ($plantings as $planting) : ?>
+                        <option value="<?= $planting['id'] ?>" <?= $select_planting === $planting['id'] ? 'selected' : '' ?>><?= $planting['name'] ?></option>
                     <?php endforeach ?>
-                </select>
-            </label>
-        </p>
-
-        <p>
-            <label>
-                Time of Day:
-                <select name="time_of_day">
-                    <option>Morning</option>
-                    <option>Afternoon</option>
-                    <option>Evening</option>
                 </select>
             </label>
         </p>

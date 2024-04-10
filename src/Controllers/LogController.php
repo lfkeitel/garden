@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Controllers;
 
 use Garden\Models;
@@ -10,9 +12,11 @@ use Onesimus\Router\Attr\Route;
 use Onesimus\Router\Attr\Filter;
 use MongoDB\BSON\ObjectId;
 
-class LogController {
+class LogController
+{
     #[Route('get', '/logs')]
-    public function logs(Request $request, Application $app) {
+    public function logs(Request $request, Application $app)
+    {
         $all_logs = $app->db->logs->get_all(
             'date',
             -1,
@@ -27,10 +31,12 @@ class LogController {
     }
 
     #[Route('get', '/logs/{id}')]
-    public function logs_view_get(Request $request, Application $app, string $id) {
+    public function logs_view_get(Request $request, Application $app, string $id)
+    {
         $log = $app->db->logs->find_by_id($id);
 
-        echo $app->templates->render('logs::view',
+        echo $app->templates->render(
+            'logs::view',
             [
                 'log' => $log,
             ]
@@ -39,27 +45,32 @@ class LogController {
 
     #[Filter('LoginRequired')]
     #[Route('get', '/logs/new')]
-    public function logs_new_get(Request $request, Application $app) {
+    public function logs_new_get(Request $request, Application $app)
+    {
         $form_vars = $request->GET;
         $preselect_id = $form_vars['planting'] ?? '';
 
         echo $app->templates->render(
             'logs::new',
-            ['plantings' => $this->get_planting_select_data($app, [
-                'status' => [
-                    '$nin' => [
-                        'Harvested',
-                        'Failed',
-                        'Transplanted',
-                    ],
-                ]
-            ]), 'select_planting' => $preselect_id],
+            [
+                'plantings' => $this->get_planting_select_data($app, [
+                    'status' => [
+                        '$nin' => [
+                            'Harvested',
+                            'Failed',
+                            'Transplanted',
+                        ],
+                    ]
+                ]),
+                'select_planting' => $preselect_id,
+            ],
         );
     }
 
     #[Filter('LoginRequired')]
     #[Route('post', '/logs/new')]
-    public function logs_new_post(Request $request, Application $app) {
+    public function logs_new_post(Request $request, Application $app)
+    {
         $form_vars = $request->POST;
 
         $record = new Models\Log();
@@ -70,7 +81,16 @@ class LogController {
             $record->planting = $planting;
         }
         $record->notes = $form_vars['notes'];
-        $record->time_of_day = $form_vars['time_of_day'];
+
+        $now_hour = \intval(\date('H'));
+        if ($now_hour < 12) {
+            $record->time_of_day = "Morning";
+        } else if ($now_hour < 18) {
+            $record->time_of_day = 'Afternoon';
+        } else {
+            $record->time_of_day = 'Evening';
+        }
+
         if (\str_contains($form_vars['image_files'], '.png')) {
             $record->image_files = \explode(";", $form_vars['image_files']);
         }
@@ -87,11 +107,12 @@ class LogController {
         );
     }
 
-    private function get_planting_select_data(Application $app, array $filter = []): array {
+    private function get_planting_select_data(Application $app, array $filter = []): array
+    {
         $plantings = $app->db->plantings->get_all($filter, 'date');
         $planting_data = [];
         foreach ($plantings as $planting) {
-            $planting_data []= [
+            $planting_data[] = [
                 'name' => $planting->display_string(),
                 'id' => $planting->get_id(),
             ];
@@ -101,7 +122,8 @@ class LogController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/logs')]
-    public function logs_post(Request $request, Application $app) {
+    public function logs_post(Request $request, Application $app)
+    {
         switch ($request->POST['action']) {
             case 'delete_log':
                 $this->logs_delete($request, $app);
@@ -111,7 +133,8 @@ class LogController {
         $this->logs($request, $app);
     }
 
-    private function logs_delete(Request $request, Application $app) {
+    private function logs_delete(Request $request, Application $app)
+    {
         $log = $app->db->logs->find_by_id($request->POST['log_id']);
 
         if (\is_null($log)) {
@@ -121,11 +144,11 @@ class LogController {
                 $files = $log->image_files;
                 $app->db->logs->delete($log);
 
-                foreach($files as $file) {
+                foreach ($files as $file) {
                     \unlink("../uploads/$file");
                 }
             } catch (\Exception $e) {
-                $toast_msg = 'Error deleting log: '.$e;
+                $toast_msg = 'Error deleting log: ' . $e;
             }
 
             $toast_msg = "Log deleted";
@@ -136,7 +159,8 @@ class LogController {
 
     #[Filter('LoginRequired')]
     #[Route('get', '/logs/edit/{id}')]
-    public function logs_edit_get(Request $request, Application $app, string $id) {
+    public function logs_edit_get(Request $request, Application $app, string $id)
+    {
         $log = $app->db->logs->find_by_id($id);
 
         echo $app->templates->render(
@@ -150,7 +174,8 @@ class LogController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/logs/edit/{id}')]
-    public function logs_edit_post(Request $request, Application $app, string $id) {
+    public function logs_edit_post(Request $request, Application $app, string $id)
+    {
         $form_vars = $request->POST;
         $record = $app->db->logs->find_by_id($id);
 
