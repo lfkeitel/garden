@@ -1,0 +1,18 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2em;
+  border: solid black 1px;
+  padding: 1.5em;
+  border-radius: 5px;
+}
+
+.login-form label {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.25em 0.5em;
+}
+
+.login-form label span {
+  margin-right: 0.5em;
+}
