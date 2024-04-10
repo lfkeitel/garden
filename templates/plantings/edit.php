@@ -1,6 +1,10 @@
-<?php $this->layout('main',
-    ['scripts' => ['seed-form'],
-     'title' => "Edit Planting = {$planting->display_string()}"]) ?>
+<?php $this->layout(
+    'main',
+    [
+        'scripts' => ['seed-form'],
+        'title' => "Edit Planting = {$planting->display_string()}"
+    ]
+) ?>
 
 <h2>Update Planting</h2>
 
@@ -13,8 +17,8 @@
                 Seed:
 
                 <select name="seed">
-                    <?php foreach ($seeds as $seed): ?>
-                    <option value="<?= $seed['id'] ?>" <?= $planting->seed->get_id() == $seed['id'] ? 'selected' : '' ?>><?= $seed['name'] ?></option>
+                    <?php foreach ($seeds as $seed) : ?>
+                        <option value="<?= $seed['id'] ?>" <?= $planting->seed->get_id() == $seed['id'] ? 'selected' : '' ?>><?= $seed['name'] ?></option>
                     <?php endforeach ?>
                 </select>
             </label>
@@ -25,8 +29,8 @@
                 Status:
 
                 <select name="status">
-                    <?php foreach ($planting_statuses as $status): ?>
-                    <option <?= $planting->status === $status ? 'selected' : '' ?>><?= $status ?></option>
+                    <?php foreach ($planting_statuses as $status) : ?>
+                        <option <?= $planting->status === $status ? 'selected' : '' ?>><?= $status ?></option>
                     <?php endforeach ?>
                 </select>
             </label>
@@ -40,8 +44,8 @@
             <label>
                 Bed:
                 <select name="bed">
-                    <?php foreach ($beds as $bed): ?>
-                    <option value="<?= $bed['id'] ?>" <?= $planting->bed->get_id() == $bed['id'] ? 'selected' : '' ?>><?= $bed['name'] ?></option>
+                    <?php foreach ($beds as $bed) : ?>
+                        <option value="<?= $bed['id'] ?>" <?= $planting->bed->get_id() == $bed['id'] ? 'selected' : '' ?>><?= $bed['name'] ?></option>
                     <?php endforeach ?>
                 </select>
             </label>
@@ -78,6 +82,13 @@
 
                 <input type="radio" name="is_transplant" value="Yes" <?= $planting->is_transplant ? 'checked' : '' ?>>Yes</input>
                 <input type="radio" name="is_transplant" value="No" <?= !$planting->is_transplant ? 'checked' : '' ?>>No</input>
+            </label>
+        </p>
+
+        <p>
+            <label>
+                Tags (comma separated):<br>
+                <textarea cols="30" rows="2" name="tags"><?= implode(", ", $planting->tags) ?></textarea>
             </label>
         </p>
 

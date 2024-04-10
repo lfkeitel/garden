@@ -1,10 +1,14 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Models;
 
+use function Garden\BSON_array_to_array;
 use MongoDB\Model\BSONDocument;
 
-class Planting extends DBRecord {
+class Planting extends DBRecord
+{
     public int $row;
     public int $column;
     public Bed $bed;
@@ -16,12 +20,15 @@ class Planting extends DBRecord {
     public string $tray_id;
     public ?\DateTimeImmutable $harvest_date = null;
     public ArrayOfTransplants $transplant_log;
+    public array $tags;
 
-    public function display_string(): string {
+    public function display_string(): string
+    {
         return "{$this->seed->common_name} - {$this->seed->variety}";
     }
 
-    protected function load_from_record(BSONDocument $record, array $extras): void {
+    protected function load_from_record(BSONDocument $record, array $extras): void
+    {
         $this->id = $record['_id'];
         $this->row = $record['row'];
         $this->column = $record['column'];
@@ -38,11 +45,12 @@ class Planting extends DBRecord {
         $this->seed = $extras['seed'];
         $this->bed = $extras['bed'];
         $this->transplant_log = $extras['transplant_log'];
+        $this->tags = BSON_array_to_array($record['custom_tags'] ?? []);
     }
 
-    public function to_array(): array {
+    public function to_array(): array
+    {
         $transplant_ids = [];
-        // var_dump($this->transplant_log);
         foreach ($this->transplant_log as $tlog) {
             \array_push($transplant_ids, $tlog->get_id_obj());
         }
@@ -59,6 +67,7 @@ class Planting extends DBRecord {
             'tray_id' => $this->tray_id,
             'harvest_date' => is_null($this->harvest_date) ? null : $this->harvest_date->format('Y-m-d H:i:s'),
             'transplant_log' => $transplant_ids,
+            'custom_tags' => $this->tags,
         ];
     }
 }

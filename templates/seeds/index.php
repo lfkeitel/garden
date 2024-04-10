@@ -1,12 +1,12 @@
 <?php $this->layout('main', ['title' => "Seeds"]) ?>
 
-<?php if ($this->is_logged_in()): ?>
-<a href="<?= $basepath ?>/seeds/new" class="btn">New Seed</a>
+<?php if ($this->is_logged_in()) : ?>
+    <a href="<?= $basepath ?>/seeds/new" class="btn">New Seed</a>
 <?php endif ?>
 
 <div>
-<strong>Tags:</strong>
-<a href="/seeds">None</a><?php foreach ($allTags as $key => $tag): ?>, <a href="/seeds?tag=<?= $tag ?>"><?= $tag ?></a><?php endforeach ?>
+    <strong>Tags:</strong>
+    <a href="/seeds">None</a><?php foreach ($allTags as $key => $tag) : ?>, <a href="/seeds?tag=<?= $tag ?>"><?= $tag ?></a><?php endforeach ?>
 </div>
 
 <table class="seed-table">
@@ -40,32 +40,32 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($allSeeds as $seed): ?>
-        <tr>
-            <?php if ($this->is_logged_in()): ?>
-            <td class="control-cell">
-                <form method="get" action="/seeds/edit/<?= $this->e($seed->get_id()) ?>">
-                    <button type="submit" class="btn btn-small">Edit</button>
-                </form>
+        <?php foreach ($allSeeds as $seed) : ?>
+            <tr>
+                <?php if ($this->is_logged_in()) : ?>
+                    <td class="control-cell">
+                        <form method="get" action="/seeds/edit/<?= $this->e($seed->get_id()) ?>">
+                            <button type="submit" class="btn btn-small">Edit</button>
+                        </form>
 
-                <form method="post" onsubmit="return form_confirm(this);">
-                    <input type="hidden" value="delete_seed" name="action">
-                    <input type="hidden" value="<?= $seed->get_id() ?>" name="seed_id">
-                    <button type="submit" class="btn btn-small">Delete</button>
-                </form>
-            </td>
-            <?php else: ?>
-            <td></td>
-            <?php endif ?>
-            <td><?= $seed->type ?></td>
-            <td><?= $seed->common_name ?></td>
-            <td><a href="<?= $basepath ?>/seeds/<?= $seed->get_id() ?>"><?= $seed->variety ?></a></td>
-            <td><?= $seed->days_to_maturity ?> (<i><?= $this->date_plus_days((new DateTimeImmutable()), $seed->days_to_maturity) ?></i>)</td>
-            <td><?= $seed->days_to_germination ?></td>
-            <td><?= $seed->is_heirloom ? 'Yes' : 'No' ?></td>
-            <td><?= $seed->sun ?></td>
-            <td><?= $seed->is_hybrid ? 'Yes' : 'No' ?></td>
-        </tr>
+                        <form method="post" onsubmit="return form_confirm(this);">
+                            <input type="hidden" value="delete_seed" name="action">
+                            <input type="hidden" value="<?= $seed->get_id() ?>" name="seed_id">
+                            <button type="submit" class="btn btn-small">Delete</button>
+                        </form>
+                    </td>
+                <?php else : ?>
+                    <td></td>
+                <?php endif ?>
+                <td><?= $seed->type ?></td>
+                <td><?= $seed->common_name ?></td>
+                <td><a href="<?= $basepath ?>/seeds/<?= $seed->get_id() ?>"><?= $seed->variety ?></a></td>
+                <td><?= $seed->days_to_maturity ?> (<i><?= $this->date_plus_days((new DateTimeImmutable()), $seed->days_to_maturity) ?></i>)</td>
+                <td><?= $seed->days_to_germination ?></td>
+                <td><?= $seed->is_heirloom ? 'Yes' : 'No' ?></td>
+                <td><?= $seed->sun ?></td>
+                <td><?= $seed->is_hybrid ? 'Yes' : 'No' ?></td>
+            </tr>
         <?php endforeach ?>
     </tbody>
 </table>

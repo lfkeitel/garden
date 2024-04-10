@@ -17,17 +17,22 @@ class PlantingController
     #[Route('get', '/plantings')]
     public function plantings(Request $request, Application $app)
     {
+        $tag_filter = $request->GET['tag'] ?? '';
         $sort_prop = $request->GET['sort_by'] ?? 'date';
         $sort_dir = $request->GET['sort_dir'] ?? 1;
         $sort_dir = intval($sort_dir);
         if ($sort_dir < -1 || $sort_dir > 1) {
             $sort_dir = 1;
         }
+        $status_filter = $request->GET['filter'] ?? '';
 
         $filter = [];
 
-        if (\array_key_exists('filter', $request->GET) && $request->GET['filter'] !== '') {
-            $filter['status'] = $request->GET['filter'];
+        if ($status_filter !== '') {
+            $filter['status'] = $status_filter;
+        }
+        if ($tag_filter !== '') {
+            $filter['custom_tags'] = ['$in' => [$tag_filter]];
         }
 
         $allPlantings = $app->db->plantings->get_all(
@@ -40,9 +45,13 @@ class PlantingController
             'plantings::index',
             [
                 'allPlantings' => $allPlantings,
+                'allTags' => $app->db->plantings->get_all_tags(),
                 'sort_by' => $sort_prop,
                 'sort_dir' => $sort_dir,
-                'filter' => $filter['status'] ?? '',
+                'filter' => $status_filter,
+                'no_tag_link' => http_build_query([
+                    'filter' => $status_filter,
+                ]),
             ],
         );
     }
@@ -137,6 +146,13 @@ class PlantingController
             $col_end = \intval($col);
         }
 
+        $tags = [];
+
+        $custom_tags = explode(',', $form_vars['tags']);
+        foreach ($custom_tags as $tag) {
+            array_push($tags, trim($tag));
+        }
+
         for ($i = $row_start; $i <= $row_end; $i++) {
             for ($j = $col_start; $j <= $col_end; $j++) {
                 $record->date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
@@ -151,6 +167,7 @@ class PlantingController
                 $record->notes = $form_vars['notes'];
                 $record->tray_id = $form_vars['tray_id'];
                 $record->transplant_log = new Models\ArrayOfTransplants();
+                $record->tags = $tags;
                 $app->db->plantings->create($record);
             }
         }
@@ -213,7 +230,15 @@ class PlantingController
     #[Route('get', '/plantings/edit')]
     public function plantings_bulk_edit_get(Request $request, Application $app)
     {
-        $selected = explode(",", $request->GET['selected']);
+        $selected_param = trim($request->GET['selected']);
+
+        if ($selected_param === '') {
+            header('Location: /plantings?filter=Active', true, 307);
+            return;
+        }
+
+        $selected = explode(",", $selected_param);
+
         $plantings = [];
         foreach ($selected as $selection) {
             $plantings[] = $app->db->plantings->find_by_id($selection);
@@ -235,10 +260,23 @@ class PlantingController
     {
         $selected = explode(",", $request->GET['selected']);
         $new_status = $request->POST['status'];
+        $change_status = $new_status !== 'Change:';
+
+        $change_tags = $request->POST['tags'] !== '';
+        $tags = [];
+        $custom_tags = explode(',', $request->POST['tags']);
+        foreach ($custom_tags as $tag) {
+            array_push($tags, trim($tag));
+        }
 
         foreach ($selected as $selection) {
             $planting = $app->db->plantings->find_by_id($selection);
-            $planting->status = $new_status;
+            if ($change_status) {
+                $planting->status = $new_status;
+            }
+            if ($change_tags) {
+                $planting->tags = $tags;
+            }
             $app->db->plantings->save($planting);
         }
 
@@ -280,6 +318,12 @@ class PlantingController
         $record->is_transplant = $form_vars['is_transplant'] === 'Yes';
         $record->notes = $form_vars['notes'];
         $record->tray_id = $form_vars['tray_id'];
+        $record->tags = [];
+
+        $custom_tags = explode(',', $form_vars['tags']);
+        foreach ($custom_tags as $tag) {
+            array_push($record->tags, trim($tag));
+        }
 
         if ($record->status === 'Harvested') {
             $record->harvest_date = new \DateTimeImmutable();

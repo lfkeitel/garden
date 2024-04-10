@@ -35,5 +35,15 @@
         </p>
     </fieldset>
 
+    <fieldset>
+        <legend>Other Information</legend>
+        <p>
+            <label>
+                Tags (comma separated):<br>
+                <textarea cols="30" rows="2" name="tags"></textarea>
+            </label>
+        </p>
+    </fieldset>
+
     <button type="submit">Update Plantings</button>
 </form>

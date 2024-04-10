@@ -31,6 +31,11 @@
 <?php endif ?>
 </p>
 
+<div>
+    <strong>Tags:</strong>
+    <a href="/plantings?<?= $no_tag_link ?>">None</a><?php foreach ($allTags as $key => $tag) : ?>, <a href="/plantings?<?= $_SERVER['QUERY_STRING'] ?>&tag=<?= $tag ?>"><?= $tag ?></a><?php endforeach ?>
+</div>
+
 <table class="seed-table">
     <thead>
         <tr>
@@ -41,6 +46,9 @@
             <th scope="col">Sort ></th>
             <th scope="col">
                 <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=date<?= $sort_by == 'date' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Planted</a>
+            </th>
+            <th scope="col">
+                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=status<?= $sort_by == 'status' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Status</a>
             </th>
             <th scope="col">
                 Seed
@@ -55,16 +63,13 @@
                 <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=column<?= $sort_by == 'column' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Column</a>
             </th>
             <th scope="col">
-                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=status<?= $sort_by == 'status' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Status</a>
-            </th>
-            <th scope="col">
                 <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=is_transplant<?= $sort_by == 'is_transplant' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Is Transplant?</a>
             </th>
             <th scope="col">
                 <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=notes<?= $sort_by == 'notes' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Notes</a>
             </th>
             <th scope="col">
-                <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=tray_id<?= $sort_by == 'tray_id' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Tray ID</a>
+                Tags
             </th>
             <th scope="col">
                 <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=harvest_date<?= $sort_by == 'harvest_date' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Maturity Date</a>
@@ -92,14 +97,14 @@
                 <?php endif ?>
                 <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>">View</a></td>
                 <td><?= $planting->date->format('Y-m-d') ?></td>
+                <td><?= $planting->status ?></td>
                 <td><?= $planting->seed->display_string() ?></td>
                 <td><?= $planting->bed->name ?></td>
                 <td><?= $planting->row ?></td>
                 <td><?= $planting->column ?></td>
-                <td><?= $planting->status ?></td>
                 <td><?= $planting->is_transplant ? 'Yes' : 'No' ?></td>
                 <td><?= $planting->notes ?></td>
-                <td><?= $planting->tray_id ?></td>
+                <td><?= count($planting->tags) == 0 ? '' : implode(", ", $planting->tags) ?></td>
                 <td><?= is_null($planting->harvest_date) ? '<i>' . $this->date_plus_days($planting->date, $planting->seed->days_to_maturity) . '*</i>' : $planting->harvest_date->format('Y-m-d') ?></td>
             </tr>
         <?php endforeach ?>
