@@ -63,6 +63,7 @@ class LogController
                     ]
                 ]),
                 'select_planting' => $preselect_id,
+                'planting_tags' => $app->db->plantings->get_all_tags(),
             ],
         );
     }
@@ -81,6 +82,7 @@ class LogController
             $record->planting = $planting;
         }
         $record->notes = $form_vars['notes'];
+        $record->planting_tag = $form_vars['planting_tag'];
 
         $now_hour = \intval(\date('H'));
         if ($now_hour < 12) {
@@ -168,6 +170,7 @@ class LogController
             [
                 'log' => $log,
                 'plantings' => $this->get_planting_select_data($app),
+                'planting_tags' => $app->db->plantings->get_all_tags(),
             ],
         );
     }
@@ -185,6 +188,7 @@ class LogController
         }
         $record->notes = $form_vars['notes'];
         $record->time_of_day = $form_vars['time_of_day'];
+        $record->planting_tag = $form_vars['planting_tag'];
 
         $app->db->logs->save($record);
 

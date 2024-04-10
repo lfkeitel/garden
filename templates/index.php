@@ -99,7 +99,7 @@ $now = new DateTimeImmutable();
             <th scope="col">Seed</th>
             <th scope="col">Bed</th>
             <th scope="col">Status</th>
-            <th scope="col">Tray ID</th>
+            <th scope="col">Tags</th>
             <th scope="col">Maturity Date</th>
         </tr>
     </thead>
@@ -110,7 +110,7 @@ $now = new DateTimeImmutable();
                 <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>"><?= $planting->display_string() ?></a></td>
                 <td><?= $planting->bed->name ?> (<?= $planting->row ?>/<?= $planting->column ?>)</td>
                 <td><?= $planting->status ?></td>
-                <td><?= $planting->tray_id ?></td>
+                <td><?= count($planting->tags) == 0 ? '' : implode(", ", $planting->tags) ?></td>
                 <td><?= is_null($planting->harvest_date) ? '<i>' . $this->date_plus_days($planting->date, $planting->seed->days_to_maturity) . '*</i>' : $planting->harvest_date->format('Y-m-d') ?></td>
             </tr>
         <?php endforeach ?>

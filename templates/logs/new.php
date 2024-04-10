@@ -27,6 +27,18 @@
 
         <p>
             <label>
+                Planting Tag:
+                <select name="planting_tag">
+                    <option value="">None</option>
+                    <?php foreach ($planting_tags as $tag) : ?>
+                        <option><?= $tag ?></option>
+                    <?php endforeach ?>
+                </select>
+            </label>
+        </p>
+
+        <p>
+            <label>
                 Notes:<br>
                 <textarea cols="50" rows="6" name="notes"></textarea>
             </label>

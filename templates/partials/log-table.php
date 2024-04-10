@@ -44,6 +44,8 @@
                 <?php if (!isset($planting_id)) : ?>
                     <?php if (!is_null($log->planting)) : ?>
                         <td><a href="<?= $basepath ?>/plantings/<?= $log->planting->get_id() ?>"><?= $log->display_string() ?></a></td>
+                    <?php elseif ($log->planting_tag) : ?>
+                        <td>Tag: <a href="/plantings?tag=<?= $log->planting_tag ?>"><?= $log->planting_tag ?></a></td>
                     <?php else : ?>
                         <td><?= $log->display_string() ?></td>
                     <?php endif ?>

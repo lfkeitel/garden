@@ -3,8 +3,8 @@
 <h2>== Log <?= $log->date->format('Y-m-d H:i:s') ?> ==</h2>
 
 <p>
-    <?php if ($this->is_logged_in()): ?>
-    <a href="<?= $basepath ?>/logs/edit/<?= $log->get_id() ?>" class="btn">Edit</a>
+    <?php if ($this->is_logged_in()) : ?>
+        <a href="<?= $basepath ?>/logs/edit/<?= $log->get_id() ?>" class="btn">Edit</a>
     <?php endif ?>
 </p>
 
@@ -16,13 +16,17 @@
 
         <dt>Planting:</dt>
         <dd>
-            <?php if ($log->planting): ?>
-            <a href="<?= $basepath ?>/plantings/<?= $log->planting->get_id() ?>">
-            <?= $log->planting->seed->common_name.' - '.$log->planting->seed->variety ?>
-            </a>
-            <?php else: ?>
+            <?php if ($log->planting) : ?>
+                <a href="<?= $basepath ?>/plantings/<?= $log->planting->get_id() ?>">
+                    <?= $log->planting->seed->common_name . ' - ' . $log->planting->seed->variety ?>
+                </a>
+            <?php else : ?>
                 All
             <?php endif ?>
+        </dd>
+
+        <dt>Planting Tag:</dt>
+        <dd><?= $log->planting_tag == '' ? 'None' : $log->planting_tag ?></dd>
         </dd>
 
         <dt>Time of Day:</dt>
@@ -63,7 +67,7 @@
     <p class="notes"><?= nl2br($log->notes) ?></p>
 
     <h3 id="images">Images</h3>
-    <?php foreach ($log->image_files as $file): ?>
-    <p><a href="<?= $basepath ?>/uploads/<?= $file ?>" target="_blank"><img src="<?= $basepath ?>/uploads/<?= $file ?>" width="720" height="540"></a></p>
+    <?php foreach ($log->image_files as $file) : ?>
+        <p><a href="<?= $basepath ?>/uploads/<?= $file ?>" target="_blank"><img src="<?= $basepath ?>/uploads/<?= $file ?>" width="720" height="540"></a></p>
     <?php endforeach ?>
 </article>
