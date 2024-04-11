@@ -171,6 +171,7 @@ class PlantingController
                 $record->tray_id = $form_vars['tray_id'];
                 $record->transplant_log = new Models\ArrayOfTransplants();
                 $record->tags = $tags;
+                $record->count = \intval($form_vars['count']);
                 $app->db->plantings->create($record);
             }
         }
@@ -337,6 +338,7 @@ class PlantingController
         $record->notes = $form_vars['notes'];
         $record->tray_id = $form_vars['tray_id'];
         $record->tags = [];
+        $record->count = \intval($form_vars['count']);
 
         $custom_tags = explode(',', $form_vars['tags']);
         foreach ($custom_tags as $tag) {

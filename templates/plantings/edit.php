@@ -26,6 +26,12 @@
 
         <p>
             <label>
+                Plant Count: <input type="number" name="count" value="<?= $planting->count ?>">
+            </label>
+        </p>
+
+        <p>
+            <label>
                 Status:
 
                 <select name="status">

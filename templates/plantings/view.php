@@ -24,6 +24,9 @@
                 </a>
             </dd>
 
+            <dt>Plant Count:</dt>
+            <dd><?= $planting->count ?></dd>
+
             <dt>Status:</dt>
             <dd><?= $planting->status ?></dd>
 

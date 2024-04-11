@@ -55,6 +55,9 @@
                 Seed
             </th>
             <th scope="col">
+                Count
+            </th>
+            <th scope="col">
                 Bed
             </th>
             <th scope="col">
@@ -100,6 +103,7 @@
                 <td><?= $planting->date->format('Y-m-d') ?></td>
                 <td><?= $planting->status ?></td>
                 <td><?= $planting->seed->display_string() ?></td>
+                <td><?= $planting->count ?></td>
                 <td><?= $planting->bed->name ?></td>
                 <td><?= $planting->row ?></td>
                 <td><?= $planting->column ?></td>

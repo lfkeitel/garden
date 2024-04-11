@@ -63,7 +63,7 @@ $now = new DateTimeImmutable();
                                         foreach ($bed_plantings[$bed->get_id()] as $planting) : ?>
                                             <?php if ($planting->row === $i && $planting->column === $j) : ?>
                                                 <a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>" title="<?= $planting->notes ?>">
-                                                    <?= $planting->display_string() ?> (<?= $planting->row ?>/<?= $planting->column ?>) (<?= $this->days_from_date($planting->date) ?>) (<?= $planting->status ?>)<br>
+                                                    <?= $planting->count ?> x <?= $planting->display_string() ?> (<?= $planting->row ?>/<?= $planting->column ?>) (<?= $this->days_from_date($planting->date) ?>) (<?= $planting->status ?>)<br>
                                                 </a>
                                             <?php $n++;
                                             endif ?>
@@ -97,6 +97,7 @@ $now = new DateTimeImmutable();
         <tr>
             <th scope="col">Planted</th>
             <th scope="col">Seed</th>
+            <th scope="col">Count</th>
             <th scope="col">Bed</th>
             <th scope="col">Status</th>
             <th scope="col">Tags</th>
@@ -108,6 +109,7 @@ $now = new DateTimeImmutable();
             <tr>
                 <td><?= $planting->date->format('Y-m-d') ?></td>
                 <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>"><?= $planting->display_string() ?></a></td>
+                <td><?= $planting->count ?></td>
                 <td><?= $planting->bed->name ?> (<?= $planting->row ?>/<?= $planting->column ?>)</td>
                 <td><?= $planting->status ?></td>
                 <td><?= count($planting->tags) == 0 ? '' : implode(", ", $planting->tags) ?></td>

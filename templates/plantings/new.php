@@ -19,6 +19,12 @@
                 <option value="<?= $seed['id'] ?>"><?= $seed['name'] ?></option>
             <?php endforeach ?>
         </select>
+
+        <p>
+            <label>
+                Plant Count: <input type="number" name="count" value="1">
+            </label>
+        </p>
     </fieldset>
 
     <fieldset>

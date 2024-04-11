@@ -21,6 +21,7 @@ class Planting extends DBRecord
     public ?\DateTimeImmutable $harvest_date = null;
     public ArrayOfTransplants $transplant_log;
     public array $tags;
+    public int $count;
 
     public function display_string(): string
     {
@@ -46,6 +47,7 @@ class Planting extends DBRecord
         $this->bed = $extras['bed'];
         $this->transplant_log = $extras['transplant_log'];
         $this->tags = BSON_array_to_array($record['custom_tags'] ?? []);
+        $this->count = $record['count'] ?? 1;
     }
 
     public function to_array(): array
@@ -68,6 +70,7 @@ class Planting extends DBRecord
             'harvest_date' => is_null($this->harvest_date) ? null : $this->harvest_date->format('Y-m-d H:i:s'),
             'transplant_log' => $transplant_ids,
             'custom_tags' => $this->tags,
+            'count' => $this->count,
         ];
     }
 }
