@@ -24,11 +24,14 @@ class PlantingController
         if ($sort_dir < -1 || $sort_dir > 1) {
             $sort_dir = 1;
         }
-        $status_filter = $request->GET['filter'] ?? '';
+        $status_filter = $request->GET['filter'] ?? 'Active';
+        if ($status_filter === '') {
+            $status_filter = 'Active';
+        }
 
         $filter = [];
 
-        if ($status_filter !== '') {
+        if ($status_filter !== 'All') {
             $filter['status'] = $status_filter;
         }
         if ($tag_filter !== '') {
@@ -195,8 +198,8 @@ class PlantingController
             case 'delete_planting':
                 $this->plantings_delete($request, $app);
                 break;
-            case 'bulk_edit':
-                $this->plantings_bulk_edit($request, $app);
+            case 'bulk_delete':
+                $this->plantings_bulk_delete($request, $app);
                 break;
         }
 
@@ -222,8 +225,23 @@ class PlantingController
         $app->templates->addData(['toast' => $toast_msg]);
     }
 
-    private function plantings_bulk_edit(Request $request, Application $app)
+    private function plantings_bulk_delete(Request $request, Application $app)
     {
+        $selections = explode(",", $request->POST['selection'] ?? '');
+
+        foreach ($selections as $selection) {
+            $planting = $app->db->plantings->find_by_id($selection);
+
+            if (!\is_null($planting)) {
+                try {
+                    $app->db->plantings->delete($planting);
+                } catch (\Exception $e) {
+                }
+            }
+        }
+        $toast_msg = "Plantings deleted";
+
+        $app->templates->addData(['toast' => $toast_msg]);
     }
 
     #[Filter('LoginRequired')]

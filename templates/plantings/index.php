@@ -13,7 +13,7 @@
         Status:
 
         <select name="filter">
-            <option value=''>All</option>
+            <option value='All'>All</option>
             <?php foreach ($planting_statuses as $status) : ?>
                 <option <?= $filter === $status ? 'selected' : '' ?>><?= $status ?></option>
             <?php endforeach ?>
@@ -27,6 +27,7 @@
     <form>
         <input type="hidden" value="bulk_edit" name="action">
         <button type="button" class="btn btn-small" id="bulk_edit_btn">Bulk Edit</button>
+        <button type="button" class="btn btn-small" id="bulk_delete_btn">Bulk Delete</button>
     </form>
 <?php endif ?>
 </p>
