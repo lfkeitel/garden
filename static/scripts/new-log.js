@@ -98,7 +98,7 @@
       body: formData,
     })
       // .then((response) => response.text())
-      // .then((t) => console.log(t))
+      // .then((t) => alert(t))
       .then((response) => response.json())
       .then((json) => {
         if (json.error !== '') {

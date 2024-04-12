@@ -69,11 +69,17 @@
     <section>
         <h3>Transplant Log</h3>
         <?php foreach ($planting->transplant_log as $log) : ?>
-            <p>
-                <?= $log->date->format('Y-m-d') ?> <strong>From:</strong> <?= $log->from->display_string() ?> -> <strong>To:</strong> <?= $log->to->display_string() ?>
-            </p>
+        <p>
+            <?= $log->date->format('Y-m-d') ?> <strong>From:</strong> <?= $log->from->display_string() ?> -> <strong>To:</strong> <?= $log->to->display_string() ?>
+        </p>
         <?php endforeach ?>
+        <?php if (count($planting->transplant_log) === 0) : ?>
+        <p>
+            No transplant logs.
+        </p>
+        <?php endif ?>
 
+        <h3>Planting Log</h3>
         <?php $this->insert(
             'partials::log-table',
             [

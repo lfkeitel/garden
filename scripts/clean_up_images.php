@@ -15,10 +15,7 @@ if ($dev_mode) {
     error_reporting(E_ALL);
 }
 
-require "{$cwd}/../src/functions.php";
-require "{$cwd}/../src/database.php";
-
-$db = new DatabaseConnection($mongo_db_connect);
+require "{$cwd}/../src/include.php";
 
 $logs = $db->logs->get_all();
 $log_images = [];
@@ -32,7 +29,7 @@ foreach ($logs as $log) {
 $files = \scandir($upload_dir);
 
 $log_image_cnt = count($log_images);
-$file_cnt = count($files)-2;
+$file_cnt = count($files)-3; // . .. .gitkeep
 
 echo "{$log_image_cnt} linked images\n";
 echo "{$file_cnt} uploaded images\n";

@@ -26,3 +26,7 @@ function get_class_name(mixed $object): string {
     if ($pos = strrpos($classname, '\\')) return substr($classname, $pos + 1);
     return $pos;
 }
+
+function is_web_request(): bool {
+    return \array_key_exists('REQUEST_URI', $_SERVER);
+}

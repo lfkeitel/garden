@@ -11,11 +11,11 @@ use Onesimus\Router\Http\Request;
 class Application
 {
     private DatabaseConnection $db;
-    private Engine $templates;
+    private ?Engine $templates;
     private ?Request $request = null;
     private array $config;
 
-    public function __construct(DatabaseConnection $db, array $config, ?Request $request, Engine $templates)
+    public function __construct(DatabaseConnection $db, array $config, ?Request $request, ?Engine $templates)
     {
         $this->db = $db;
         $this->templates = $templates;
