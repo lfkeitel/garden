@@ -18,7 +18,46 @@ class ImageController {
         if (\array_key_exists('image', $data)) {
             $filename = $this->upload_png_data($data['image']);
         } elseif (\array_key_exists('image_file', $_FILES)) {
-            $filename = $this->upload_image_file($_FILES['image_file']);
+            switch($_FILES['image_file']['error']) {
+                case 0:
+                    $filename = $this->upload_image_file($_FILES['image_file']);
+                    break;
+                case 1:
+                    echo \json_encode([
+                        'error' => 'Image is bigger than 4M'
+                    ]);
+                    break;
+                case 2:
+                    echo \json_encode([
+                        'error' => 'Image is bigger than MAX_FILE_SIZE'
+                    ]);
+                    break;
+                case 3:
+                    echo \json_encode([
+                        'error' => 'Image was only partially uploaded'
+                    ]);
+                    break;
+                case 4:
+                    echo \json_encode([
+                        'error' => 'No file was uploaded'
+                    ]);
+                    break;
+                case 6:
+                    echo \json_encode([
+                        'error' => 'Missing temporary folder'
+                    ]);
+                    break;
+                case 7:
+                    echo \json_encode([
+                        'error' => 'Failed to write image to storage'
+                    ]);
+                    break;
+                case 8:
+                    echo \json_encode([
+                        'error' => 'Something else went horribly wrong'
+                    ]);
+                    break;
+            }
         } else {
             \http_response_code(400);
             echo \json_encode([
@@ -102,7 +141,7 @@ class ImageController {
             \unlink($filepath);
             \http_response_code(400);
             echo \json_encode([
-                'error' => 'Image file must be a PNG'
+                'error' => 'Image file must be a PNG.'
             ]);
             return '';
         }
