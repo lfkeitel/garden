@@ -41,7 +41,7 @@
             </dd>
 
             <dt>Is Transplant?:</dt>
-            <dd><?= count($planting->transplant_log) > 0 ? 'Yes' : 'No' ?></dd>
+            <dd><?= count($planting->transplant_log) > 0 || $planting->is_transplant ? 'Yes' : 'No' ?></dd>
 
             <dt>Tags:</dt>
             <dd><?= count($planting->tags) == 0 ? 'None' : implode(", ", $planting->tags) ?></dd>
