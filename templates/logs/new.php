@@ -5,7 +5,10 @@
         'scripts' => ['new-log'],
         'title' => 'New Log'
     ]
-) ?>
+);
+
+$select_planting = isset($select_planting) ? $select_planting : '';
+?>
 
 <h2>New Log</h2>
 
@@ -15,11 +18,21 @@
 
         <p>
             <label>
+                Date: <input type="datetime-local" name="log_date"
+                    value="<?= (new DateTimeImmutable())->format("Y-m-d\\TH:m") ?>">
+            </label>
+        </p>
+
+        <p>
+            <label>
                 Planting:
                 <select name="planting">
                     <option>All</option>
                     <?php foreach ($plantings as $planting) : ?>
-                        <option value="<?= $planting['id'] ?>" <?= $select_planting === $planting['id'] ? 'selected' : '' ?>><?= $planting['name'] ?></option>
+                    <option
+                        value="<?= $planting['id'] ?>"
+                        <?= $select_planting === $planting['id'] ? 'selected' : '' ?>><?= $planting['name'] ?>
+                    </option>
                     <?php endforeach ?>
                 </select>
             </label>
@@ -31,7 +44,7 @@
                 <select name="planting_tag">
                     <option value="">None</option>
                     <?php foreach ($planting_tags as $tag) : ?>
-                        <option><?= $tag ?></option>
+                    <option><?= $tag ?></option>
                     <?php endforeach ?>
                 </select>
             </label>

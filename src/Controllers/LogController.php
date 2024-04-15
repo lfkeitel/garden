@@ -76,7 +76,7 @@ class LogController
 
         $record = new Models\Log();
 
-        $record->date = new \DateTimeImmutable();
+        $record->date = new \DateTimeImmutable($form_vars['log_date'] ?? 'now');
         if ($form_vars['planting'] !== 'All') {
             $planting = $app->db->plantings->find_by_id(new ObjectId($form_vars['planting']));
             $record->planting = $planting;
@@ -84,10 +84,10 @@ class LogController
         $record->notes = $form_vars['notes'];
         $record->planting_tag = $form_vars['planting_tag'];
 
-        $now_hour = \intval(\date('H'));
+        $now_hour = \intval($record->date->format('H'));
         if ($now_hour < 12) {
             $record->time_of_day = "Morning";
-        } else if ($now_hour < 18) {
+        } elseif ($now_hour < 18) {
             $record->time_of_day = 'Afternoon';
         } else {
             $record->time_of_day = 'Evening';

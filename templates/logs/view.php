@@ -6,6 +6,12 @@
     <?php if ($this->is_logged_in()) : ?>
         <a href="<?= $basepath ?>/logs/edit/<?= $log->get_id() ?>" class="btn">Edit</a>
     <?php endif ?>
+
+    <form method="post" action="/logs" onsubmit="return form_confirm(this);">
+        <input type="hidden" value="delete_log" name="action">
+        <input type="hidden" value="<?= $log->get_id() ?>" name="log_id">
+        <button type="submit" class="btn btn-small">Delete</button>
+    </form>
 </p>
 
 <article>
