@@ -2,3 +2,4 @@ config.php
 vendor/
 uploads/
 sessions/
+.php-cs-fixer.cache
