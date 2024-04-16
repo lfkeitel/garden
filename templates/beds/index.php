@@ -28,16 +28,18 @@
         <?php foreach ($all_beds as $bed): ?>
         <tr>
             <?php if ($this->is_logged_in()): ?>
-            <td class="control-cell">
-                <form method="get" action="/beds/edit/<?= $this->e($bed->get_id()) ?>">
-                    <button type="submit" class="btn btn-small">Edit</button>
-                </form>
+            <td>
+                <div class="control-cell">
+                    <form method="get" action="/beds/edit/<?= $this->e($bed->get_id()) ?>">
+                        <button type="submit" class="btn btn-small">Edit</button>
+                    </form>
 
-                <form method="post" onsubmit="return form_confirm(this);">
-                    <input type="hidden" value="delete_bed" name="action">
-                    <input type="hidden" value="<?= $bed->get_id() ?>" name="bed_id">
-                    <button type="submit" class="btn btn-small">Delete</button>
-                </form>
+                    <form method="post" onsubmit="return form_confirm(this);">
+                        <input type="hidden" value="delete_bed" name="action">
+                        <input type="hidden" value="<?= $bed->get_id() ?>" name="bed_id">
+                        <button type="submit" class="btn btn-small">Delete</button>
+                    </form>
+                </div>
             </td>
             <?php endif ?>
             <td><a href="<?= $basepath ?>/beds/<?= $bed->get_id() ?>"><?= $bed->name ?></a></td>

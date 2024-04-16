@@ -43,16 +43,18 @@
         <?php foreach ($allSeeds as $seed) : ?>
             <tr>
                 <?php if ($this->is_logged_in()) : ?>
-                    <td class="control-cell">
-                        <form method="get" action="/seeds/edit/<?= $this->e($seed->get_id()) ?>">
-                            <button type="submit" class="btn btn-small">Edit</button>
-                        </form>
+                    <td>
+                        <div class="control-cell">
+                            <form method="get" action="/seeds/edit/<?= $this->e($seed->get_id()) ?>">
+                                <button type="submit" class="btn btn-small">Edit</button>
+                            </form>
 
-                        <form method="post" onsubmit="return form_confirm(this);">
-                            <input type="hidden" value="delete_seed" name="action">
-                            <input type="hidden" value="<?= $seed->get_id() ?>" name="seed_id">
-                            <button type="submit" class="btn btn-small">Delete</button>
-                        </form>
+                            <form method="post" onsubmit="return form_confirm(this);">
+                                <input type="hidden" value="delete_seed" name="action">
+                                <input type="hidden" value="<?= $seed->get_id() ?>" name="seed_id">
+                                <button type="submit" class="btn btn-small">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 <?php else : ?>
                     <td></td>
