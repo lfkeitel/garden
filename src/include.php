@@ -6,11 +6,13 @@ namespace Garden;
 
 use Onesimus\Router\Http\Request;
 use League\Plates\Engine;
-
-require 'functions.php';
+use Garden\Models\Planting;
 
 $cwd = dirname(__FILE__);
 require "{$cwd}/../vendor/autoload.php";
+
+require 'functions.php';
+
 $config = [
     'dev_mode' => false,
     'session_timeout' => 3600,
@@ -36,7 +38,7 @@ if (is_web_request()) {
 
     if (!isset($_SESSION['CREATED'])) {
         $_SESSION['CREATED'] = time();
-    } else if (time() - $_SESSION['CREATED'] > 1800) {
+    } elseif (time() - $_SESSION['CREATED'] > 1800) {
         session_regenerate_id(true);
         $_SESSION['CREATED'] = time();
     }
@@ -100,6 +102,20 @@ if (is_web_request()) {
 
     $templates->registerFunction('date_plus_days', function (\DateTimeInterface $then, int $days) {
         $day = $then->add(new \DateInterval("P{$days}D"));
+        return $day->format('Y-m-d');
+    });
+
+    $templates->registerFunction('plant_maturity_day', function (Planting $planting) {
+        if ($planting->harvest_date) {
+            return $planting->harvest_date->format('Y-m-d');
+        }
+
+        $date = $planting->date;
+        if ($planting->sprout_date) {
+            $date = $planting->sprout_date;
+        }
+
+        $day = $date->add(new \DateInterval("P{$planting->seed->days_to_maturity}D"));
         return $day->format('Y-m-d');
     });
 

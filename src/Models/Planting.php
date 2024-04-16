@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Garden\Models;
 
-use function Garden\BSON_array_to_array;
 use MongoDB\Model\BSONDocument;
+
+use function Garden\BSON_array_to_array;
 
 class Planting extends DBRecord
 {
@@ -17,6 +18,7 @@ class Planting extends DBRecord
     public bool $is_transplant;
     public string $notes;
     public \DateTimeImmutable $date;
+    public ?\DateTimeImmutable $sprout_date = null;
     public string $tray_id;
     public ?\DateTimeImmutable $harvest_date = null;
     public ArrayOfTransplants $transplant_log;
@@ -42,6 +44,9 @@ class Planting extends DBRecord
         if ($record['harvest_date']) {
             $this->harvest_date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['harvest_date']);
         }
+        if ($record['sprout_date'] ?? false) {
+            $this->sprout_date = \DateTimeImmutable::createFromFormat('Y-m-d', $record['sprout_date']);
+        }
 
         $this->seed = $extras['seed'];
         $this->bed = $extras['bed'];
@@ -66,6 +71,7 @@ class Planting extends DBRecord
             'is_transplant' => $this->is_transplant,
             'notes' => $this->notes,
             'date' => $this->date->format('Y-m-d H:i:s'),
+            'sprout_date' => is_null($this->sprout_date) ? null : $this->sprout_date->format('Y-m-d'),
             'tray_id' => $this->tray_id,
             'harvest_date' => is_null($this->harvest_date) ? null : $this->harvest_date->format('Y-m-d H:i:s'),
             'transplant_log' => $transplant_ids,

@@ -84,6 +84,12 @@
 
         <p>
             <label>
+                Sprouting Date: <input type="date" name="sprouting_date" value="<?= $planting->sprout_date ? $planting->sprout_date->format("Y-m-d") : '' ?>">
+            </label>
+        </p>
+
+        <p>
+            <label>
                 Is transplant?
 
                 <input type="radio" name="is_transplant" value="Yes" <?= $planting->is_transplant ? 'checked' : '' ?>>Yes</input>

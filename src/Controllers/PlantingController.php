@@ -19,7 +19,7 @@ class PlantingController
     {
         $tag_filter = $request->GET['tag'] ?? '';
         $sort_prop = $request->GET['sort_by'] ?? 'date';
-        $sort_dir = $request->GET['sort_dir'] ?? 1;
+        $sort_dir = $request->GET['sort_dir'] ?? -1;
         $sort_dir = intval($sort_dir);
         if ($sort_dir < -1 || $sort_dir > 1) {
             $sort_dir = 1;
@@ -327,6 +327,9 @@ class PlantingController
         $record = $app->db->plantings->find_by_id($id);
 
         $record->date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
+        if ($form_vars['sprouting_date']) {
+            $record->sprout_date = new \DateTimeImmutable($form_vars['sprouting_date']);
+        }
         $record->row = \intval($form_vars['row']);
         $record->column = \intval($form_vars['column']);
         $bed = $app->db->beds->find_by_id(new ObjectId($form_vars['bed']));
