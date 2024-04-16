@@ -24,7 +24,7 @@ class IndexController
                     ],
                 ],
             ],
-            ['sort' => ['date' => 1]],
+            ['sort' => ['date' => -1]],
         );
 
         $logs = $app->db->logs->find_multiple(

@@ -126,7 +126,7 @@ class LogController
 
     private function get_planting_select_data(Application $app, array $filter = []): array
     {
-        $plantings = $app->db->plantings->get_all($filter, 'date');
+        $plantings = $app->db->plantings->get_all('date', 1, $filter);
         $planting_data = [];
         foreach ($plantings as $planting) {
             $planting_data[] = [

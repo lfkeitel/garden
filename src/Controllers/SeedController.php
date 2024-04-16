@@ -79,11 +79,32 @@ class SeedController
     public function seeds_view_get(Request $request, Application $app, string $id)
     {
         $seed = $app->db->seeds->find_by_id($id);
+        $avg_germ_time_results = $app->db->plantings->aggregate(
+            [
+                [
+                    '$match' => [
+                        'seed' => $seed->get_id_obj(),
+                        'sprout_date' => ['$type' => 'string'],
+                    ]
+                ],
+                [
+                    '$group' => [
+                        '_id' => 'gt', 'germ_time' => ['$avg' => ['$abs' => ['$dateDiff' => ['startDate' => ['$convert' => ['input' => ['$getField' => 'sprout_date'], 'to' => 'date']], 'endDate' => ['$convert' => ['input' => ['$getField' => 'date'], 'to' => 'date']], 'unit' => 'day']]]]
+                    ]
+                ]
+            ],
+        );
+
+        $avg_germ_time = 0;
+        if ($avg_germ_time_results) {
+            $avg_germ_time = \intval($avg_germ_time_results[0]['germ_time']);
+        }
 
         echo $app->templates->render(
             'seeds::view',
             [
                 'seed' => $seed,
+                'avg_germ_time' => $avg_germ_time,
             ]
         );
     }

@@ -33,6 +33,9 @@
         <dt>Days to Germination:</dt>
         <dd><?= $seed->days_to_germination ?></dd>
 
+        <dt>Average Germination Time:</dt>
+        <dd><?= $avg_germ_time === 0 ? 'Unknown' : $avg_germ_time ?> days</dd>
+
         <dt>Is Heirloom:</dt>
         <dd><?= $seed->is_heirloom ? 'Yes' : 'No' ?></dd>
 

@@ -39,9 +39,9 @@ class PlantingController
         }
 
         $allPlantings = $app->db->plantings->get_all(
-            $filter,
             $sort_prop,
             $sort_dir,
+            $filter,
         );
 
         echo $app->templates->render(

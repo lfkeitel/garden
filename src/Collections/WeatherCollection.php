@@ -16,21 +16,8 @@ class WeatherCollection extends Collection implements WDataConnector
         return $this->find_one('date', $date);
     }
 
-    public function find_one(string $prop, mixed $val): ?Models\Weather
+    protected function results_to_result_set($all_items): \ArrayObject
     {
-        $records = $this->find_multiple([$prop => $val]);
-
-        if (\count($records) > 0) {
-            return $records[0];
-        }
-
-        return null;
-    }
-
-    public function find_multiple(array $filter = [], array $options = []): Models\ArrayOfWeather
-    {
-        $collection = $this->db->get_mongodb_collection($this->collection);
-        $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfWeather();
         foreach ($all_items as $record) {
             $records [] = new Models\Weather($record);

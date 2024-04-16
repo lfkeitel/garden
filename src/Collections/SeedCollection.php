@@ -11,44 +11,27 @@ use function Garden\BSON_array_to_array;
 
 class SeedCollection extends Collection
 {
-    public function get_all(string $sort_prop = 'common_name', $sort_dir = 1, $filter = []): Models\ArrayOfSeeds
+    protected string $default_sort_prop = 'common_name';
+
+    public function get_all(?string $sort_prop = 'common_name', $sort_dir = 1, array $filter = []): \ArrayObject
     {
-        return $this->find_multiple(array_merge([
+        return parent::get_all($sort_prop, $sort_dir, array_merge([
             '$or' => [
                 ['on_wishlist' => false],
                 ['on_wishlist' => ['$exists' => false]],
             ]
-        ], $filter), ['sort' => [$sort_prop => $sort_dir]]);
+        ], $filter));
     }
 
-    public function get_all_wishlist(string $sort_prop = 'common_name', $sort_dir = 1, $filter = []): Models\ArrayOfSeeds
+    public function get_all_wishlist(string $sort_prop = 'common_name', $sort_dir = 1, array $filter = []): \ArrayObject
     {
         return $this->find_multiple(array_merge([
             'on_wishlist' => true,
         ], $filter), ['sort' => [$sort_prop => $sort_dir]]);
     }
 
-    public function find_by_id(string|ObjectId $id): ?Models\Seed
+    protected function results_to_result_set($all_items): \ArrayObject
     {
-        $id = $id instanceof ObjectId ? $id : new ObjectId($id);
-        return $this->find_one('_id', $id);
-    }
-
-    public function find_one(string $prop, mixed $val): ?Models\Seed
-    {
-        $records = $this->find_multiple([$prop => $val]);
-
-        if (\count($records) > 0) {
-            return $records[0];
-        }
-
-        return null;
-    }
-
-    public function find_multiple(array $filter = [], array $options = []): Models\ArrayOfSeeds
-    {
-        $collection = $this->db->get_mongodb_collection($this->collection);
-        $all_items = $collection->find($filter, $options);
         $records = new Models\ArrayOfSeeds();
         foreach ($all_items as $seed) {
             $records [] = new Models\Seed($seed);
