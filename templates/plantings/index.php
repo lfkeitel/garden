@@ -28,6 +28,7 @@
         <input type="hidden" value="bulk_edit" name="action">
         <button type="button" class="btn btn-small" id="bulk_edit_btn">Bulk Edit</button>
         <button type="button" class="btn btn-small" id="bulk_delete_btn">Bulk Delete</button>
+        <button type="button" class="btn btn-small" id="bulk_log_btn">Bulk Logs</button>
     </form>
 <?php endif ?>
 </p>
@@ -40,11 +41,10 @@
 <table class="seed-table">
     <thead>
         <tr>
+            <th scope="col"></th>
             <?php if ($this->is_logged_in()) : ?>
-                <th scope="col"></th>
-                <th scope="col"></th>
+                <th scope="col"><form><input type="checkbox" id="select_all"></form></th>
             <?php endif ?>
-            <th scope="col">Sort ></th>
             <th scope="col">
                 <a href="<?= $basepath ?>/plantings?filter=<?= $filter ?>&sort_by=date<?= $sort_by == 'date' && $sort_dir == -1 ? '&sort_dir=1' : '' ?>">Planted</a>
             </th>
@@ -80,8 +80,11 @@
     <tbody>
         <?php foreach ($allPlantings as $planting) : ?>
             <tr>
+                <td>
+                    <div class="control-cell">
+                        <a class="btn btn-small" href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>">Open</a>
+
                 <?php if ($this->is_logged_in()) : ?>
-                    <td class="control-cell">
                         <form method="get" action="/plantings/edit/<?= $this->e($planting->get_id()) ?>">
                             <button type="submit" class="btn btn-small">Edit</button>
                         </form>
@@ -91,12 +94,12 @@
                             <input type="hidden" value="<?= $planting->get_id() ?>" name="planting_id">
                             <button type="submit" class="btn btn-small">Delete</button>
                         </form>
-                    </td>
-                    <td>
-                        <input type="checkbox" name="plantings_selection" value="<?= $this->e($planting->get_id()) ?>">
-                    </td>
+                    </div>
+                </td>
+                <td>
+                    <input type="checkbox" name="plantings_selection" value="<?= $this->e($planting->get_id()) ?>">
                 <?php endif ?>
-                <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>">View</a></td>
+                </td>
                 <td><?= $planting->date->format('Y-m-d') ?></td>
                 <td><?= $planting->sprout_date ? $planting->sprout_date->format('Y-m-d') : "Not yet" ?></td>
                 <td><?= $planting->status ?></td>

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Garden\Models;
 
-use function Garden\BSON_array_to_array;
 use MongoDB\Model\BSONDocument;
+
+use function Garden\BSON_array_to_array;
 
 class Log extends DBRecord
 {

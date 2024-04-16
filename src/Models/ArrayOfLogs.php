@@ -1,9 +1,13 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Models;
 
-class ArrayOfLogs extends \ArrayObject {
-    public function offsetSet($key, $val): void {
+class ArrayOfLogs extends \ArrayObject
+{
+    public function offsetSet($key, $val): void
+    {
         if ($val instanceof Log) {
             parent::offsetSet($key, $val);
             return;

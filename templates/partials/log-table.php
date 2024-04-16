@@ -11,9 +11,6 @@
 <table class="seed-table">
     <thead>
         <tr>
-            <?php if ($this->is_logged_in() && $edit_btns) : ?>
-                <th scope="col"></th>
-            <?php endif ?>
             <th scope="col"></th>
             <th scope="col">Date</th>
             <th scope="col">Weather</th>
@@ -25,8 +22,11 @@
     <tbody>
         <?php foreach ($logs as $log) : ?>
             <tr>
-                <?php if ($this->is_logged_in() && $edit_btns) : ?>
-                    <td class="control-cell">
+                <td>
+                    <div class="control-cell">
+                        <a class="btn btn-small" href="<?= $basepath ?>/logs/<?= $log->get_id() ?>">Open</a>
+                        <?php if ($this->is_logged_in() && $edit_btns) : ?>
+
                         <form method="get" action="/logs/edit/<?= $this->e($log->get_id()) ?>">
                             <button type="submit" class="btn btn-small">Edit</button>
                         </form>
@@ -36,9 +36,9 @@
                             <input type="hidden" value="<?= $log->get_id() ?>" name="log_id">
                             <button type="submit" class="btn btn-small">Delete</button>
                         </form>
-                    </td>
-                <?php endif ?>
-                <td><a href="<?= $basepath ?>/logs/<?= $log->get_id() ?>">View Log</a></td>
+                        <?php endif ?>
+                    </div>
+                </td>
                 <td><?= $log->date->format('Y-m-d') ?></td>
                 <td><?= $log->weather->temp_high ?>/<?= $log->weather->temp_low ?>&deg;C</td>
                 <?php if (!isset($planting_id)) : ?>

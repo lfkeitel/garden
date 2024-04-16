@@ -105,9 +105,9 @@
         <?php $this->insert(
             'partials::log-table',
             [
-                'logs' => $logs,
-                'planting_id' => $planting->get_id(),
-            ]
+                        'logs' => $logs,
+                        'planting_id' => $planting->get_id(),
+                    ]
         ) ?>
     </section>
 </div>

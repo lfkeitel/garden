@@ -1,6 +1,8 @@
-<?php $this->layout('main',
+<?php $this->layout(
+    'main',
     ['scripts' => [],
-     'title' => "Transplant {$planting->display_string()}"]) ?>
+     'title' => "Transplant {$planting->display_string()}"]
+) ?>
 
 <h2>Transplant <?= $planting->display_string() ?></h2>
 

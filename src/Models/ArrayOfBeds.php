@@ -1,9 +1,13 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Models;
 
-class ArrayOfBeds extends \ArrayObject {
-    public function offsetSet($key, $val): void {
+class ArrayOfBeds extends \ArrayObject
+{
+    public function offsetSet($key, $val): void
+    {
         if ($val instanceof Bed) {
             parent::offsetSet($key, $val);
             return;

@@ -1,10 +1,13 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Lib\Weather;
 
 use Garden\Models\Weather as WeatherModel;
 
-class Store {
+class Store
+{
     public static DataConnector $db;
     public static string $address = 'https://api.openweathermap.org/data/3.0/onecall/day_summary';
     public static string $apikey = '';
@@ -16,7 +19,8 @@ class Store {
     private static array $cache = [];
 
     // $date = 'yyyy-mm-dd'
-    public static function get_for_date(string $date): WeatherModel {
+    public static function get_for_date(string $date): WeatherModel
+    {
         if (array_key_exists($date, self::$cache)) {
             return self::$cache[$date];
         }
@@ -49,7 +53,8 @@ class Store {
         return $w;
     }
 
-    public static function get_openweather_data(string $date): ?array {
+    public static function get_openweather_data(string $date): ?array
+    {
         if (self::$apikey === '') {
             return null;
         }

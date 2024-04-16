@@ -114,6 +114,7 @@ button,
 
 .btn-small {
   padding: 5px 10px;
+  font-size: 0.75em;
 }
 
 button:hover,
@@ -129,11 +130,6 @@ button:hover,
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3px 5px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  border-left: none;
-  border-right: none;
 }
 
 dt {

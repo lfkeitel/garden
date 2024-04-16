@@ -1,6 +1,8 @@
-<?php $this->layout('main',
+<?php $this->layout(
+    'main',
     ['scripts' => ['seed-form'],
-     'title' => "Edit Seed = {$seed->display_string()}"]) ?>
+     'title' => "Edit Seed = {$seed->display_string()}"]
+) ?>
 
 <h2>== <?= $seed->common_name ?> - <?= $seed->variety ?> <?= $seed->on_wishlist ? '(Wishlist)' : '' ?> ==</h2>
 

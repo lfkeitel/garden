@@ -6,8 +6,6 @@
         'title' => 'New Log'
     ]
 );
-
-$select_planting = isset($select_planting) ? $select_planting : '';
 ?>
 
 <h2>New Log</h2>
@@ -94,5 +92,6 @@ $select_planting = isset($select_planting) ? $select_planting : '';
         <input type="hidden" id="image_files" name="image_files" value="">
     </fieldset>
 
+    <input type="hidden" name="selected" value="<?= $rest_of_plantings ?>">
     <button type="submit">Add Log</button>
 </form>

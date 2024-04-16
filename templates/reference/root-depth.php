@@ -1,5 +1,7 @@
-<?php $this->layout('main',
-    ['title' => "Reference - Seed Depth"]) ?>
+<?php $this->layout(
+    'main',
+    ['title' => "Reference - Seed Depth"]
+) ?>
 
 <h2>Root Depth</h2>
 

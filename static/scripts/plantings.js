@@ -1,5 +1,7 @@
 const bulk_edit_button = document.getElementById("bulk_edit_btn");
 const bulk_delete_button = document.getElementById("bulk_delete_btn");
+const bulk_log_button = document.getElementById("bulk_log_btn");
+const plantings_sel_all = document.getElementById("select_all");
 const plantings_sel_checks = document.getElementsByName("plantings_selection");
 
 function setup() {
@@ -10,6 +12,8 @@ function setup() {
 
   bulk_edit_button.addEventListener("click", bulk_edit_btn_click);
   bulk_delete_button.addEventListener("click", bulk_delete_btn_click);
+  bulk_log_button.addEventListener("click", bulk_log_btn_click);
+  plantings_sel_all.addEventListener("click", plantings_sel_all_click);
 }
 
 function post(path, params, method = 'post') {
@@ -36,6 +40,12 @@ function bulk_edit_btn_click() {
   window.location.href = "/plantings/edit?selected=" + set_to_string(selected_plantings);
 }
 
+function bulk_log_btn_click() {
+  const planting = selected_plantings.values().next().value;
+  selected_plantings.delete(planting);
+  window.location.href = `/logs/new?selected=${set_to_string(selected_plantings)}&planting=${planting}`
+}
+
 function bulk_delete_btn_click() {
   if (form_confirm()) {
     post("/plantings", {
@@ -60,6 +70,19 @@ function sel_toggle(ev) {
     selected_plantings.add(ev.target.value);
   } else {
     selected_plantings.delete(ev.target.value);
+  }
+}
+
+function plantings_sel_all_click(ev) {
+  const checked = ev.target.checked;
+
+  for (let i = 0; i < plantings_sel_checks.length; i++) {
+    plantings_sel_checks[i].checked = checked;
+    if (checked) {
+      selected_plantings.add(plantings_sel_checks[i].value);
+    } else {
+      selected_plantings.delete(plantings_sel_checks[i].value);
+    }
   }
 }
 

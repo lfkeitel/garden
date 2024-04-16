@@ -1,18 +1,21 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Models;
 
 use MongoDB\Model\BSONDocument;
 
-
-class Bed extends DBRecord {
+class Bed extends DBRecord
+{
     public \DateTimeImmutable $added;
     public string $name;
     public int $rows;
     public int $cols;
     public string $notes;
 
-    protected function load_from_record(BSONDocument $record, array $extras): void {
+    protected function load_from_record(BSONDocument $record, array $extras): void
+    {
         $this->id = $record['_id'];
         $this->added = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['added']);
         $this->name = $record['name'];
@@ -21,7 +24,8 @@ class Bed extends DBRecord {
         $this->notes = $record['notes'];
     }
 
-    public function to_array(): array {
+    public function to_array(): array
+    {
         return [
             'added' => $this->added->format('Y-m-d H:i:s'),
             'name' => $this->name,
@@ -31,7 +35,8 @@ class Bed extends DBRecord {
         ];
     }
 
-    public function display_string(): string {
+    public function display_string(): string
+    {
         return $this->name;
     }
 }

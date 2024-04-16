@@ -49,6 +49,7 @@ class LogController
     {
         $form_vars = $request->GET;
         $preselect_id = $form_vars['planting'] ?? '';
+        $selected_plantings = $form_vars['selected'] ?? '';
 
         echo $app->templates->render(
             'logs::new',
@@ -63,6 +64,7 @@ class LogController
                     ]
                 ]),
                 'select_planting' => $preselect_id,
+                'rest_of_plantings' => $selected_plantings,
                 'planting_tags' => $app->db->plantings->get_all_tags(),
             ],
         );
@@ -73,6 +75,14 @@ class LogController
     public function logs_new_post(Request $request, Application $app)
     {
         $form_vars = $request->POST;
+
+        $preselect_id = '';
+        $selected_plantings = $form_vars['selected'] ?? '';
+        if ($selected_plantings) {
+            $plantings = \explode(',', $selected_plantings);
+            $preselect_id = \array_shift($plantings);
+            $selected_plantings = \implode(',', $plantings);
+        }
 
         $record = new Models\Log();
 
@@ -105,7 +115,12 @@ class LogController
 
         echo $app->templates->render(
             'logs::new',
-            ['plantings' => $this->get_planting_select_data($app)],
+            [
+                'plantings' => $this->get_planting_select_data($app),
+                'select_planting' => $preselect_id,
+                'rest_of_plantings' => $selected_plantings,
+                'planting_tags' => $app->db->plantings->get_all_tags(),
+            ],
         );
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 $seed_types = [
     'Vegetable',
     'Herb',
@@ -220,7 +221,8 @@ $planting_statuses = [
     'Transplanted',
 ];
 
-function next_day(int $month, int $day) {
+function next_day(int $month, int $day)
+{
     $this_year = \intval(\date('Y'));
     $this_month = \intval(\date('m'));
     $this_day = \intval(\date('d'));

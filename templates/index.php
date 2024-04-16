@@ -57,10 +57,10 @@ $now = new DateTimeImmutable();
                                         },
                                         'planting-good'
                                     );
-                                ?>
+                                    ?>
                                     <td class="<?= $condition_class ?>">
                                         <?php $n = 0;
-                                        foreach ($bed_plantings[$bed->get_id()] as $planting) : ?>
+                                    foreach ($bed_plantings[$bed->get_id()] as $planting) : ?>
                                             <?php if ($planting->row === $i && $planting->column === $j) : ?>
                                                 <a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>" title="<?= $planting->notes ?>">
                                                     <?= $planting->count ?> x <?= $planting->display_string() ?> (<?= $planting->row ?>/<?= $planting->column ?>) (<?= $this->days_from_date($planting->date) ?>) (<?= $planting->status ?>)<br>

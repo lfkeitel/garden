@@ -1,6 +1,8 @@
-<?php $this->layout('main',
+<?php $this->layout(
+    'main',
     ['scripts' => ['seed-form'],
-     'title' => 'New seed']) ?>
+     'title' => 'New seed']
+) ?>
 
 <form method="POST" id="seed-form">
     <fieldset>

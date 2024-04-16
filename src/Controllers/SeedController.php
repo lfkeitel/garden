@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Controllers;
 
 use Garden\Models;
@@ -9,9 +11,11 @@ use Onesimus\Router\Http\Request;
 use Onesimus\Router\Attr\Route;
 use Onesimus\Router\Attr\Filter;
 
-class SeedController {
+class SeedController
+{
     #[Route('get', '/seeds')]
-    public function seeds(Request $request, Application $app) {
+    public function seeds(Request $request, Application $app)
+    {
         $tag_filter = $request->GET['tag'] ?? '';
         $sort_prop = $request->GET['sort_by'] ?? 'common_name';
         $sort_dir = $request->GET['sort_dir'] ?? 1;
@@ -23,7 +27,7 @@ class SeedController {
         $filter = [];
         if ($tag_filter !== '') {
             $filter = [
-                'custom_tags'=>[
+                'custom_tags' => [
                     '$in' => [$tag_filter],
                 ],
             ];
@@ -41,7 +45,8 @@ class SeedController {
     }
 
     #[Route('get', '/wishlist')]
-    public function wishlist(Request $request, Application $app) {
+    public function wishlist(Request $request, Application $app)
+    {
         $tag_filter = $request->GET['tag'] ?? '';
         $sort_prop = $request->GET['sort_by'] ?? 'common_name';
         $sort_dir = $request->GET['sort_dir'] ?? 1;
@@ -53,7 +58,7 @@ class SeedController {
         $filter = [];
         if ($tag_filter !== '') {
             $filter = [
-                'custom_tags'=>[
+                'custom_tags' => [
                     '$in' => [$tag_filter],
                 ],
             ];
@@ -71,10 +76,12 @@ class SeedController {
     }
 
     #[Route('get', '/seeds/{id}')]
-    public function seeds_view_get(Request $request, Application $app, string $id) {
+    public function seeds_view_get(Request $request, Application $app, string $id)
+    {
         $seed = $app->db->seeds->find_by_id($id);
 
-        echo $app->templates->render('seeds::view',
+        echo $app->templates->render(
+            'seeds::view',
             [
                 'seed' => $seed,
             ]
@@ -83,13 +90,15 @@ class SeedController {
 
     #[Filter('LoginRequired')]
     #[Route('get', '/seeds/new')]
-    public function seeds_new_get(Request $request, Application $app) {
+    public function seeds_new_get(Request $request, Application $app)
+    {
         echo $app->templates->render('seeds::new');
     }
 
     #[Filter('LoginRequired')]
     #[Route('post', '/seeds/new')]
-    public function seeds_new_post(Request $request, Application $app) {
+    public function seeds_new_post(Request $request, Application $app)
+    {
         $form_vars = $request->POST;
 
         $record = new Models\Seed();
@@ -138,7 +147,8 @@ class SeedController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/seeds')]
-    public function seeds_post(Request $request, Application $app) {
+    public function seeds_post(Request $request, Application $app)
+    {
         switch ($request->POST['action']) {
             case 'delete_seed':
                 $this->seeds_delete($request, $app);
@@ -150,7 +160,8 @@ class SeedController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/wishlist')]
-    public function seeds_post_wishlist(Request $request, Application $app) {
+    public function seeds_post_wishlist(Request $request, Application $app)
+    {
         switch ($request->POST['action']) {
             case 'delete_seed':
                 $this->seeds_delete($request, $app);
@@ -160,7 +171,8 @@ class SeedController {
         $this->wishlist($request, $app);
     }
 
-    private function seeds_delete(Request $request, Application $app) {
+    private function seeds_delete(Request $request, Application $app)
+    {
         $seed = $app->db->seeds->find_by_id($request->POST['seed_id']);
 
         if (\is_null($seed)) {
@@ -180,10 +192,12 @@ class SeedController {
 
     #[Filter('LoginRequired')]
     #[Route('get', '/seeds/edit/{id}')]
-    public function seeds_edit_get(Request $request, Application $app, string $id) {
+    public function seeds_edit_get(Request $request, Application $app, string $id)
+    {
         $seed = $app->db->seeds->find_by_id($id);
 
-        echo $app->templates->render('seeds::edit',
+        echo $app->templates->render(
+            'seeds::edit',
             [
                 'seed' => $seed,
             ]
@@ -192,7 +206,8 @@ class SeedController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/seeds/edit/{id}')]
-    public function seeds_edit_post(Request $request, Application $app, string $id) {
+    public function seeds_edit_post(Request $request, Application $app, string $id)
+    {
         $form_vars = $request->POST;
         $record = $app->db->seeds->find_by_id($id);
 
@@ -234,7 +249,8 @@ class SeedController {
         $app->db->seeds->save($record);
 
         $app->templates->addData(['toast' => "Saved seed (<a href=\"/seeds/{$record->get_id()}\">{$record->display_string()}</a>)"]);
-        echo $app->templates->render('seeds::view',
+        echo $app->templates->render(
+            'seeds::view',
             [
                 'seed' => $record,
             ]

@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Controllers;
 
 use Garden\Models;
@@ -9,9 +11,11 @@ use Onesimus\Router\Attr\Route;
 use Onesimus\Router\Attr\Filter;
 use MongoDB\BSON\ObjectId;
 
-class BedController {
+class BedController
+{
     #[Route('get', '/beds')]
-    public function beds(Request $request, Application $app) {
+    public function beds(Request $request, Application $app)
+    {
         $sort_prop = $request->GET['sort_by'] ?? 'name';
         $sort_dir = $request->GET['sort_dir'] ?? 1;
         $sort_dir = intval($sort_dir);
@@ -35,10 +39,12 @@ class BedController {
     }
 
     #[Route('get', '/beds/{id}')]
-    public function beds_view_get(Request $request, Application $app, string $id) {
+    public function beds_view_get(Request $request, Application $app, string $id)
+    {
         $bed = $app->db->beds->find_by_id($id);
 
-        echo $app->templates->render('beds::view',
+        echo $app->templates->render(
+            'beds::view',
             [
                 'bed' => $bed,
             ]
@@ -47,13 +53,15 @@ class BedController {
 
     #[Filter('LoginRequired')]
     #[Route('get', '/beds/new')]
-    public function beds_new_get(Request $request, Application $app) {
+    public function beds_new_get(Request $request, Application $app)
+    {
         echo $app->templates->render('beds::new');
     }
 
     #[Filter('LoginRequired')]
     #[Route('post', '/beds/new')]
-    public function beds_new_post(Request $request, Application $app) {
+    public function beds_new_post(Request $request, Application $app)
+    {
         $form_vars = $request->POST;
 
         $record = new Models\Bed();
@@ -75,7 +83,8 @@ class BedController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/beds')]
-    public function beds_post(Request $request, Application $app) {
+    public function beds_post(Request $request, Application $app)
+    {
         switch ($request->POST['action']) {
             case 'delete_bed':
                 $this->beds_delete($request, $app);
@@ -86,7 +95,8 @@ class BedController {
     }
 
     #[Filter('LoginRequired')]
-    private function beds_delete(Request $request, Application $app) {
+    private function beds_delete(Request $request, Application $app)
+    {
         $bed = $app->db->beds->find_by_id($request->POST['bed_id']);
 
         if (\is_null($bed)) {
@@ -106,7 +116,8 @@ class BedController {
 
     #[Filter('LoginRequired')]
     #[Route('get', '/beds/edit/{id}')]
-    public function beds_edit_get(Request $request, Application $app, string $id) {
+    public function beds_edit_get(Request $request, Application $app, string $id)
+    {
         $bed = $app->db->beds->find_by_id($id);
 
         echo $app->templates->render('beds::edit', ['bed' => $bed]);
@@ -114,7 +125,8 @@ class BedController {
 
     #[Filter('LoginRequired')]
     #[Route('post', '/beds/edit/{id}')]
-    public function beds_edit_post(Request $request, Application $app, string $id) {
+    public function beds_edit_post(Request $request, Application $app, string $id)
+    {
         $form_vars = $request->POST;
         $record = $app->db->beds->find_by_id($id);
 

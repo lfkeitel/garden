@@ -1,10 +1,13 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Models;
 
 use MongoDB\Model\BSONDocument;
 
-class Weather extends DBRecord {
+class Weather extends DBRecord
+{
     public \DateTimeImmutable $date;
     public float $temp_high; // Celsius
     public float $temp_low; // Celsius
@@ -16,7 +19,8 @@ class Weather extends DBRecord {
     public float $cloud_cov; // %
     public float $humidity; // % relative
 
-    protected function load_from_record(BSONDocument $record, array $extras): void {
+    protected function load_from_record(BSONDocument $record, array $extras): void
+    {
         $this->id = $record['_id'];
         $this->date = \DateTimeImmutable::createFromFormat('Y-m-d', $record['date']);
         $this->temp_high = $record['temp_high'];
@@ -30,7 +34,8 @@ class Weather extends DBRecord {
         $this->humidity = $record['humidity'];
     }
 
-    public function to_array(): array {
+    public function to_array(): array
+    {
         return [
             'date' => $this->date->format('Y-m-d'),
             'temp_high' => $this->temp_high,
@@ -45,7 +50,8 @@ class Weather extends DBRecord {
         ];
     }
 
-    public function display_string(): string {
+    public function display_string(): string
+    {
         return "{$this->date} - {$this->temp_high}/{$this->temp_low}&deg;C";
     }
 }

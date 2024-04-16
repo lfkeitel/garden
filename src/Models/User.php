@@ -6,7 +6,6 @@ namespace Garden\Models;
 
 use MongoDB\Model\BSONDocument;
 
-
 class User extends DBRecord
 {
     public \DateTimeImmutable $created;

@@ -1,12 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Models;
 
-use function Garden\BSON_array_to_array;
 use MongoDB\Model\BSONDocument;
 
+use function Garden\BSON_array_to_array;
 
-class Seed extends DBRecord {
+class Seed extends DBRecord
+{
     public \DateTimeImmutable $added;
     public string $type;
     public string $common_name;
@@ -24,11 +27,13 @@ class Seed extends DBRecord {
     public bool $on_wishlist;
     public array $tags;
 
-    public function display_string(): string {
+    public function display_string(): string
+    {
         return "{$this->common_name} - {$this->variety}";
     }
 
-    protected function load_from_record(BSONDocument $record, array $extras): void {
+    protected function load_from_record(BSONDocument $record, array $extras): void
+    {
         $this->id = $record['_id'];
         $this->added = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['added']);
         $this->type = $record['type'];
@@ -48,8 +53,9 @@ class Seed extends DBRecord {
         $this->tags = BSON_array_to_array($record['custom_tags'] ?? []);
     }
 
-    public function to_array(): array {
-        sort($this->tags, \SORT_NATURAL|\SORT_FLAG_CASE);
+    public function to_array(): array
+    {
+        sort($this->tags, \SORT_NATURAL | \SORT_FLAG_CASE);
 
         return [
             'added' => $this->added->format('Y-m-d H:i:s'),

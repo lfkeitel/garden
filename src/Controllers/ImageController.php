@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Garden\Controllers;
 
 use Garden\Application;
@@ -7,12 +9,15 @@ use Garden\Lib\LoginRequired;
 use Onesimus\Router\Http\Request;
 use Onesimus\Router\Attr\Route;
 use Onesimus\Router\Attr\Filter;
+
 use function Garden\buffer_var_dump;
 
-class ImageController {
+class ImageController
+{
     #[Filter('LoginRequired')]
     #[Route('post', '/upload')]
-    public function upload_image(Request $request) {
+    public function upload_image(Request $request)
+    {
         $data = $request->POST;
 
         if (\array_key_exists('image', $data)) {
@@ -73,7 +78,8 @@ class ImageController {
         }
     }
 
-    private function upload_png_data($image_data): string {
+    private function upload_png_data($image_data): string
+    {
         $parts = \explode(";", $image_data);
         $filetype = $parts[0];
         $filedata = $parts[1];
@@ -114,12 +120,14 @@ class ImageController {
         return $filename;
     }
 
-    private function convert_image_to_png(string $input, string $output): bool {
+    private function convert_image_to_png(string $input, string $output): bool
+    {
         $imagick_file = new \Imagick($input);
         return $imagick_file->writeImage($output);
     }
 
-    private function upload_image_file(array $image_data): string {
+    private function upload_image_file(array $image_data): string
+    {
         $filename = \uniqid(\strval(\rand()), true);
         $filepath = "../uploads/$filename.png";
 
@@ -158,13 +166,15 @@ class ImageController {
         return $filename;
     }
 
-    private function check_image_type(string $filepath): bool {
+    private function check_image_type(string $filepath): bool
+    {
         $finfo = new \finfo(\FILEINFO_MIME_TYPE);
         $upload_finfo = $finfo->file($filepath);
         return $upload_finfo === 'image/png';
     }
 
-    private function resize_image_file(string $filepath): bool {
+    private function resize_image_file(string $filepath): bool
+    {
         $image_size = \getimagesize($filepath);
         if ($image_size === false) {
             return false;
