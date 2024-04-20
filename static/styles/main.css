@@ -24,13 +24,17 @@ tbody tr:nth-child(odd) {
 }
 
 table.no-color-bg tbody tr {
-  background-color: rgb(228, 228, 228);
+  background-color: lightgray;
 }
 
 table.planting-table,
 table.planting-table th,
 table.planting-table td {
   border: 2px solid grey;
+}
+
+table.planting-table td {
+  padding: 0;
 }
 
 body {
@@ -145,12 +149,28 @@ dl,
   margin-left: 2em;
 }
 
-.planting-good {
+.planting-active,
+.planting-harvesting,
+.planting-harvested,
+.planting-failed,
+.planting-transplanted {
   background-color: lightgreen;
 }
 
 .planting-concerned {
   background-color: rgb(255, 255, 150);
+}
+
+.planting-unsprouted {
+  background-color: lightblue;
+}
+
+.planting-none {
+  background-color: lightgray;
+}
+
+.planting-cell {
+  padding: 1px 10px;
 }
 
 .gallery {

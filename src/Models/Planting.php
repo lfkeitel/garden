@@ -12,7 +12,7 @@ class Planting extends DBRecord
 {
     public int $row;
     public int $column;
-    public Bed $bed;
+    public ?Bed $bed = null;
     public Seed $seed;
     public string $status;
     public bool $is_transplant;
@@ -65,7 +65,7 @@ class Planting extends DBRecord
         return [
             'row' => $this->row,
             'column' => $this->column,
-            'bed' => $this->bed->get_id_obj(),
+            'bed' => is_null($this->bed) ? null : $this->bed->get_id_obj(),
             'seed' => $this->seed->get_id_obj(),
             'status' => $this->status,
             'is_transplant' => $this->is_transplant,

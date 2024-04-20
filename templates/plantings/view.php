@@ -6,13 +6,10 @@
 
 <p>
     <?php if ($this->is_logged_in()) : ?>
-    <a href="<?= $basepath ?>/plantings/edit/<?= $planting->get_id() ?>"
-        class="btn">Edit</a>
-    <a href="<?= $basepath ?>/plantings/transplant/<?= $planting->get_id() ?>"
-        class="btn">Transplant</a>
+    <a href="<?= $basepath ?>/plantings/edit/<?= $planting->get_id() ?>" class="btn">Edit</a>
+    <a href="<?= $basepath ?>/plantings/transplant/<?= $planting->get_id() ?>" class="btn">Transplant</a>
     <?php endif ?>
-    <a href="<?= $basepath ?>/plantings/gallery/<?= $this->e($planting->get_id()) ?>"
-        class="btn">Photo Gallery</a>
+    <a href="<?= $basepath ?>/plantings/gallery/<?= $this->e($planting->get_id()) ?>" class="btn">Photo Gallery</a>
 </p>
 
 <div class="side-by-side">
@@ -34,8 +31,7 @@
 
             <dt>Seed:</dt>
             <dd>
-                <a
-                    href="<?= $basepath ?>/seeds/<?= $planting->seed->get_id() ?>">
+                <a href="<?= $basepath ?>/seeds/<?= $planting->seed->get_id() ?>">
                     <?= $planting->seed->display_string() ?>
                 </a>
             </dd>
@@ -68,7 +64,7 @@
         <h3>Location</h3>
         <dl>
             <dt>Bed:</dt>
-            <dd><?= $planting->bed->name ?></dd>
+            <dd><?= $planting->bed ? $planting->bed->name : 'Deleted bed' ?></dd>
 
             <dt>Row:</dt>
             <dd><?= $planting->row ?></dd>

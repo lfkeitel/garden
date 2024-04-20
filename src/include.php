@@ -120,6 +120,13 @@ if (is_web_request()) {
     });
 
     $templates->registerFunction('is_logged_in', $is_logged_in);
+
+    $templates->registerFunction('planting_status_class', function(Planting $planting): string {
+        if (is_null($planting->sprout_date)) {
+            return 'planting-unsprouted';
+        }
+        return 'planting-' . strtolower($planting->status);
+    });
 }
 
 $app = new Application($db, $config, $request, $templates);
