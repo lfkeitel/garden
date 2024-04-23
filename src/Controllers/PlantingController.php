@@ -86,6 +86,7 @@ class PlantingController
                 'auto_bed' => $request->GET['bed'] ?? '',
                 'auto_row' => $request->GET['row'] ?? '1',
                 'auto_col' => $request->GET['col'] ?? '1',
+                'auto_seed' => $request->GET['seed'] ?? '',
             ],
         );
     }
@@ -187,6 +188,7 @@ class PlantingController
                 'seeds' => $this->get_seed_select_data($app),
                 'beds' => $this->get_bed_select_data($app),
                 'auto_bed' => $request->GET['bed'] ?? '',
+                'auto_seed' => $request->GET['seed'] ?? '',
             ],
         );
     }
