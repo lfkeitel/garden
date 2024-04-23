@@ -12,6 +12,16 @@ use Onesimus\Router\Attr\Route;
 use Onesimus\Router\Attr\Filter;
 use MongoDB\BSON\ObjectId;
 
+const ACTIVE_PLANTING_FILTER = [
+    'status' => [
+        '$nin' => [
+            'Harvested',
+            'Failed',
+            'Transplanted',
+        ],
+    ]
+];
+
 class LogController
 {
     #[Route('get', '/logs')]
@@ -54,15 +64,7 @@ class LogController
         echo $app->templates->render(
             'logs::new',
             [
-                'plantings' => $this->get_planting_select_data($app, [
-                    'status' => [
-                        '$nin' => [
-                            'Harvested',
-                            'Failed',
-                            'Transplanted',
-                        ],
-                    ]
-                ]),
+                'plantings' => $this->get_planting_select_data($app, ACTIVE_PLANTING_FILTER),
                 'select_planting' => $preselect_id,
                 'rest_of_plantings' => $selected_plantings,
                 'planting_tags' => $app->db->plantings->get_all_tags(),
@@ -116,7 +118,7 @@ class LogController
         echo $app->templates->render(
             'logs::new',
             [
-                'plantings' => $this->get_planting_select_data($app),
+                'plantings' => $this->get_planting_select_data($app, ACTIVE_PLANTING_FILTER),
                 'select_planting' => $preselect_id,
                 'rest_of_plantings' => $selected_plantings,
                 'planting_tags' => $app->db->plantings->get_all_tags(),
@@ -184,7 +186,7 @@ class LogController
             'logs::edit',
             [
                 'log' => $log,
-                'plantings' => $this->get_planting_select_data($app),
+                'plantings' => $this->get_planting_select_data($app, ACTIVE_PLANTING_FILTER),
                 'planting_tags' => $app->db->plantings->get_all_tags(),
             ],
         );
@@ -215,7 +217,7 @@ class LogController
             'logs::edit',
             [
                 'log' => $record,
-                'plantings' => $this->get_planting_select_data($app),
+                'plantings' => $this->get_planting_select_data($app, ACTIVE_PLANTING_FILTER),
             ],
         );
     }
