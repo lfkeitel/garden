@@ -38,6 +38,7 @@ $veggie_seeds = [
     'Leeks',
     'Lettuce',
     'Melons',
+    'Mix',
     'Microgreens',
     'Okra',
     'Onions',
