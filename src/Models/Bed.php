@@ -13,7 +13,7 @@ class Bed extends DBRecord
     public int $rows;
     public int $cols;
     public string $notes;
-    public bool $hide_from_home;
+    public bool $hide_from_home = false;
 
     protected function load_from_record(BSONDocument $record, array $extras): void
     {
