@@ -79,4 +79,8 @@ class Planting extends DBRecord
             'count' => $this->count,
         ];
     }
+
+    public function tags_to_str(): string {
+        return count($this->tags) === 0 ? '' : implode(", ", $this->tags);
+    }
 }

@@ -29,6 +29,24 @@ class PlantingCollection extends Collection
         );
     }
 
+    public function get_of_seed(string|ObjectId $id): Models\ArrayOfPlantings
+    {
+        $id = $id instanceof ObjectId ? $id : new ObjectId($id);
+
+        return $this->find_multiple(
+            [
+                'seed' => $id,
+                'status' => [
+                    '$nin' => [
+                        'Harvested',
+                        'Failed',
+                        'Transplanted',
+                    ],
+                ]
+            ]
+        );
+    }
+
     protected function results_to_result_set($records): \ArrayObject
     {
         $items = new Models\ArrayOfPlantings();

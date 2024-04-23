@@ -57,14 +57,22 @@
             </dd>
 
             <dt>Tags:</dt>
-            <dd><?= count($planting->tags) == 0 ? 'None' : implode(", ", $planting->tags) ?>
+            <dd><?= $planting->tags_to_str() ?>
             </dd>
         </dl>
 
         <h3>Location</h3>
         <dl>
             <dt>Bed:</dt>
-            <dd><?= $planting->bed ? $planting->bed->name : 'Deleted bed' ?></dd>
+            <dd>
+                <?php if ($planting->bed): ?>
+                <a href="<?= $basepath ?>/beds/<?= $planting->bed->get_id() ?>">
+                    <?= $planting->bed->name ?>
+                </a>
+                <?php else: ?>
+                    Deleted bed
+                <?php endif ?>
+            </dd>
 
             <dt>Row:</dt>
             <dd><?= $planting->row ?></dd>
@@ -101,9 +109,9 @@
         <?php $this->insert(
             'partials::log-table',
             [
-                        'logs' => $logs,
-                        'planting_id' => $planting->get_id(),
-                    ]
+                'logs' => $logs,
+                'planting_id' => $planting->get_id(),
+            ]
         ) ?>
     </section>
 </div>

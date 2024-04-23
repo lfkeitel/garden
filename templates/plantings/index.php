@@ -118,7 +118,7 @@
             <td><?= $planting->bed ? $planting->bed->name : 'Deleted bed' ?></td>
             <td><?= $planting->is_transplant ? 'Yes' : 'No' ?></td>
             <td><?= $planting->notes ?></td>
-            <td><?= count($planting->tags) == 0 ? '' : implode(", ", $planting->tags) ?></td>
+            <td><?= $planting->tags_to_str() ?></td>
             <td><?= is_null($planting->harvest_date) ? '<i>' . $this->plant_maturity_day($planting) . '*</i>' : $this->plant_maturity_day($planting) ?>
             </td>
         </tr>

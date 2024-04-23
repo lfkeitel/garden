@@ -47,6 +47,7 @@ class BedController
             'beds::view',
             [
                 'bed' => $bed,
+                'plantings' => $app->db->plantings->get_in_bed($bed->get_id_obj()),
             ]
         );
     }
@@ -141,6 +142,9 @@ class BedController
             'toast' => "Saved bed ({$record->name})"
         ]);
 
-        echo $app->templates->render('beds::edit', ['bed' => $record]);
+        echo $app->templates->render('beds::edit', [
+            'bed' => $record,
+            'plantings' => $app->db->plantings->get_in_bed($bed->get_id_obj()),
+        ]);
     }
 }

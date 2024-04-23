@@ -110,7 +110,7 @@ $now = new DateTimeImmutable();
             <td><?= $planting->count ?></td>
             <td><?= $planting->bed->name ?> (<?= $planting->row ?>/<?= $planting->column ?>)</td>
             <td><?= $planting->status ?></td>
-            <td><?= count($planting->tags) == 0 ? '' : implode(", ", $planting->tags) ?></td>
+            <td><?= $planting->tags_to_str() ?></td>
             <td><?= is_null($planting->harvest_date) ? '<i>' . $this->date_plus_days($planting->date, $planting->seed->days_to_maturity) . '*</i>' : $planting->harvest_date->format('Y-m-d') ?>
             </td>
         </tr>

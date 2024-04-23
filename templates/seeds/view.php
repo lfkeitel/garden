@@ -70,4 +70,32 @@
 
     <h3>Notes</h3>
     <p class="notes"><?= $seed->notes ?></p>
+
+    <h3>Current Plantings (<?= count($plantings) ?>)</h3>
+
+    <?php if ($this->is_logged_in()) : ?>
+    <a href="<?= $basepath ?>/plantings/new?seed=<?= $seed->get_id() ?>" class="btn">New Planting</a>
+    <?php endif ?>
+
+    <table class="seed-table">
+        <thead>
+            <tr>
+                <th scope="col">Planted</th>
+                <th scope="col">Bed</th>
+                <th scope="col">Status</th>
+                <th scope="col">Tags</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($plantings as $planting) : ?>
+            <tr>
+                <td><a href="<?= $basepath ?>/plantings/<?= $planting->get_id() ?>"><?= $planting->date->format('Y-m-d') ?></a></td>
+                <td><?= $planting->bed->name ?> (<?= $planting->row ?>/<?= $planting->column ?>)</td>
+                <td><?= $planting->status ?></td>
+                <td><?= $planting->tags_to_str() ?></td>
+                </td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
 </article>

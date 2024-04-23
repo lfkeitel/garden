@@ -85,6 +85,7 @@ class SeedController
             [
                 'seed' => $seed,
                 'avg_germ_time' => $this->seed_avg_germ_time($app, $seed),
+                'plantings' => $app->db->plantings->get_of_seed($seed->get_id_obj()),
             ]
         );
     }
@@ -279,6 +280,7 @@ class SeedController
             [
                 'seed' => $record,
                 'avg_germ_time' => $this->seed_avg_germ_time($app, $record),
+                'plantings' => $app->db->plantings->get_of_seed($record->get_id_obj()),
             ]
         );
     }
