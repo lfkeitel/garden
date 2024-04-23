@@ -26,6 +26,9 @@
 
         <dt>Total ft<sup>2</sup>:</dt>
         <dd><?= $bed->rows * $bed->cols ?> ft<sup>2</sup></dd>
+
+        <dt>Hidden from Home:</dt>
+        <dd><?= $bed->hide_from_home ? 'Yes' : 'No' ?></dd>
     </dl>
 
     <h3>Notes</h3>

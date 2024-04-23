@@ -24,6 +24,12 @@
 
         <p>
             <label>
+                Hidden from Home: <input type="checkbox" name="hide_from_home" <?= $bed->hide_from_home ? 'checked' : ''  ?>>
+            </label>
+        </p>
+
+        <p>
+            <label>
                 Notes:<br>
                 <textarea cols="50" rows="6" name="notes"><?= $bed->notes ?></textarea>
             </label>

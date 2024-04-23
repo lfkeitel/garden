@@ -136,6 +136,12 @@ class BedController
         $record->cols = \intval($form_vars['cols']);
         $record->notes = $form_vars['notes'];
 
+        if (\array_key_exists('hide_from_home', $form_vars)) {
+            $record->hide_from_home = $form_vars['hide_from_home'] === 'on';
+        } else {
+            $record->hide_from_home = false;
+        }
+
         $app->db->beds->save($record);
 
         $app->templates->addData([
@@ -144,7 +150,7 @@ class BedController
 
         echo $app->templates->render('beds::edit', [
             'bed' => $record,
-            'plantings' => $app->db->plantings->get_in_bed($bed->get_id_obj()),
+            'plantings' => $app->db->plantings->get_in_bed($record->get_id_obj()),
         ]);
     }
 }

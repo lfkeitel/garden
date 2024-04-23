@@ -13,6 +13,7 @@ class Bed extends DBRecord
     public int $rows;
     public int $cols;
     public string $notes;
+    public bool $hide_from_home;
 
     protected function load_from_record(BSONDocument $record, array $extras): void
     {
@@ -22,6 +23,7 @@ class Bed extends DBRecord
         $this->rows = $record['rows'];
         $this->cols = $record['cols'];
         $this->notes = $record['notes'];
+        $this->hide_from_home = $record['hide_from_home'] ?? false;
     }
 
     public function to_array(): array
@@ -32,6 +34,7 @@ class Bed extends DBRecord
             'rows' => $this->rows,
             'cols' => $this->cols,
             'notes' => $this->notes,
+            'hide_from_home' => $this->hide_from_home,
         ];
     }
 

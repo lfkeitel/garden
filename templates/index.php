@@ -35,6 +35,7 @@ $now = new DateTimeImmutable();
     </thead>
     <tbody>
         <?php foreach ($beds as $bed) : ?>
+        <?php if ($bed->hide_from_home) { continue; } ?>
         <tr>
             <td><a href="<?= $basepath ?>/beds/<?= $bed->get_id() ?>"><?= $bed->display_string() ?></a></td>
 

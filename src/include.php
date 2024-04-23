@@ -30,16 +30,16 @@ if (is_web_request()) {
     \session_save_path(__DIR__ . '/../sessions');
     \session_start();
 
-    if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $config['session_timeout'])) {
-        session_unset();
-        session_destroy();
+    if (isset($_SESSION['LAST_ACTIVITY']) && (\time() - $_SESSION['LAST_ACTIVITY'] > $config['session_timeout'])) {
+        \session_unset();
+        \session_regenerate_id(true);
     }
-    $_SESSION['LAST_ACTIVITY'] = time();
+    $_SESSION['LAST_ACTIVITY'] = \time();
 
     if (!isset($_SESSION['CREATED'])) {
         $_SESSION['CREATED'] = time();
-    } elseif (time() - $_SESSION['CREATED'] > 1800) {
-        session_regenerate_id(true);
+    } elseif (\time() - $_SESSION['CREATED'] > 1800) {
+        \session_regenerate_id(true);
         $_SESSION['CREATED'] = time();
     }
 }
