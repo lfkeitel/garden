@@ -75,7 +75,10 @@ class Planting extends DBRecord
             'tray_id' => $this->tray_id,
             'harvest_date' => is_null($this->harvest_date) ? null : $this->harvest_date->format('Y-m-d H:i:s'),
             'transplant_log' => $transplant_ids,
-            'custom_tags' => $this->tags,
+            'custom_tags' => array_map(
+                fn($value): string => \strtolower($value),
+                $this->tags
+            ),
             'count' => $this->count,
         ];
     }

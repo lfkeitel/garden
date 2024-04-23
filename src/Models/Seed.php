@@ -73,7 +73,10 @@ class Seed extends DBRecord
             'link' => $this->link,
             'notes' => $this->notes,
             'on_wishlist' => $this->on_wishlist,
-            'custom_tags' => $this->tags,
+            'custom_tags' => array_map(
+                fn($value): string => strtolower($value),
+                $this->tags
+            ),
         ];
     }
 }

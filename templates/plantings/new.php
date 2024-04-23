@@ -16,7 +16,8 @@
 
         <select name="seed">
             <?php foreach ($seeds as $seed) : ?>
-                <option value="<?= $seed['id'] ?>"><?= $seed['name'] ?></option>
+            <option value="<?= $seed['id'] ?>" <?= $seed['id'] === $auto_seed ? 'selected' : '' ?>><?= $seed['name'] ?>
+            </option>
             <?php endforeach ?>
         </select>
 
@@ -35,7 +36,8 @@
                 Bed:
                 <select name="bed">
                     <?php foreach ($beds as $bed) : ?>
-                        <option value="<?= $bed['id'] ?>" <?= $bed['id'] === $auto_bed ? 'selected' : '' ?>><?= $bed['name'] ?></option>
+                    <option value="<?= $bed['id'] ?>" <?= $bed['id'] === $auto_bed ? 'selected' : '' ?>>
+                        <?= $bed['name'] ?></option>
                     <?php endforeach ?>
                 </select>
             </label>
@@ -62,7 +64,8 @@
 
         <p>
             <label>
-                Planting Date: <input type="date" name="planting_date" value="<?= (new DateTimeImmutable())->format("Y-m-d") ?>">
+                Planting Date: <input type="date" name="planting_date"
+                    value="<?= (new DateTimeImmutable())->format("Y-m-d") ?>">
             </label>
         </p>
 
