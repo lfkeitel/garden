@@ -79,6 +79,17 @@ class SeedController
     public function seeds_view_get(Request $request, Application $app, string $id)
     {
         $seed = $app->db->seeds->find_by_id($id);
+
+        echo $app->templates->render(
+            'seeds::view',
+            [
+                'seed' => $seed,
+                'avg_germ_time' => $this->seed_avg_germ_time($app, $seed),
+            ]
+        );
+    }
+
+    private function seed_avg_germ_time(Application $app, Models\Seed $seed): int {
         $avg_germ_time_results = $app->db->plantings->aggregate(
             [
                 [
@@ -99,14 +110,7 @@ class SeedController
         if ($avg_germ_time_results) {
             $avg_germ_time = \intval($avg_germ_time_results[0]['germ_time']);
         }
-
-        echo $app->templates->render(
-            'seeds::view',
-            [
-                'seed' => $seed,
-                'avg_germ_time' => $avg_germ_time,
-            ]
-        );
+        return $avg_germ_time;
     }
 
     #[Filter('LoginRequired')]
@@ -274,6 +278,7 @@ class SeedController
             'seeds::view',
             [
                 'seed' => $record,
+                'avg_germ_time' => $this->seed_avg_germ_time($app, $record),
             ]
         );
     }
