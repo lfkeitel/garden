@@ -12,6 +12,10 @@ require 'include.php';
 try {
     Router::dispatch($app);
 } catch (FailedFilterException $e) {
-    http_response_code(403);
+    if ($e->filter_name === 'LoginRequired') {
+        header("Location: /login", true, 307);
+    } else {
+        http_response_code(403);
+    }
     exit(0);
 }

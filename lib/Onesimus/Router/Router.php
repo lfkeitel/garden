@@ -274,11 +274,12 @@ class Router
         if ($route->getFilters()) {
             foreach ($route->getFilters() as $filter) {
                 if (!self::hasFilter($filter)) {
-                    throw new Exceptions\FailedFilterException("Filter '{$filter}' not registered");
+                    throw new Exceptions\UndefinedFilterException("Filter '{$filter}' not registered");
                 }
 
-                if (!self::handleFilter($filter, [$request])) {
-                    throw new Exceptions\FailedFilterException("Filter '{$filter}' failed");
+                $filter_result = self::handleFilter($filter, $urlVars);
+                if ($filter_result === false) {
+                    throw new Exceptions\FailedFilterException($filter, $filter_result);
                 }
             }
         }
@@ -301,11 +302,13 @@ class Router
 
                 foreach ($c->filters as $filter) {
                     if (!self::hasFilter($filter)) {
-                        throw new Exceptions\FailedFilterException("Filter '{$filter}' not registered");
+                        throw new Exceptions\UndefinedFilterException("Filter '{$filter}' not registered");
                     }
 
-                    if (!self::handleFilter($filter, $urlVars)) {
-                        throw new Exceptions\FailedFilterException("Filter '{$filter}' failed");
+                    $filter_result = self::handleFilter($filter, $urlVars);
+
+                    if ($filter_result === false) {
+                        throw new Exceptions\FailedFilterException($filter, $filter_result);
                     }
                 }
             }
