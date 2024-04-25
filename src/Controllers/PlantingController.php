@@ -63,7 +63,7 @@ class PlantingController
     public function plantings_view_get(Request $request, Application $app, string $id)
     {
         $planting = $app->db->plantings->find_by_id($id);
-        $logs = $app->db->logs->get_planting_logs($id, $planting->date->format('Y-m-d H:i:s'), $planting->tags);
+        $logs = $app->db->logs->get_planting_logs($planting);
 
         echo $app->templates->render(
             'plantings::view',
@@ -368,7 +368,7 @@ class PlantingController
         $planting = $app->db->plantings->find_by_id($id);
 
         $log_dir = $dir === 'asc' ? 1 : -1;
-        $logs = $app->db->logs->get_planting_logs($id, $planting->date->format('Y-m-d H:i:s'), $planting->tags, 'date', $log_dir);
+        $logs = $app->db->logs->get_planting_logs($planting, 'date', $log_dir);
 
         echo $app->templates->render(
             'plantings::gallery',

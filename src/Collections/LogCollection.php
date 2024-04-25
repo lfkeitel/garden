@@ -10,19 +10,27 @@ use MongoDB\BSON\ObjectId;
 
 class LogCollection extends Collection
 {
-    public function get_planting_logs(string|ObjectId $id, string $planting_date, array $tags, string $sort_prop = 'date', $sort_dir = -1): Models\ArrayOfLogs
+    public function get_planting_logs(Models\Planting $planting, string $sort_prop = 'date', $sort_dir = -1): Models\ArrayOfLogs
     {
-        $id = $id instanceof ObjectId ? $id : new ObjectId($id);
+        $harvest_date = $planting->harvest_date;
+        if ($harvest_date === null) {
+            $harvest_date = new \DateTimeImmutable();
+        }
+
         return $this->find_multiple([
             '$or' => [
-                ['planting' => $id], // Logs for specific planting
+                ['planting' => $planting->get_id_obj()], // Logs for specific planting
                 ['$and' => [ // Logs for all plantings made after planting date
                     ['planting' => null],
-                    ['planting_tag' => ''],
-                    ['date' => ['$gt' => $planting_date]]
+                    ['$or' => [
+                        ['planting_tag' => ['$exists' => false]],
+                        ['planting_tag' => ''],
+                    ]],
+                    ['date' => ['$gte' => $planting->date->format('Y-m-d H:i:s')]],
+                    ['date' => ['$lte' => $harvest_date->format('Y-m-d H:i:s')]],
                 ]], // Logs apploed to specific planting tags
                 ['planting_tag' => [
-                    '$in' => $tags,
+                    '$in' => $planting->tags,
                 ]],
             ]
         ], ['sort' => [$sort_prop => $sort_dir]]);
