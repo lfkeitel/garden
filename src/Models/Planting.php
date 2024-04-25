@@ -38,14 +38,14 @@ class Planting extends DBRecord
         $this->status = $record['status'];
         $this->is_transplant = $record['is_transplant'];
         $this->notes = $record['notes'];
-        $this->date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['date']);
+        $this->date = new \DateTimeImmutable($record['date']);
         $this->tray_id = $record['tray_id'];
 
         if ($record['harvest_date']) {
-            $this->harvest_date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['harvest_date']);
+            $this->harvest_date = new \DateTimeImmutable($record['harvest_date']);
         }
         if ($record['sprout_date'] ?? false) {
-            $this->sprout_date = \DateTimeImmutable::createFromFormat('Y-m-d', $record['sprout_date']);
+            $this->sprout_date = new \DateTimeImmutable($record['sprout_date']);
         }
 
         $this->seed = $extras['seed'];
@@ -70,10 +70,10 @@ class Planting extends DBRecord
             'status' => $this->status,
             'is_transplant' => $this->is_transplant,
             'notes' => $this->notes,
-            'date' => $this->date->format('Y-m-d H:i:s'),
+            'date' => $this->date->format('Y-m-d'),
             'sprout_date' => is_null($this->sprout_date) ? null : $this->sprout_date->format('Y-m-d'),
             'tray_id' => $this->tray_id,
-            'harvest_date' => is_null($this->harvest_date) ? null : $this->harvest_date->format('Y-m-d H:i:s'),
+            'harvest_date' => is_null($this->harvest_date) ? null : $this->harvest_date->format('Y-m-d'),
             'transplant_log' => $transplant_ids,
             'custom_tags' => array_map(
                 fn($value): string => \strtolower($value),

@@ -18,7 +18,7 @@
         <dl>
             <dt>Planted:</dt>
             <dd><?= $planting->date->format('Y-m-d') ?>
-                (<?= $this->days_from_date($planting->date) ?>)
+                (<?= $this->days_from_date($planting->date, $planting->harvest_date) ?>)
             </dd>
 
             <dt>Sprouted:</dt>

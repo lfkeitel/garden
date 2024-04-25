@@ -95,8 +95,12 @@ if (is_web_request()) {
         ['plantings::new', 'plantings::edit', 'plantings::bulk_edit', 'plantings::index'],
     );
 
-    $templates->registerFunction('days_from_date', function (\DateTimeInterface $then) {
-        $diff = \date_diff($then, new \DateTimeImmutable(), true);
+    $templates->registerFunction('days_from_date', function (\DateTimeInterface $start, ?\DateTimeInterface $end = null) {
+        if ($end === null) {
+            $end = new \DateTimeImmutable();
+        }
+
+        $diff = \date_diff($start, $end, true);
         return "{$diff->format('%a')} days";
     });
 

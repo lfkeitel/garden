@@ -35,7 +35,7 @@ class Seed extends DBRecord
     protected function load_from_record(BSONDocument $record, array $extras): void
     {
         $this->id = $record['_id'];
-        $this->added = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['added']);
+        $this->added = new \DateTimeImmutable($record['added']);
         $this->type = $record['type'];
         $this->common_name = $record['common_name'];
         $this->variety = $record['variety'];
@@ -58,7 +58,7 @@ class Seed extends DBRecord
         sort($this->tags, \SORT_NATURAL | \SORT_FLAG_CASE);
 
         return [
-            'added' => $this->added->format('Y-m-d H:i:s'),
+            'added' => $this->added->format('Y-m-d'),
             'type' => $this->type,
             'common_name' => $this->common_name,
             'variety' => $this->variety,

@@ -350,7 +350,7 @@ class PlantingController
             array_push($record->tags, trim($tag));
         }
 
-        if ($record->status === 'Harvested') {
+        if (\in_array($record->status, ['Harvested', 'Failed', 'Transplanted'])) {
             $record->harvest_date = new \DateTimeImmutable();
         } else {
             $record->harvest_date = null;
