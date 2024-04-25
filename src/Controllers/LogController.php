@@ -221,4 +221,41 @@ class LogController
             ],
         );
     }
+
+    #[Route('get', '/logs/gallery')]
+    public function logs_gallery(Request $request, Application $app)
+    {
+        $get = $request->GET;
+
+        $start_date = null;
+        $end_date = null;
+
+        if (\array_key_exists('start_date', $get)) {
+            $start_date = new \DateTimeImmutable($get['start_date']);
+        } else {
+            $start_date = (new \DateTimeImmutable())->sub(new \DateInterval('P1M'));
+        }
+
+        if (\array_key_exists('end_date', $get)) {
+            $end_date = new \DateTimeImmutable($get['end_date']);
+        } else {
+            $end_date = $start_date->add(new \DateInterval('P1M'));
+        }
+
+        $logs = $app->db->logs->get_logs_date(
+            $start_date,
+            $end_date,
+            'date',
+            -1,
+        );
+
+        echo $app->templates->render(
+            'logs::photos',
+            [
+                'logs' => $logs,
+                'start_date' => $start_date->format('Y-m-d'),
+                'end_date' => $end_date->format('Y-m-d'),
+            ],
+        );
+    }
 }
