@@ -27,7 +27,25 @@ class LogController
     #[Route('get', '/logs')]
     public function logs(Request $request, Application $app)
     {
-        $all_logs = $app->db->logs->get_all(
+        $get = $request->GET;
+        $start_date = null;
+        $end_date = null;
+
+        if (\array_key_exists('start_date', $get)) {
+            $start_date = (new \DateTimeImmutable($get['start_date']))->setTime(0, 0);
+        } else {
+            $start_date = (new \DateTimeImmutable())->sub(new \DateInterval('P1M'));
+        }
+
+        if (\array_key_exists('end_date', $get)) {
+            $end_date = (new \DateTimeImmutable($get['end_date']))->setTime(23, 59);
+        } else {
+            $end_date = $start_date->add(new \DateInterval('P1M'));
+        }
+
+        $logs = $app->db->logs->get_logs_date(
+            $start_date,
+            $end_date,
             'date',
             -1,
         );
@@ -35,7 +53,9 @@ class LogController
         echo $app->templates->render(
             'logs::index',
             [
-                'all_logs' => $all_logs,
+                'all_logs' => $logs,
+                'start_date' => $start_date->format('Y-m-d'),
+                'end_date' => $end_date->format('Y-m-d'),
             ],
         );
     }
@@ -231,13 +251,13 @@ class LogController
         $end_date = null;
 
         if (\array_key_exists('start_date', $get)) {
-            $start_date = new \DateTimeImmutable($get['start_date']);
+            $start_date = (new \DateTimeImmutable($get['start_date']))->setTime(0, 0);
         } else {
             $start_date = (new \DateTimeImmutable())->sub(new \DateInterval('P1M'));
         }
 
         if (\array_key_exists('end_date', $get)) {
-            $end_date = new \DateTimeImmutable($get['end_date']);
+            $end_date = (new \DateTimeImmutable($get['end_date']))->setTime(23, 59);
         } else {
             $end_date = $start_date->add(new \DateInterval('P1M'));
         }
