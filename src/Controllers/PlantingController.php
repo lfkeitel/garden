@@ -132,7 +132,7 @@ class PlantingController
         $col_start = 0;
         $col_end = 0;
 
-        if (str_contains($row, "-")) {
+        if (\str_contains($row, "-")) {
             $row_parts = explode("-", $row);
             $row_start = \intval($row_parts[0]);
             $row_end = \intval($row_parts[1]);
@@ -141,7 +141,7 @@ class PlantingController
             $row_end = \intval($row);
         }
 
-        if (str_contains($col, "-")) {
+        if (\str_contains($col, "-")) {
             $col_parts = explode("-", $col);
             $col_start = \intval($col_parts[0]);
             $col_end = \intval($col_parts[1]);
@@ -152,9 +152,11 @@ class PlantingController
 
         $tags = [];
 
-        $custom_tags = explode(',', $form_vars['tags']);
-        foreach ($custom_tags as $tag) {
-            array_push($tags, trim($tag));
+        if ($form_vars['tags']) {
+            $custom_tags = explode(',', $form_vars['tags']);
+            foreach ($custom_tags as $tag) {
+                array_push($tags, trim($tag));
+            }
         }
 
         for ($i = $row_start; $i <= $row_end; $i++) {
