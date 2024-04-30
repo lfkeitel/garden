@@ -23,6 +23,7 @@ class PlantingCollection extends Collection
                         'Harvested',
                         'Failed',
                         'Transplanted',
+                        'Finished',
                     ],
                 ]
             ]
@@ -41,6 +42,7 @@ class PlantingCollection extends Collection
                         'Harvested',
                         'Failed',
                         'Transplanted',
+                        'Finished',
                     ],
                 ]
             ]

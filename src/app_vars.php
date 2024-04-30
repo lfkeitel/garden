@@ -215,8 +215,8 @@ $flower_seeds = [
 
 $planting_statuses = [
     'Active',
-    'Harvesting',
     'Harvested',
+    'Finished',
     'Concerned',
     'Failed',
     'Transplanted',
