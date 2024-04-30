@@ -29,8 +29,10 @@ class LogCollection extends Collection
                     ['date' => ['$gte' => $planting->date->format('Y-m-d H:i:s')]],
                     ['date' => ['$lte' => $harvest_date->format('Y-m-d H:i:s')]],
                 ]], // Logs apploed to specific planting tags
-                ['planting_tag' => [
-                    '$in' => $planting->tags,
+                ['$and' => [
+                    ['planting_tag' => ['$in' => $planting->tags]],
+                    ['date' => ['$gte' => $planting->date->format('Y-m-d H:i:s')]],
+                    ['date' => ['$lte' => $harvest_date->format('Y-m-d H:i:s')]],
                 ]],
             ]
         ], ['sort' => [$sort_prop => $sort_dir]]);
