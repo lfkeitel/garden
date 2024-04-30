@@ -110,7 +110,7 @@
             'partials::log-table',
             [
                 'logs' => $logs,
-                'planting_id' => $planting->get_id(),
+                'planting' => $planting,
             ]
         ) ?>
     </section>
