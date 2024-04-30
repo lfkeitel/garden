@@ -41,9 +41,10 @@
             </td>
 
             <?php if (!is_null($log->planting)) : ?>
-            <td><?= $log->date->format('Y-m-d') ?> (<?= $this->days_from_date($log->planting->date, $log->date) ?>)</td>
+            <td><?= $log->date->format('Y-m-d') ?>
+                (<?= $this->days_from_date($log->planting->germ_date(), $log->date) ?>)</td>
             <?php elseif (isset($planting)) : ?>
-            <td><?= $log->date->format('Y-m-d') ?> (<?= $this->days_from_date($planting->date, $log->date) ?>)
+            <td><?= $log->date->format('Y-m-d') ?> (<?= $this->days_from_date($planting->germ_date(), $log->date) ?>)
             </td>
             <?php else : ?>
             <td><?= $log->date->format('Y-m-d') ?> </td>

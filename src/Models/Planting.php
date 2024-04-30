@@ -100,4 +100,8 @@ class Planting extends DBRecord
         $day = $date->add(new \DateInterval("P{$this->seed->days_to_maturity}D"));
         return $day->format('Y-m-d');
     }
+
+    public function germ_date(): \DateTimeInterface {
+        return $this->sprout_date ? $this->sprout_date : $this->date;
+    }
 }
