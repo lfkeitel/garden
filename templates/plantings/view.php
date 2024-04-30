@@ -49,7 +49,7 @@
 
             <dt>Expected Maturity</dt>
             <dd>
-                <i><?= $this->plant_maturity_day($planting) ?></i>
+                <i><?= $planting->maturity_date() ?></i>
             </dd>
 
             <dt>Is Transplant?:</dt>
@@ -70,7 +70,7 @@
                     <?= $planting->bed->name ?>
                 </a>
                 <?php else: ?>
-                    Deleted bed
+                Deleted bed
                 <?php endif ?>
             </dd>
 

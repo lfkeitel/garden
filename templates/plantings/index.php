@@ -119,7 +119,7 @@
             <td><?= $planting->is_transplant ? 'Yes' : 'No' ?></td>
             <td><?= $planting->notes ?></td>
             <td><?= $planting->tags_to_str() ?></td>
-            <td><?= is_null($planting->harvest_date) ? '<i>' . $this->plant_maturity_day($planting) . '*</i>' : $this->plant_maturity_day($planting) ?>
+            <td><?= is_null($planting->harvest_date) ? '<i>' . $planting->maturity_date() . '*</i>' : $planting->maturity_date() ?>
             </td>
         </tr>
         <?php endforeach ?>

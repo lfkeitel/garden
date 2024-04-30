@@ -109,20 +109,6 @@ if (is_web_request()) {
         return $day->format('Y-m-d');
     });
 
-    $templates->registerFunction('plant_maturity_day', function (Planting $planting) {
-        if ($planting->harvest_date) {
-            return $planting->harvest_date->format('Y-m-d');
-        }
-
-        $date = $planting->date;
-        if ($planting->sprout_date) {
-            $date = $planting->sprout_date;
-        }
-
-        $day = $date->add(new \DateInterval("P{$planting->seed->days_to_maturity}D"));
-        return $day->format('Y-m-d');
-    });
-
     $templates->registerFunction('is_logged_in', $is_logged_in);
 
     $templates->registerFunction('planting_status_class', function(Planting $planting): string {

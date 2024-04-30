@@ -86,4 +86,18 @@ class Planting extends DBRecord
     public function tags_to_str(): string {
         return count($this->tags) === 0 ? '' : implode(", ", $this->tags);
     }
+
+    public function maturity_date(): string {
+        if ($this->harvest_date) {
+            return $this->harvest_date->format('Y-m-d');
+        }
+
+        $date = $this->date;
+        if ($this->sprout_date) {
+            $date = $this->sprout_date;
+        }
+
+        $day = $date->add(new \DateInterval("P{$this->seed->days_to_maturity}D"));
+        return $day->format('Y-m-d');
+    }
 }
