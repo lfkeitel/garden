@@ -189,3 +189,7 @@ dl,
 .gallery-item {
   margin: 0.5em 0.5em;
 }
+
+.calendar td {
+  vertical-align: top;
+}

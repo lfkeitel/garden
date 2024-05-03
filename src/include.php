@@ -117,6 +117,10 @@ if (is_web_request()) {
         }
         return 'planting-' . strtolower($planting->status);
     });
+
+    $templates->registerFunction('days_in_month', function(string $month): int {
+        return \intval((\DateTimeImmutable::createFromFormat('m', $month))->format('t'));
+    });
 }
 
 $app = new Application($db, $config, $request, $templates);

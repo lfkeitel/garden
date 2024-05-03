@@ -13,5 +13,6 @@
 </form>
 
 <a href="/logs/gallery" class="btn">Photo Gallery</a>
+<a href="/logs/monthly" class="btn">Monthly View</a>
 
 <?php $this->insert('partials::log-table', ['logs' => $all_logs]) ?>

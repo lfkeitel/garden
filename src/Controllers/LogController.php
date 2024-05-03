@@ -32,16 +32,18 @@ class LogController
         $end_date = null;
 
         if (\array_key_exists('start_date', $get)) {
-            $start_date = (new \DateTimeImmutable($get['start_date']))->setTime(0, 0);
+            $start_date = (new \DateTimeImmutable($get['start_date']));
         } else {
             $start_date = (new \DateTimeImmutable())->sub(new \DateInterval('P1M'));
         }
+        $start_date = $start_date->setTime(0, 0);
 
         if (\array_key_exists('end_date', $get)) {
-            $end_date = (new \DateTimeImmutable($get['end_date']))->setTime(23, 59);
+            $end_date = (new \DateTimeImmutable($get['end_date']));
         } else {
             $end_date = $start_date->add(new \DateInterval('P1M'));
         }
+        $end_date = $end_date->setTime(23, 59);
 
         $logs = $app->db->logs->get_logs_date(
             $start_date,
@@ -56,6 +58,45 @@ class LogController
                 'all_logs' => $logs,
                 'start_date' => $start_date->format('Y-m-d'),
                 'end_date' => $end_date->format('Y-m-d'),
+            ],
+        );
+    }
+
+    #[Route('get', '/logs/monthly')]
+    public function logs_monthly(Request $request, Application $app)
+    {
+        $get = $request->GET;
+
+        $month = $get['month'] ?? \date('m');
+        $year = $get['year'] ?? \date('Y');
+
+        $start_date = null;
+        $end_date = null;
+
+        if (\array_key_exists('month', $get)) {
+            $start_date = (new \DateTimeImmutable())->setDate(\intval($year), \intval($get['month']), 1);
+        } else {
+            $start_date = (new \DateTimeImmutable())->setDate(\intval($year), \intval($month), 1);
+        }
+        $start_date = $start_date->setTime(0, 0);
+
+        $end_date = $start_date->add(new \DateInterval('P1M'));
+        $end_date = $end_date->setTime(0, 0);
+
+        $logs = $app->db->logs->get_logs_date(
+            $start_date,
+            $end_date,
+            'date',
+            -1,
+        );
+
+        echo $app->templates->render(
+            'logs::monthly',
+            [
+                'logs' => $logs,
+                'month' => $month,
+                'year' => $year,
+                'start_day' => $start_date->format('w'),
             ],
         );
     }

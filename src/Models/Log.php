@@ -23,6 +23,9 @@ class Log extends DBRecord
         if ($this->planting) {
             return $this->planting->display_string();
         }
+        if ($this->planting_tag) {
+            return "Tag: ".$this->planting_tag;
+        }
         return "All";
     }
 
