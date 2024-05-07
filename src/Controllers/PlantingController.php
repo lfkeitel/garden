@@ -381,6 +381,8 @@ class PlantingController
         $record->date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
         if ($form_vars['sprouting_date']) {
             $record->sprout_date = new \DateTimeImmutable($form_vars['sprouting_date']);
+        } else {
+            $record->sprout_date = null;
         }
         $record->row = \intval($form_vars['row']);
         $record->column = \intval($form_vars['column']);

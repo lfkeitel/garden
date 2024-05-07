@@ -34,13 +34,10 @@ class Log extends DBRecord
         $this->id = $record['_id'];
         $this->date = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $record['date']);
         $this->notes = $record['notes'];
-        $this->planting_tag = $record['planting_tag'] ?? '';
+        $this->planting_tag = $record['planting_tag'];
         $this->time_of_day = $record['time_of_day'];
         $this->weather = $extras['weather'];
-
-        if ($record->offsetExists('image_files')) {
-            $this->image_files = BSON_array_to_array($record['image_files']);
-        }
+        $this->image_files = BSON_array_to_array($record['image_files']);
 
         if ($record['planting']) {
             $this->planting = $extras['planting'];

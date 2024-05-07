@@ -62,7 +62,7 @@ class Planting extends DBRecord implements \JsonSerializable
         if ($record['harvest_date']) {
             $this->harvest_date = new \DateTimeImmutable($record['harvest_date']);
         }
-        if ($record['sprout_date'] ?? false) {
+        if ($record['sprout_date']) {
             $this->sprout_date = new \DateTimeImmutable($record['sprout_date']);
         }
 

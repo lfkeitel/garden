@@ -22,6 +22,7 @@
             <th scope="col">
                 <a href="<?= $basepath ?>/beds?sort_by=cols<?= $sort_by == 'cols' && $sort_dir == 1 ? '&sort_dir=-1' : '' ?>">Columns</a>
             </th>
+            <th scope="col">Hidden</th>
         </tr>
     </thead>
     <tbody>
@@ -46,6 +47,7 @@
             <td><?= $bed->added->format('Y-m-d') ?></td>
             <td><?= $bed->rows ?></td>
             <td><?= $bed->cols ?></td>
+            <td><?= $bed->hide_from_home ? 'Yes' : 'No' ?></td>
         </tr>
         <?php endforeach ?>
     </tbody>

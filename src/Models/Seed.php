@@ -46,11 +46,11 @@ class Seed extends DBRecord
         $this->season = BSON_array_to_array($record['season']);
         $this->characteristics = BSON_array_to_array($record['characteristics']);
         $this->is_hybrid = $record['is_hybrid'];
-        $this->source = $record['source'] ?? '';
-        $this->link = $record['link'] ?? '';
-        $this->notes = $record['notes'] ?? '';
-        $this->on_wishlist = $record['on_wishlist'] ?? false;
-        $this->tags = BSON_array_to_array($record['custom_tags'] ?? []);
+        $this->source = $record['source'];
+        $this->link = $record['link'];
+        $this->notes = $record['notes'];
+        $this->on_wishlist = $record['on_wishlist'];
+        $this->tags = BSON_array_to_array($record['custom_tags']);
     }
 
     public function to_array(): array

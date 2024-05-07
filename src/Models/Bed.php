@@ -23,7 +23,7 @@ class Bed extends DBRecord
         $this->rows = $record['rows'];
         $this->cols = $record['cols'];
         $this->notes = $record['notes'];
-        $this->hide_from_home = $record['hide_from_home'] ?? false;
+        $this->hide_from_home = $record['hide_from_home'];
     }
 
     public function to_array(): array

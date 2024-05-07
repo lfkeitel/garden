@@ -97,11 +97,36 @@ class SeedController
                     '$match' => [
                         'seed' => $seed->get_id_obj(),
                         'sprout_date' => ['$type' => 'string'],
+                        '$expr' => ['$ne' => [
+                            ['$getField' => 'sprout_date'],
+                            ['$getField' => 'date'],
+                        ]],
                     ]
                 ],
                 [
                     '$group' => [
-                        '_id' => 'gt', 'germ_time' => ['$avg' => ['$abs' => ['$dateDiff' => ['startDate' => ['$convert' => ['input' => ['$getField' => 'sprout_date'], 'to' => 'date']], 'endDate' => ['$convert' => ['input' => ['$getField' => 'date'], 'to' => 'date']], 'unit' => 'day']]]]
+                        '_id' => 'gt',
+                        'germ_time' => [
+                            '$avg' => [
+                                '$abs' => [
+                                    '$dateDiff' => [
+                                        'startDate' => [
+                                            '$convert' => [
+                                                'input' => ['$getField' => 'sprout_date'],
+                                                'to' => 'date'
+                                            ]
+                                        ],
+                                        'endDate' => [
+                                            '$convert' => [
+                                                'input' => ['$getField' => 'date'],
+                                                'to' => 'date'
+                                            ]
+                                        ],
+                                        'unit' => 'day'
+                                    ]
+                                ]
+                            ]
+                        ]
                     ]
                 ]
             ],
