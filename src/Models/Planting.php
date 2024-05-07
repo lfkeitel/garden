@@ -8,7 +8,7 @@ use MongoDB\Model\BSONDocument;
 
 use function Garden\BSON_array_to_array;
 
-class Planting extends DBRecord
+class Planting extends DBRecord implements \JsonSerializable
 {
     public int $row;
     public int $column;
@@ -24,10 +24,28 @@ class Planting extends DBRecord
     public ArrayOfTransplants $transplant_log;
     public array $tags;
     public int $count;
+    public ?Planting $parent = null;
 
     public function display_string(): string
     {
         return "{$this->seed->common_name} - {$this->seed->variety}";
+    }
+
+    public function display_string_with_bed(): string
+    {
+        $str = "{$this->seed->common_name} - {$this->seed->variety}";
+        if ($this->bed) {
+            $str .= " in {$this->bed->display_string()} [{$this->row}/{$this->column}]";
+        }
+        return $str;
+    }
+
+    public function display_string_bed(): string
+    {
+        if ($this->bed) {
+            return  "{$this->bed->display_string()} [{$this->row}/{$this->column}]";
+        }
+        return '';
     }
 
     protected function load_from_record(BSONDocument $record, array $extras): void
@@ -53,6 +71,7 @@ class Planting extends DBRecord
         $this->transplant_log = $extras['transplant_log'];
         $this->tags = BSON_array_to_array($record['custom_tags'] ?? []);
         $this->count = $record['count'] ?? 1;
+        $this->parent = $extras['parent'];
     }
 
     public function to_array(): array
@@ -80,6 +99,7 @@ class Planting extends DBRecord
                 $this->tags
             ),
             'count' => $this->count,
+            'parent' => is_null($this->parent) ? null : $this->parent->get_id_obj(),
         ];
     }
 
@@ -103,5 +123,29 @@ class Planting extends DBRecord
 
     public function germ_date(): \DateTimeInterface {
         return $this->sprout_date ? $this->sprout_date : $this->date;
+    }
+
+    public function jsonSerialize(): mixed {
+        return [
+            'id' => (string) $this->id,
+            'row' => $this->row,
+            'column' => $this->column,
+            'bed' => $this->bed,
+            'seed' => $this->seed,
+            'status' => $this->status,
+            'is_transplant' => $this->is_transplant,
+            'notes' => $this->notes,
+            'date' => $this->date->format('Y-m-d'),
+            'sprout_date' => $this->sprout_date,
+            'tray_id' => $this->tray_id,
+            'harvest_date' => $this->harvest_date,
+            'transplant_log' => $this->transplant_log,
+            'custom_tags' => array_map(
+                fn($value): string => \strtolower($value),
+                $this->tags
+            ),
+            'count' => $this->count,
+            'parent' => $this->parent,
+        ];
     }
 }

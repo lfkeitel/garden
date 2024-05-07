@@ -55,13 +55,19 @@ class PlantingCollection extends Collection
 
         foreach ($records as $doc) {
             $transplants = new Models\ArrayOfTransplants();
-            foreach ($doc['transplant_log'] ?? [] as $id) {
+            foreach ($doc['transplant_log'] as $id) {
                 $transplants[] = $this->db->transplants->find_by_id($id);
+            }
+
+            $parent = null;
+            if ($doc['parent']) {
+                $parent = $this->find_by_id($doc['parent']);
             }
 
             $extras = [
                 'seed' => $this->db->seeds->find_by_id($doc['seed']),
-                'bed' => $this->db->beds->find_by_id($doc['bed']),
+                'bed' => $doc['bed'] ? $this->db->beds->find_by_id($doc['bed']) : null,
+                'parent' => $parent,
                 'transplant_log' => $transplants,
             ];
 

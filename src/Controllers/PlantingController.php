@@ -59,6 +59,42 @@ class PlantingController
         );
     }
 
+    #[Route('get', '/plantings/search')]
+    public function seeds(Request $request, Application $app)
+    {
+        $tag_filter = $request->GET['tag'] ?? '';
+        $sort_prop = $request->GET['sort_by'] ?? 'date';
+        $sort_dir = $request->GET['sort_dir'] ?? -1;
+        $sort_dir = intval($sort_dir);
+        if ($sort_dir < -1 || $sort_dir > 1) {
+            $sort_dir = 1;
+        }
+        $seed_filter = $request->GET['seed_id'];
+
+        $filter = [];
+        if ($tag_filter !== '') {
+            $filter = [
+                'custom_tags' => [
+                    '$in' => [$tag_filter],
+                ],
+            ];
+        }
+
+        if ($seed_filter !== '') {
+            $filter = [
+                'seed' => new ObjectId($seed_filter),
+            ];
+        }
+
+        $allPlantings = $app->db->plantings->get_all(
+            $sort_prop,
+            $sort_dir,
+            $filter,
+        );
+
+        echo json_encode($allPlantings->getArrayCopy());
+    }
+
     #[Route('get', '/plantings/{id}')]
     public function plantings_view_get(Request $request, Application $app, string $id)
     {
@@ -70,6 +106,9 @@ class PlantingController
             [
                 'planting' => $planting,
                 'logs' => $logs,
+                'children' => $app->db->plantings->find_multiple([
+                    'parent' => $planting->get_id_obj(),
+                ]),
             ]
         );
     }
@@ -175,6 +214,11 @@ class PlantingController
                 $record->transplant_log = new Models\ArrayOfTransplants();
                 $record->tags = $tags;
                 $record->count = \intval($form_vars['count']);
+
+                if ($form_vars['parent']) {
+                    $record->parent = $app->db->plantings->find_by_id($form_vars['parent']);
+                }
+
                 $app->db->plantings->create($record);
             }
         }
@@ -189,6 +233,7 @@ class PlantingController
             [
                 'seeds' => $this->get_seed_select_data($app),
                 'beds' => $this->get_bed_select_data($app),
+                'all_plantings' => $app->db->plantings->get_all(),
                 'auto_bed' => $request->GET['bed'] ?? '',
                 'auto_seed' => $request->GET['seed'] ?? '',
             ],
@@ -317,6 +362,9 @@ class PlantingController
             'plantings::edit',
             [
                 'planting' => $planting,
+                'all_plantings' => $app->db->plantings->find_multiple([
+                    'seed' => $planting->seed->get_id_obj(),
+                ]),
                 'seeds' => $this->get_seed_select_data($app),
                 'beds' => $this->get_bed_select_data($app),
             ]
@@ -346,6 +394,11 @@ class PlantingController
         $record->tray_id = $form_vars['tray_id'];
         $record->tags = [];
         $record->count = \intval($form_vars['count']);
+
+        $record->parent = null;
+        if ($form_vars['parent']) {
+            $record->parent = $app->db->plantings->find_by_id($form_vars['parent']);
+        }
 
         $custom_tags = explode(',', $form_vars['tags']);
         foreach ($custom_tags as $tag) {

@@ -1,7 +1,7 @@
 <?php $this->layout(
     'main',
     [
-        'scripts' => ['seed-form'],
+        'scripts' => ['new-planting'],
         'title' => "New Planting"
     ]
 ) ?>
@@ -12,14 +12,28 @@
     <fieldset>
         <legend>Crop</legend>
 
-        <label for="seed">Seed:</label>
+        <p>
+            <label for="seed">
+                Seed:
 
-        <select name="seed">
-            <?php foreach ($seeds as $seed) : ?>
-            <option value="<?= $seed['id'] ?>" <?= $seed['id'] === $auto_seed ? 'selected' : '' ?>><?= $seed['name'] ?>
-            </option>
-            <?php endforeach ?>
-        </select>
+                <select name="seed">
+                    <?php foreach ($seeds as $seed) : ?>
+                    <option value="<?= $seed['id'] ?>" <?= $seed['id'] === $auto_seed ? 'selected' : '' ?>><?= $seed['name'] ?>
+                    </option>
+                    <?php endforeach ?>
+                </select>
+            </label>
+        </p>
+
+        <p>
+            <label>
+                Parent Planting:
+
+                <select name="parent">
+                    <option value="">Loading...</a>
+                </select>
+            </label>
+        </p>
 
         <p>
             <label>

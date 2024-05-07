@@ -26,6 +26,21 @@
 
         <p>
             <label>
+                Parent Planting:
+
+                <select name="parent">
+                    <option value="">None</a>
+                    <?php foreach ($all_plantings as $parent) : ?>
+                        <?php if ($parent->get_id() === $planting->get_id()) { continue; } ?>
+
+                        <option value="<?= $parent->get_id() ?>" <?= $planting->parent && $parent->get_id() === $planting->parent->get_id() ? 'selected' : '' ?>><?= $parent->date->format("Y-m-d") ?> <?= $parent->display_string_with_bed() ?></option>
+                    <?php endforeach ?>
+                </select>
+            </label>
+        </p>
+
+        <p>
+            <label>
                 Plant Count: <input type="number" name="count" value="<?= $planting->count ?>">
             </label>
         </p>

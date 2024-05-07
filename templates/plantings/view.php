@@ -36,6 +36,17 @@
                 </a>
             </dd>
 
+            <dt>Parent:</dt>
+            <dd>
+                <?php if ($planting->parent): ?>
+                <a href="<?= $basepath ?>/plantings/<?= $planting->parent->get_id() ?>">
+                    <?= $planting->parent->date->format("Y-m-d") ?> <?= $planting->parent->display_string_bed() ?>
+                </a>
+                <?php else: ?>
+                None
+                <?php endif ?>
+            </dd>
+
             <dt>Plant Count:</dt>
             <dd><?= $planting->count ?></dd>
 
@@ -60,6 +71,19 @@
             <dd><?= $planting->tags_to_str() ?>
             </dd>
         </dl>
+
+        <?php if (count($children) > 0): ?>
+        <h3>Children Plantings</h3>
+        <ul>
+            <?php foreach($children as $child): ?>
+            <li>
+                <a href="<?= $basepath ?>/plantings/<?= $child->get_id() ?>">
+                    <?= $child->date->format("Y-m-d") ?> <?= $child->display_string_bed() ?>
+                </a>
+            </li>
+            <?php endforeach ?>
+        </ul>
+        <?php endif ?>
 
         <h3>Location</h3>
         <dl>
