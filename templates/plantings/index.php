@@ -6,6 +6,7 @@
 <?php if ($this->is_logged_in()) : ?>
 <a href="<?= $basepath ?>/plantings/new" class="btn">New Planting</a>
 <?php endif ?>
+<a href="/plantings/calendar" class="btn">Calendar</a>
 
 <p>
 <form>

@@ -21,6 +21,8 @@ class IndexController
                         'Harvested',
                         'Failed',
                         'Transplanted',
+                        'Finished',
+                        'Planned',
                     ],
                 ],
             ],
@@ -52,6 +54,7 @@ class IndexController
                 'logs' => $logs,
                 'beds' => $beds,
                 'bed_plantings' => $bed_plantings,
+                'tasks' => $app->db->tasks->get_due_on(),
             ],
         );
     }

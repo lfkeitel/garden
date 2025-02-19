@@ -38,3 +38,16 @@ function is_web_request(): bool
 {
     return \array_key_exists('REQUEST_URI', $_SERVER);
 }
+
+function next_day(int $month, int $day)
+{
+    $this_year = \intval(\date('Y'));
+    $this_month = \intval(\date('m'));
+    $this_day = \intval(\date('d'));
+
+    if (($this_month === $month && $this_day > $day) || $this_month > $month) {
+        $this_year++;
+    }
+
+    return \DateTimeImmutable::createFromFormat('Y-m-d', "{$this_year}-{$month}-{$day}");
+}

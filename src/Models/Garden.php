@@ -7,11 +7,10 @@ namespace Garden\Models;
 use Garden\Application;
 use MongoDB\Model\BSONDocument;
 
-class Bed extends DBRecord
+class Garden extends DBRecord
 {
     public \DateTimeImmutable $added;
     public string $name;
-    public ?Garden $garden = null;
     public int $rows;
     public int $cols;
     public string $notes;
@@ -26,20 +25,11 @@ class Bed extends DBRecord
         $this->cols = $record['cols'];
         $this->notes = $record['notes'];
         $this->hide_from_home = $record['hide_from_home'];
-        $this->garden = $extras['garden'];
     }
 
-    public function get_plantings(Application $app): ArrayOfPlantings
+    public function get_beds(Application $app): ArrayOfBeds
     {
-        return $app->db->plantings->get_in_bed($this->get_id_obj());
-    }
-
-    public function display_string_garden(): string
-    {
-        if ($this->garden) {
-            return  "{$this->garden->display_string()}";
-        }
-        return 'N/A';
+        return $app->db->beds->get_in_garden($this->get_id_obj());
     }
 
     public function to_array(): array
@@ -51,7 +41,6 @@ class Bed extends DBRecord
             'cols' => $this->cols,
             'notes' => $this->notes,
             'hide_from_home' => $this->hide_from_home,
-            'garden' => $this->garden->get_id_obj(),
         ];
     }
 

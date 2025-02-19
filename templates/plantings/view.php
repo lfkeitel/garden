@@ -16,6 +16,9 @@
     <article>
         <h3>Information</h3>
         <dl>
+            <dt>Status:</dt>
+            <dd><?= $planting->status ?></dd>
+
             <dt>Planted:</dt>
             <dd><?= $planting->date->format('Y-m-d') ?>
                 (<?= $this->days_from_date($planting->date, $planting->harvest_date) ?>)
@@ -49,9 +52,6 @@
 
             <dt>Plant Count:</dt>
             <dd><?= $planting->count ?></dd>
-
-            <dt>Status:</dt>
-            <dd><?= $planting->status ?></dd>
 
             <dt>Harvest Date</dt>
             <dd>

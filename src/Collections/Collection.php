@@ -16,6 +16,7 @@ abstract class Collection
     protected DatabaseConnection $db;
     protected string $collection;
     protected string $default_sort_prop = 'date';
+    protected array $id_cache = [];
 
     public function __construct(DatabaseConnection $db)
     {
@@ -65,8 +66,14 @@ abstract class Collection
 
     public function find_by_id(string|ObjectID $id): mixed
     {
+        if (\array_key_exists(strval($id), $this->id_cache)) {
+            return $this->id_cache[strval($id)];
+        }
+
         $id = $id instanceof ObjectId ? $id : new ObjectId($id);
-        return $this->find_one('_id', $id);
+        $item = $this->find_one('_id', $id);
+        $this->id_cache[strval($id)] = $item;
+        return $item;
     }
 
     public function find_one(string $prop, mixed $val): mixed

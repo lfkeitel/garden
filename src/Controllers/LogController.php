@@ -90,10 +90,20 @@ class LogController
             -1,
         );
 
+        $items = [];
+        foreach ($logs as $log) {
+            $items []= [
+                'date' => $log->date,
+                'span_title' => $log->notes,
+                'link' => "/logs/{$log->get_id()}",
+                'title' => $log->display_string(),
+            ];
+        }
+
         echo $app->templates->render(
             'logs::monthly',
             [
-                'logs' => $logs,
+                'items' => $items,
                 'month' => $month,
                 'year' => $year,
                 'start_day' => $start_date->format('w'),

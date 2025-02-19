@@ -47,16 +47,31 @@ class BedController
             'beds::view',
             [
                 'bed' => $bed,
-                'plantings' => $app->db->plantings->get_in_bed($bed->get_id_obj()),
+                'plantings' => $bed->get_plantings($app),
             ]
         );
+    }
+
+    private function get_garden_select_data(Application $app): array
+    {
+        $gardens = $app->db->gardens->get_all('name');
+        $garden_data = [];
+        foreach ($gardens as $garden) {
+            $garden_data[] = [
+                'name' => $garden->display_string(),
+                'id' => $garden->get_id(),
+            ];
+        }
+        return $garden_data;
     }
 
     #[Filter('LoginRequired')]
     #[Route('get', '/beds/new')]
     public function beds_new_get(Request $request, Application $app)
     {
-        echo $app->templates->render('beds::new');
+        echo $app->templates->render('beds::new', [
+            'gardens' => $this->get_garden_select_data($app),
+        ]);
     }
 
     #[Filter('LoginRequired')]
@@ -72,6 +87,7 @@ class BedController
         $record->rows = \intval($form_vars['rows']);
         $record->cols = \intval($form_vars['cols']);
         $record->notes = $form_vars['notes'];
+        $record->garden = $app->db->gardens->find_by_id(new ObjectId($form_vars['garden']));
 
         $app->db->beds->create($record);
 
@@ -79,7 +95,7 @@ class BedController
             'toast' => "Created new bed (<a href=\"/beds/{$record->get_id()}\">{$record->name}</a>)"
         ]);
 
-        echo $app->templates->render('beds::new');
+        $this->beds($request, $app);
     }
 
     #[Filter('LoginRequired')]
@@ -121,7 +137,10 @@ class BedController
     {
         $bed = $app->db->beds->find_by_id($id);
 
-        echo $app->templates->render('beds::edit', ['bed' => $bed]);
+        echo $app->templates->render('beds::edit', [
+            'bed' => $bed,
+            'gardens' => $this->get_garden_select_data($app),
+        ]);
     }
 
     #[Filter('LoginRequired')]
@@ -135,6 +154,7 @@ class BedController
         $record->rows = \intval($form_vars['rows']);
         $record->cols = \intval($form_vars['cols']);
         $record->notes = $form_vars['notes'];
+        $record->garden = $app->db->gardens->find_by_id(new ObjectId($form_vars['garden']));
 
         if (\array_key_exists('hide_from_home', $form_vars)) {
             $record->hide_from_home = $form_vars['hide_from_home'] === 'on';
@@ -148,9 +168,6 @@ class BedController
             'toast' => "Saved bed ({$record->name})"
         ]);
 
-        echo $app->templates->render('beds::edit', [
-            'bed' => $record,
-            'plantings' => $app->db->plantings->get_in_bed($record->get_id_obj()),
-        ]);
+        $this->beds_view_get($request, $app, $id);
     }
 }

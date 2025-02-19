@@ -82,4 +82,26 @@ class PlantingCollection extends Collection
         $collection = $this->db->get_mongodb_collection($this->collection);
         return BSON_array_to_array($collection->distinct('custom_tags'));
     }
+
+    public function get_plantings_date(\DateTimeInterface $start_date = null, \DateTimeInterface $end_date = null, string $sort_prop = 'date', $sort_dir = -1): Models\ArrayOfPlantings
+    {
+        if ($start_date === null) {
+            $start_date = new \DateTimeImmutable('1970-01-01');
+        }
+
+        if ($end_date === null) {
+            $end_date = (new \DateTimeImmutable())->add(new \DateInterval('P1D'));
+        }
+
+        return $this->find_multiple([
+            '$and' => [
+                ['date' => [
+                    '$gte' => $start_date->format('Y-m-d H:i:s')
+                ]],
+                ['date' => [
+                    '$lte' => $end_date->format('Y-m-d H:i:s')
+                ]],
+            ]
+        ], ['sort' => [$sort_prop => $sort_dir]]);
+    }
 }

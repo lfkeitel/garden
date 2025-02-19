@@ -22,6 +22,7 @@
             <nav>
                 <ul>
                     <li><a href="<?= $basepath ?>/" class="<?= $app->request->REQUEST_URI == "/" ? 'active-page' : '' ?>">Home</a></li>
+                    <li><a href="<?= $basepath ?>/gardens" class="<?= $app->request->REQUEST_URI == "/gardens" ? 'active-page' : '' ?>">Gardens</a></li>
                     <li><a href="<?= $basepath ?>/logs" class="<?= $app->request->REQUEST_URI == "/logs" ? 'active-page' : '' ?>">Log</a></li>
                     <li><a href="<?= $basepath ?>/plantings?filter=Active" class="<?= $app->request->REQUEST_URI == "/plantings" ? 'active-page' : '' ?>">Plantings</a></li>
                     <li><a href="<?= $basepath ?>/seeds" class="<?= $app->request->REQUEST_URI == "/seeds" ? 'active-page' : '' ?>">Seeds</a></li>

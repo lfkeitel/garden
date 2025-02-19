@@ -18,6 +18,9 @@
         <dt>Name:</dt>
         <dd><?= $bed->name ?></dd>
 
+        <dt>Garden:</dt>
+        <dd><?= $bed->display_string_garden() ?></dd>
+
         <dt>Rows:</dt>
         <dd><?= $bed->rows ?></dd>
 

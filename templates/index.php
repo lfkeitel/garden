@@ -20,6 +20,18 @@ $now = new DateTimeImmutable();
     (<?= $last_frost->format('Y-m-d') ?>)
 </p>
 
+<h2>Tasks for Today</h2>
+
+<?php if (count($tasks) === 0): ?>
+    No tasks due today.
+<?php else: ?>
+<ul>
+    <?php foreach($tasks as $task): ?>
+        <li><?= $task->display_string() ?></li>
+    <?php endforeach ?>
+</ul>
+<?php endif ?>
+
 <h2>Bed Status</h2>
 
 <?php if ($this->is_logged_in()) : ?>

@@ -214,6 +214,7 @@ $flower_seeds = [
 ];
 
 $planting_statuses = [
+    'Planned',
     'Active',
     'Harvested',
     'Finished',
@@ -221,22 +222,6 @@ $planting_statuses = [
     'Failed',
     'Transplanted',
 ];
-
-function next_day(int $month, int $day)
-{
-    $this_year = \intval(\date('Y'));
-    $this_month = \intval(\date('m'));
-    $this_day = \intval(\date('d'));
-
-    if (($this_month === $month && $this_day > $day) || $this_month > $month) {
-        $this_year++;
-    }
-
-    return \DateTimeImmutable::createFromFormat('Y-m-d', "{$this_year}-{$month}-{$day}");
-}
-
-$first_frost = next_day(10, 28);
-$last_frost = next_day(4, 7);
 
 return [
     'seed_data' => [
@@ -249,7 +234,7 @@ return [
         ]
     ],
     'planting_statuses' => $planting_statuses,
-    'first_frost' => $first_frost,
-    'last_frost' => $last_frost,
+    'first_frost' => \Garden\next_day(10, 28),
+    'last_frost' => \Garden\next_day(4, 7),
     'usda_zone' => '7a',
 ];

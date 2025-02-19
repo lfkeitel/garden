@@ -1,6 +1,4 @@
-<?php $this->layout('main', ['title' => "Logs Monthly View"]) ?>
-
-<h2>== Garden Logs Monthly View - <?= count($items) ?> Logs ==</h2>
+<?php $this->layout('main', ['title' => "Planting Calendar"]) ?>
 
 <?php $this->insert(
     'partials::calendar-controls',
@@ -12,7 +10,7 @@
 <?php $this->insert(
     'partials::calendar-table',
     [
-        'items' => $items,
+        'items' => $plantings,
         'month' => $month,
         'start_day' => $start_day,
     ]

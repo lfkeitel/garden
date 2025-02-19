@@ -1,25 +1,14 @@
-<?php $this->layout('main', ['title' => 'New Bed']) ?>
+<?php $this->layout('main', ['title' => 'New Garden']) ?>
 
-<h2>New Bed</h2>
+<h2>New Garden</h2>
 
-<form method="POST" id="bed-form">
+<form method="POST" id="garden-form">
     <fieldset>
         <legend>Properties</legend>
 
         <p>
             <label>
                 Name: <input type="text" name="name" value="" required>
-            </label>
-        </p>
-        <p>
-            <label>
-                Garden:
-                <select name="garden">
-                    <?php var_dump($gardens); ?>
-                    <?php foreach ($gardens as $garden) : ?>
-                    <option value="<?= $garden['id'] ?>"><?= $garden['name'] ?></option>
-                    <?php endforeach ?>
-                </select>
             </label>
         </p>
         <p>
@@ -41,5 +30,5 @@
         </p>
     </fieldset>
 
-    <button type="submit">Add Bed</button>
+    <button type="submit">Create Garden</button>
 </form>

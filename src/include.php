@@ -69,6 +69,7 @@ if (is_web_request()) {
     $templates->addFolder('seeds', "{$cwd}/../templates/seeds");
     $templates->addFolder('plantings', "{$cwd}/../templates/plantings");
     $templates->addFolder('beds', "{$cwd}/../templates/beds");
+    $templates->addFolder('gardens', "{$cwd}/../templates/gardens");
     $templates->addFolder('logs', "{$cwd}/../templates/logs");
     $templates->addFolder('partials', "{$cwd}/../templates/partials");
     $templates->addFolder('reference', "{$cwd}/../templates/reference");

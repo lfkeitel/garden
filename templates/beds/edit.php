@@ -13,6 +13,17 @@
         </p>
         <p>
             <label>
+                Garden:
+                <select name="garden">
+                    <?php var_dump($gardens); ?>
+                    <?php foreach ($gardens as $garden) : ?>
+                        <option value="<?= $garden['id'] ?>" <?= ($bed->garden ? $bed->garden->get_id() : '') == $garden['id'] ? 'selected' : '' ?>><?= $garden['name'] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </label>
+        </p>
+        <p>
+            <label>
                 Rows: <input type="number" name="rows" value="<?= $bed->rows ?>">
             </label>
         </p>

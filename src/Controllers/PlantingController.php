@@ -59,6 +59,55 @@ class PlantingController
         );
     }
 
+    #[Route('get', '/plantings/calendar')]
+    public function plantings_calendar(Request $request, Application $app)
+    {
+        $get = $request->GET;
+
+        $month = $get['month'] ?? \date('m');
+        $year = $get['year'] ?? \date('Y');
+
+        $start_date = null;
+        $end_date = null;
+
+        if (\array_key_exists('month', $get)) {
+            $start_date = (new \DateTimeImmutable())->setDate(\intval($year), \intval($get['month']), 1);
+        } else {
+            $start_date = (new \DateTimeImmutable())->setDate(\intval($year), \intval($month), 1);
+        }
+        $start_date = $start_date->setTime(0, 0);
+
+        $end_date = $start_date->add(new \DateInterval('P1M'));
+        $end_date = $end_date->setTime(0, 0);
+
+        $plantings = $app->db->plantings->get_plantings_date(
+            $start_date,
+            $end_date,
+            'date',
+            -1,
+        );
+
+        $items = [];
+        foreach ($plantings as $planting) {
+            $items []= [
+                'date' => $planting->date,
+                'span_title' => $planting->notes,
+                'link' => "/plantings/{$planting->get_id()}",
+                'title' => $planting->display_string_with_bed(),
+            ];
+        }
+
+        echo $app->templates->render(
+            'plantings::calendar',
+            [
+                'plantings' => $items,
+                'month' => $month,
+                'year' => $year,
+                'start_day' => $start_date->format('w'),
+            ],
+        );
+    }
+
     #[Route('get', '/plantings/search')]
     public function seeds(Request $request, Application $app)
     {
@@ -198,22 +247,34 @@ class PlantingController
             }
         }
 
+        $today = new \DateTimeImmutable();
+        $planting_date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
+
+        $status = 'Active';
+        if ($planting_date->getTimestamp() > $today->getTimestamp()) {
+            $status = 'Planned';
+        }
+
         for ($i = $row_start; $i <= $row_end; $i++) {
             for ($j = $col_start; $j <= $col_end; $j++) {
-                $record->date = new \DateTimeImmutable($form_vars['planting_date'] ?? 'now');
+                $record->date = $planting_date;
                 $record->row = $i;
                 $record->column = $j;
                 $bed = $app->db->beds->find_by_id(new ObjectId($form_vars['bed']));
                 $record->bed = $bed;
                 $seed = $app->db->seeds->find_by_id(new ObjectId($form_vars['seed']));
                 $record->seed = $seed;
-                $record->status = 'Active';
+                $record->status = $status;
                 $record->is_transplant = $form_vars['is_transplant'] === 'Yes';
                 $record->notes = $form_vars['notes'];
                 $record->tray_id = $form_vars['tray_id'];
                 $record->transplant_log = new Models\ArrayOfTransplants();
                 $record->tags = $tags;
                 $record->count = \intval($form_vars['count']);
+
+                if ($record->is_transplant) {
+                    $record->sprout_date = $record->date;
+                }
 
                 if ($form_vars['parent']) {
                     $record->parent = $app->db->plantings->find_by_id($form_vars['parent']);
@@ -407,7 +468,7 @@ class PlantingController
             array_push($record->tags, trim($tag));
         }
 
-        if (\in_array($record->status, ['Active', 'Concerned'])) {
+        if (\in_array($record->status, ['Active', 'Concerned', 'Planned'])) {
             $record->harvest_date = null;
         } else if (\is_null($record->harvest_date)) {
             $record->harvest_date = new \DateTimeImmutable();

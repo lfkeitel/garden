@@ -13,6 +13,7 @@ function fetch_planting_list(id) {
 
       const none = document.createElement("option");
       none.textContent = "None";
+      none.value = "";
       parent_select.appendChild(none);
 
       json.forEach(planting => {

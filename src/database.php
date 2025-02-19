@@ -14,9 +14,11 @@ class DatabaseConnection
     public Collections\Collection $plantings;
     public Collections\Collection $logs;
     public Collections\Collection $beds;
+    public Collections\Collection $gardens;
     public Collections\Collection $weather;
     public Collections\Collection $transplants;
-    public Collections\UserCollection $users;
+    public Collections\Collection $users;
+    public Collections\Collection $tasks;
 
     public function __construct(array $options)
     {
@@ -27,9 +29,11 @@ class DatabaseConnection
         $this->plantings = new Collections\PlantingCollection($this);
         $this->logs = new Collections\LogCollection($this);
         $this->beds = new Collections\BedCollection($this);
+        $this->gardens = new Collections\GardenCollection($this);
         $this->weather = new Collections\WeatherCollection($this);
         $this->transplants = new Collections\TransplantCollection($this);
         $this->users = new Collections\UserCollection($this);
+        $this->tasks = new Collections\TaskCollection($this);
     }
 
     public function get_mongodb_collection(string $collection): MongoDB\Collection

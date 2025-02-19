@@ -9,6 +9,7 @@ use Onesimus\Router\Http\Request;
 
 Router::registerClass('Garden\Controllers\IndexController');
 Router::registerClass('Garden\Controllers\BedController');
+Router::registerClass('Garden\Controllers\GardenController');
 Router::registerClass('Garden\Controllers\ImageController');
 Router::registerClass('Garden\Controllers\SeedController');
 Router::registerClass('Garden\Controllers\PlantingController');
