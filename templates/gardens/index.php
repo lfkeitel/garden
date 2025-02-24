@@ -26,28 +26,28 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($all_gardens as $map): ?>
+        <?php foreach ($all_gardens as $garden): ?>
         <tr>
             <?php if ($this->is_logged_in()): ?>
             <td>
                 <div class="control-cell">
-                    <form method="get" action="/gardens/edit/<?= $this->e($map->get_id()) ?>">
+                    <form method="get" action="/gardens/edit/<?= $this->e($garden->get_id()) ?>">
                         <button type="submit" class="btn btn-small">Edit</button>
                     </form>
 
                     <form method="post" onsubmit="return form_confirm(this);">
-                        <input type="hidden" value="delete_map" name="action">
-                        <input type="hidden" value="<?= $map->get_id() ?>" name="map_id">
+                        <input type="hidden" value="delete_garden" name="action">
+                        <input type="hidden" value="<?= $garden->get_id() ?>" name="garden_id">
                         <button type="submit" class="btn btn-small">Delete</button>
                     </form>
                 </div>
             </td>
             <?php endif ?>
-            <td><a href="<?= $basepath ?>/gardens/<?= $map->get_id() ?>"><?= $map->name ?></a></td>
-            <td><?= $map->added->format('Y-m-d') ?></td>
-            <td><?= $map->rows ?></td>
-            <td><?= $map->cols ?></td>
-            <td><?= $map->hide_from_home ? 'Yes' : 'No' ?></td>
+            <td><a href="<?= $basepath ?>/gardens/<?= $garden->get_id() ?>"><?= $garden->name ?></a></td>
+            <td><?= $garden->added->format('Y-m-d') ?></td>
+            <td><?= $garden->rows ?></td>
+            <td><?= $garden->cols ?></td>
+            <td><?= $garden->hide_from_home ? 'Yes' : 'No' ?></td>
         </tr>
         <?php endforeach ?>
     </tbody>

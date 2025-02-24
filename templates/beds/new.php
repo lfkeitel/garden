@@ -15,7 +15,6 @@
             <label>
                 Garden:
                 <select name="garden">
-                    <?php var_dump($gardens); ?>
                     <?php foreach ($gardens as $garden) : ?>
                     <option value="<?= $garden['id'] ?>"><?= $garden['name'] ?></option>
                     <?php endforeach ?>

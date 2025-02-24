@@ -106,6 +106,9 @@ class BedController
             case 'delete_bed':
                 $this->beds_delete($request, $app);
                 break;
+            case 'bulk_delete':
+                $this->beds_bulk_delete($request, $app);
+                break;
         }
 
         $this->beds($request, $app);
@@ -129,6 +132,70 @@ class BedController
         }
 
         $app->templates->addData(['toast' => $toast_msg]);
+    }
+
+    private function beds_bulk_delete(Request $request, Application $app)
+    {
+        $selections = explode(",", $request->POST['selection'] ?? '');
+
+        foreach ($selections as $selection) {
+            $bed = $app->db->beds->find_by_id($selection);
+
+            if (!\is_null($bed)) {
+                try {
+                    $app->db->beds->delete($bed);
+                } catch (\Exception $e) {
+                }
+            }
+        }
+        $toast_msg = "Beds deleted";
+
+        $app->templates->addData(['toast' => $toast_msg]);
+    }
+
+    #[Filter('LoginRequired')]
+    #[Route('get', '/beds/edit')]
+    public function beds_bulk_edit_get(Request $request, Application $app)
+    {
+        $selected_param = trim($request->GET['selected']);
+
+        if ($selected_param === '') {
+            header('Location: /beds', true, 307);
+            return;
+        }
+
+        $selected = explode(",", $selected_param);
+
+        $beds = [];
+        foreach ($selected as $selection) {
+            $beds[] = $app->db->beds->find_by_id($selection);
+        }
+
+        echo $app->templates->render(
+            'beds::bulk_edit',
+            [
+                'beds' => $beds,
+                'gardens' => $this->get_garden_select_data($app),
+            ]
+        );
+    }
+
+    #[Filter('LoginRequired')]
+    #[Route('post', '/beds/edit')]
+    public function beds_bulk_edit_post(Request $request, Application $app)
+    {
+        $selected = explode(",", $request->GET['selected']);
+        $new_garden = $request->POST['garden'];
+        $change_garden = $app->db->gardens->find_by_id(new ObjectId($new_garden));
+
+        foreach ($selected as $selection) {
+            $bed = $app->db->beds->find_by_id($selection);
+            $bed->garden = $change_garden;
+            $app->db->beds->save($bed);
+        }
+
+        $app->templates->addData(['toast' => "Beds updated"]);
+        header("Location: /beds", true, 302);
     }
 
     #[Filter('LoginRequired')]
