@@ -31,9 +31,21 @@ class PlantingController
 
         $filter = [];
 
-        if ($status_filter !== 'All') {
-            $filter['status'] = $status_filter;
+        switch ($status_filter) {
+            case 'Sprouted':
+                $filter['sprout_date'] = ['$ne' => null];
+                $filter['status'] = 'Active';
+                break;
+            case 'Not Yet Sprouted':
+                $filter['sprout_date'] = null;
+                $filter['status'] = 'Active';
+                break;
+            case 'All':
+                break;
+            default:
+                $filter['status'] = $status_filter;
         }
+
         if ($tag_filter !== '') {
             $filter['custom_tags'] = ['$in' => [$tag_filter]];
         }

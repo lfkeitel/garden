@@ -92,6 +92,7 @@ if (is_web_request()) {
     $templates->addData(
         [
             'planting_statuses' => $app_vars['planting_statuses'],
+            'psudo_planting_statuses' => $app_vars['psudo_planting_statuses'],
         ],
         ['plantings::new', 'plantings::edit', 'plantings::bulk_edit', 'plantings::index'],
     );

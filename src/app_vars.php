@@ -218,9 +218,13 @@ $planting_statuses = [
     'Active',
     'Harvested',
     'Finished',
-    'Concerned',
     'Failed',
     'Transplanted',
+];
+
+$psudo_planting_statuses = [
+    'Sprouted',
+    'Not Yet Sprouted',
 ];
 
 return [
@@ -234,6 +238,7 @@ return [
         ]
     ],
     'planting_statuses' => $planting_statuses,
+    'psudo_planting_statuses' => $psudo_planting_statuses,
     'first_frost' => \Garden\next_day(10, 28),
     'last_frost' => \Garden\next_day(4, 7),
     'usda_zone' => '7a',

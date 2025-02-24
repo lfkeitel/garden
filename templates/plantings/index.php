@@ -18,6 +18,9 @@
             <?php foreach ($planting_statuses as $status) : ?>
             <option <?= $filter === $status ? 'selected' : '' ?>><?= $status ?></option>
             <?php endforeach ?>
+            <?php foreach ($psudo_planting_statuses as $status) : ?>
+            <option <?= $filter === $status ? 'selected' : '' ?>><?= $status ?></option>
+            <?php endforeach ?>
         </select>
     </label>
 
